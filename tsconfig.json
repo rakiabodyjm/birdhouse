@@ -11,9 +11,12 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
+    "noEmit": false,
     "paths": {
       "src/*": ["./src/*"],
-      "@src/*": ["./src/*"]
-    }
+      "@src/*": ["./src/*"],
+      "root/*": ["./*"]
+    },
+    "resolveJsonModule": true
   }
 }

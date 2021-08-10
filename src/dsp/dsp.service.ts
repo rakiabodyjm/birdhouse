@@ -1,26 +1,76 @@
-import { Injectable } from '@nestjs/common'
+import { HttpException, Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Dsp } from 'src/dsp/entities/dsp.entity'
+import { Repository } from 'typeorm'
 import { CreateDspDto } from './dto/create-dsp.dto'
 import { UpdateDspDto } from './dto/update-dsp.dto'
 
 @Injectable()
 export class DspService {
-  create(createDspDto: CreateDspDto) {
-    return 'This action adds a new dsp'
+  constructor(@InjectRepository(Dsp) private dspRepository: Repository<Dsp>) {}
+
+  async create(createDspDto: CreateDspDto) {
+    const newDSP = this.dspRepository.create(createDspDto)
+    console.log('creating dsp', newDSP)
+    await this.dspRepository.save(newDSP)
+    return newDSP
   }
 
-  findAll() {
-    return `This action returns all dsp`
+  async findAll() {
+    try {
+      const dsps = await this.dspRepository
+        .find({
+          relations: ['area_id', 'user'],
+        })
+        .then((res) => {
+          return res
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+
+      return dsps ? dsps : []
+    } catch (err) {
+      throw Error(err)
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} dsp`
+  async findOne(id: string) {
+    return await this.dspRepository.findOne(id)
   }
 
-  update(id: number, updateDspDto: UpdateDspDto) {
-    return `This action updates a #${id} dsp`
+  async update(id: string, updateDspDto: UpdateDspDto) {
+    const dsp = await this.dspRepository.findOne(id)
+
+    if (!dsp) {
+      throw new Error('DSP Not found')
+    }
+    await this.dspRepository.update(id, {
+      ...updateDspDto,
+    })
+    return {
+      ...dsp,
+      ...updateDspDto,
+    }
+    // const dsp = this.dspRepository
+    //   .createQueryBuilder()
+    //   .update(Dsp)
+    //   .where({ id })
+    //   .set({
+    //     ...updateDspDto,
+    //   })
+    //   .execute()
+
+    // return dsp
+
+    // return `This action updates a #${id} dsp`
   }
 
   remove(id: number) {
-    return `This action removes a #${id} dsp`
+    this.dspRepository.delete(id)
+  }
+
+  async clear() {
+    return this.dspRepository.clear()
   }
 }

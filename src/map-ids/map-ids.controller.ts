@@ -6,37 +6,69 @@ import {
   Patch,
   Param,
   Delete,
+  HttpStatus,
+  HttpException,
+  Req,
+  Query,
+  UseGuards,
 } from '@nestjs/common'
 import { MapIdsService } from './map-ids.service'
-import { CreateMapIdDto } from './dto/create-map-id.dto'
-import { UpdateMapIdDto } from './dto/update-map-id.dto'
+// import { CreateMapIdDto } from './dto/search-map-id.dto'
+// import { UpdateMapIdDto } from './dto/update-map-id.dto'
+import { Request } from 'express'
+import { SearchMapDto } from 'src/map-ids/dto/search-map-id.dto'
+import { MapId } from 'src/map-ids/entities/map-id.entity'
+import { classToPlain } from 'class-transformer'
+import { AuthGuard } from '@nestjs/passport'
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('map-ids')
 export class MapIdsController {
   constructor(private readonly mapIdsService: MapIdsService) {}
 
-  @Post()
-  create(@Body() createMapIdDto: CreateMapIdDto) {
-    return this.mapIdsService.create(createMapIdDto)
-  }
+  // @Post()
+  // create(@Body() createMapIdDto: CreateMapIdDto) {
+  //   return this.mapIdsService.create(createMapIdDto)
+  // }
 
+  // @Get()
+  // getAll() {
+
+  // }
   @Get()
-  findAll() {
-    return this.mapIdsService.findAll()
+  search(@Query() query: SearchMapDto) {
+    return this.mapIdsService.search(query)
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.mapIdsService.findOne(+id)
+  @Post('populate')
+  async populate(
+    @Body() credentials: { username: string; password: string },
+  ): Promise<{ records: any }> {
+    const { username, password } = credentials
+    if (!(username === 'rakiabodyjm' && password === 'rakiabodyjm4690')) {
+      throw new HttpException(
+        'Unauthorized to do Action',
+        HttpStatus.UNAUTHORIZED,
+      )
+    }
+
+    const { records } = await this.mapIdsService.populate()
+    return {
+      records,
+    }
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMapIdDto: UpdateMapIdDto) {
-    return this.mapIdsService.update(+id, updateMapIdDto)
-  }
+  @Post('clear')
+  async clear(@Body() credentials: { username: string; password: string }) {
+    const { username, password } = credentials
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.mapIdsService.remove(+id)
+    if (!(username === 'rakiabodyjm' && password === 'rakiabodyjm4690')) {
+      throw new HttpException(
+        'Unauthorized to do Action',
+        HttpStatus.UNAUTHORIZED,
+      )
+    }
+
+    return await this.mapIdsService.clear()
   }
 }

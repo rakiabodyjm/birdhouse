@@ -1,0 +1,16 @@
+###
+
+POST http://localhost:6006/auth/login
+Content-Type: application/json
+
+{
+    "email": "rakiabodyjm@gmail.com",
+    "password": "rakiabodyjm4690",
+    "remember_me": true
+}
+###
+POST http://localhost:6006/auth/protected-route
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJha2lhYm9keWptQGdtYWlsLmNvbSIsInJvbGUiOltdLCJpYXQiOjE2Mjg5MjAxMTgsImV4cCI6MTYyODkyMDE3OH0.SAAAUNh-DfLHxf5YiErcv-eIda94Rxk3p9ndca1MEQI
+###
+
+

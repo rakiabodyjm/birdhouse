@@ -1,0 +1,8 @@
+
+GET http://localhost:6006/test-login
+Content-Type: application/json
+
+{
+    "username": "rakiabodyjm@gmail.com",
+    "password": "rakiabodyjm4690"
+}

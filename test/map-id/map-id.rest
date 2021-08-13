@@ -1,0 +1,24 @@
+# POST http://localhost:6006/map-ids/populate
+# Content-Type: application/json
+
+# {
+#     "username": "rakiabodyjm",
+#     "password": "rakiabodyjm4690"
+# }
+
+###
+
+GET http://localhost:6006/map-ids?search=Roxas&page=0&limit=200
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJha2lhYm9keWptQGdtYWlsLmNvbSIsInJvbGUiOltdLCJpYXQiOjE2Mjg5MjAyNzIsImV4cCI6MTYyOTAwNjY3Mn0.4BOTl6GZpjakfiMDjau4MCKZQ9bsOHEN10MtRqowWDE
+
+###
+
+# POST http://localhost:6006/map-ids/clear
+# Content-Type: application/json
+
+# {
+#     "username": "rakiabodyjm",
+#     "password": "rakiabodyjm4690"
+# }
+###
+GET http://localhost:6006/map-ids/?search=ILOCOS

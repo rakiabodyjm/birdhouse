@@ -4,8 +4,8 @@ POST http://localhost:6006/auth/login
 Content-Type: application/json
 
 {
-    "email": "rakiabodyjm@gmail.com",
-    "password": "rakiabodyjm4690",
+    "email": "rakiabodyjm@yahoo.com",
+    "password": "4690Astrid",
     "remember_me": true
 }
 ###

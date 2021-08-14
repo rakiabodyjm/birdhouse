@@ -4,13 +4,16 @@ POST http://localhost:6006/auth/login
 Content-Type: application/json
 
 {
-    "email": "rakiabodyjm@yahoo.com",
-    "password": "4690Astrid",
-    "remember_me": true
+    "email": "rakiabodyjm@gmail.com",
+    "password": "rakiabodyjm4690",
+    "remember_me": false
 }
+
+
 ###
-POST http://localhost:6006/auth/protected-route
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJha2lhYm9keWptQGdtYWlsLmNvbSIsInJvbGUiOltdLCJpYXQiOjE2Mjg5MjAxMTgsImV4cCI6MTYyODkyMDE3OH0.SAAAUNh-DfLHxf5YiErcv-eIda94Rxk3p9ndca1MEQI
+POST http://localhost:6006/auth/protect
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjQ4QzQwNTUtNkRGRS1FQjExLUI2NjEtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbUBnbWFpbC5jb20iLCJmaXJzdF9uYW1lIjoiSGVsbG8gV29ybGQiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIl0sImlhdCI6MTYyOTExNDkxMCwiZXhwIjoxNjI5MjAxMzEwfQ.lDNG5GyDtsIVj85i9z8kNr6HmMIQC0kaEyM419YZ6uo
 ###
 
 
+ 

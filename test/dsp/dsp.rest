@@ -18,7 +18,7 @@ DELETE http://localhost:6006/dsp/clear
 Content-Type: application/json
 
 {
-    "username" :"rakiabodyjm",
+"username" :"rakiabodyjm",
     "password": "rakiabodyjm4690"
 }
 

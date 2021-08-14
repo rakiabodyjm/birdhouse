@@ -22,3 +22,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJha2lhY
 # }
 ###
 GET http://localhost:6006/map-ids/?search=ILOCOS
+
+###
+GET http://localhost:6006/map-ids/

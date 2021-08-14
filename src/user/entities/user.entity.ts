@@ -1,10 +1,12 @@
-import { Exclude, Expose } from 'class-transformer'
+import { Exclude, Expose, Transform } from 'class-transformer'
 import { Admin } from 'src/admin/entities/admin.entity'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
+import { Bcrypt } from 'src/utils/Bcrypt'
 import { SQLDateGenerator } from 'src/utils/SQLDateGenerator'
 import {
   Column,
   Entity,
+  Index,
   JoinColumn,
   JoinTable,
   OneToOne,
@@ -12,6 +14,7 @@ import {
 } from 'typeorm'
 
 @Entity()
+@Index(['first_name', 'last_name', 'phone_number', 'email', 'username'])
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string
@@ -35,7 +38,7 @@ export class User {
   @Column({ unique: true })
   username: string
 
-  @Column({})
+  @Column()
   @Exclude()
   password: string
 
@@ -67,5 +70,5 @@ export class User {
     createForeignKeyConstraints: false,
     onDelete: 'CASCADE',
   })
-  admin?: Admin
+  admin: Admin
 }

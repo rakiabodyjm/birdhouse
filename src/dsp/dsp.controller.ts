@@ -8,11 +8,13 @@ import {
   Delete,
   HttpException,
 } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
 import { DspService } from './dsp.service'
 import { CreateDspDto } from './dto/create-dsp.dto'
 import { UpdateDspDto } from './dto/update-dsp.dto'
 
+@ApiTags('DSP Routes')
 @Controller('dsp')
 export class DspController {
   constructor(private readonly dspService: DspService) {}

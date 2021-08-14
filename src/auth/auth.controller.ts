@@ -10,10 +10,12 @@ import {
 } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { AuthGuard } from '@nestjs/passport'
+import { ApiTags } from '@nestjs/swagger'
 import { Request } from 'express'
 import { LoginUserDto } from 'src/auth/dto/login.dto'
 import { UserService } from 'src/user/user.service'
 import { AuthService } from './auth.service'
+@ApiTags('Authentication Routes')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -34,8 +36,11 @@ export class AuthController {
         success: 'Access Granted',
         access_token: this.jwtService.sign(
           {
+            user_id: user.id,
             email: email,
-            role: userRole,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            roles: userRole,
           },
           {
             expiresIn: remember_me ? '1d' : '1h',
@@ -49,7 +54,7 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Post('protected-route')
+  @Post('protect')
   async jwtRoute() {
     return 'hello world'
   }

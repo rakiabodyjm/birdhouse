@@ -15,28 +15,20 @@ import {
 import { MapIdsService } from './map-ids.service'
 // import { CreateMapIdDto } from './dto/search-map-id.dto'
 // import { UpdateMapIdDto } from './dto/update-map-id.dto'
-import { Request } from 'express'
 import { SearchMapDto } from 'src/map-ids/dto/search-map-id.dto'
-import { MapId } from 'src/map-ids/entities/map-id.entity'
-import { classToPlain } from 'class-transformer'
-import { AuthGuard } from '@nestjs/passport'
+import { ApiTags } from '@nestjs/swagger'
 
-@UseGuards(AuthGuard('jwt'))
+// @UseGuards(AuthGuard('jwt'))
+@ApiTags('MapID Routes')
 @Controller('map-ids')
 export class MapIdsController {
   constructor(private readonly mapIdsService: MapIdsService) {}
-
-  // @Post()
-  // create(@Body() createMapIdDto: CreateMapIdDto) {
-  //   return this.mapIdsService.create(createMapIdDto)
-  // }
-
   // @Get()
-  // getAll() {
-
+  // findAll(): Promise<MapId[]> {
+  //   return this.mapIdsService.findAll()
   // }
   @Get()
-  search(@Query() query: SearchMapDto) {
+  search(@Query() query?: SearchMapDto) {
     return this.mapIdsService.search(query)
   }
 

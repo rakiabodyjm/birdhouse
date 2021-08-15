@@ -7,8 +7,8 @@ import {
   IsUUID,
 } from 'class-validator'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
-import { ExistsInDb } from 'src/dsp/pipes/validation/ExistsInDb'
-import { NoDuplicateInDb } from 'src/dsp/pipes/validation/NoDuplicateInDb'
+import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
+import { NoDuplicateInDb } from 'src/pipes/validation/NoDuplicateInDb'
 import { MapId } from 'src/map-ids/entities/map-id.entity'
 import { CreateUserDto } from 'src/user/dto/create-user.dto'
 import { User } from 'src/user/entities/user.entity'

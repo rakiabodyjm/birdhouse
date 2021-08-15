@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
 import { Repository } from 'typeorm'

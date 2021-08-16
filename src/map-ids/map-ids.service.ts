@@ -16,8 +16,11 @@ export class MapIdsService {
   async findById(id: string) {
     return await this.mapRepository.findOne(id)
   }
+  async findAll() {
+    return await this.mapRepository.find()
+  }
 
-  async search({ search, page = 1, limit = 100 }: SearchMapDto) {
+  async search({ search, page = 0, limit = 100 }: SearchMapDto) {
     console.log('search', 'page', page, 'limt', limit)
 
     let maps = []

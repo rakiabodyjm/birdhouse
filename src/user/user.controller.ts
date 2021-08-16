@@ -10,20 +10,27 @@ import {
   HttpStatus,
   HttpException,
   Query,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+  UseGuards,
 } from '@nestjs/common'
 import { UserService } from './user.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { User } from 'src/user/entities/user.entity'
-import { Bcrypt } from 'src/utils/Bcrypt'
 import { v4 } from 'uuid'
 import { UserPasswordTransformer } from 'src/user/pipes/user-password-transformer.pipe'
+import { ApiTags } from '@nestjs/swagger'
+import { GetAllUserDto } from 'src/user/dto/get-all-user.dto'
 import { AuthGuard } from '@nestjs/passport'
-import { Request } from 'express'
-import { plainToClass } from 'class-transformer'
 
 @Controller('user')
-// @UseGuards(AuthGuard('local'), )
+@ApiTags('User Routes')
+/**
+ * serializes plain objects into classes to apply validation and transformation
+ */
+
+@UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -36,7 +43,6 @@ export class UserController {
     const username: string = createUserDto.email.replace(/@[a-zA-Z]*(.|)*/, '')
 
     const uuidTag: string = v4().split('-')[4]
-    // uuid = uuid[uuid.length - 1]
     const duplicateUserName = await this.userService.findByUsername(username)
 
     /**
@@ -52,10 +58,9 @@ export class UserController {
       createUserDto.username = username
     }
 
-    /**
-     * generate password
-     */
-    createUserDto.password = Bcrypt().generatePassword(createUserDto.password)
+    // /**
+    //  * generate password
+    //  */
     const user = await this.userService.create(createUserDto)
     return {
       message: 'User Created',
@@ -64,20 +69,15 @@ export class UserController {
   }
 
   @Get('all')
-  findAll(): Promise<User[]> {
-    return this.userService.findAll()
+  async findAll(@Query() query: GetAllUserDto) {
+    return await this.userService.findAll(query)
   }
 
   @Delete('clear')
-  async clear(
-    @Body() credentials: { username: string; password: string },
-  ): Promise<{
+  @UseGuards(AuthGuard('local'))
+  async clear(): Promise<{
     message: string
   }> {
-    const { username, password } = credentials
-    if (username === 'rakiabodyjm' && password === 'rakiabodyjm4690') {
-      throw new HttpException('Unauthorized', 401)
-    }
     await this.userService.clear()
     return {
       message: `Users succesfully cleared`,
@@ -102,7 +102,8 @@ export class UserController {
   ): Promise<User> {
     const user = await this.userService.update(id, updateUserDto)
 
-    return plainToClass(User, user)
+    // return (User, user)
+    return user
   }
 
   @Patch('suspend/:id')
@@ -116,7 +117,12 @@ export class UserController {
   async delete(
     @Param('id') id: string,
   ): Promise<{ message: string; user: User }> {
-    const user = await this.userService.delete(id)
+    let user: null | User = null
+    try {
+      user = await this.userService.delete(id)
+    } catch (err) {
+      throw new HttpException(`User Account not found`, HttpStatus.BAD_REQUEST)
+    }
     return {
       message: 'User Account Deleted',
       user,

@@ -1,18 +1,17 @@
-import {
-  ClassSerializerInterceptor,
-  Injectable,
-  UseInterceptors,
-} from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { Paginated } from 'src/types/Paginated'
+import { GetAllUserDto } from 'src/user/dto/get-all-user.dto'
 import { User } from 'src/user/entities/user.entity'
 import { UserRoles } from 'src/user/types/UserRoles'
+import paginateFind from 'src/utils/paginate'
 import { SQLDateGenerator } from 'src/utils/SQLDateGenerator'
 import { Like, Repository } from 'typeorm'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
+import { isNotEmptyObject } from 'class-validator'
 
 @Injectable()
-@UseInterceptors(ClassSerializerInterceptor)
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
@@ -32,11 +31,34 @@ export class UserService {
     // return 'This action adds a new user'
   }
 
-  async findAll(): Promise<User[]> {
-    const users = await this.userRepository.find({
-      relations: ['dsp'],
-    })
-    return users
+  async findAll(
+    params?: GetAllUserDto,
+  ): Promise<User[] | Promise<Paginated<User>>> {
+    // const [, total] = await this.userRepository.findAndCount()
+    // const page = params?.page || 0
+    // const limit = params?.limit || 100
+    // const total_page = Math.ceil(total / limit)
+    if (!isNotEmptyObject(params)) {
+      return await this.userRepository.find({
+        relations: ['dsp', 'admin'],
+      })
+    } else {
+      return paginateFind<User>(this.userRepository, params, {
+        relations: ['dsp', 'admin'],
+      })
+    }
+    // const users = await this.userRepository.find({
+    //   relations: ['dsp', 'admin'],
+    // })
+    // return {
+    //   data: users,
+    //   metadata: {
+    //     total_page,
+    //     limit,
+    //     page,
+    //     total,
+    //   },
+    // }
   }
 
   async findOne(id: string): Promise<User> {
@@ -69,7 +91,7 @@ export class UserService {
   }
 
   async delete(id: string): Promise<User> {
-    const user = await this.userRepository.findOne(id)
+    const user = await this.userRepository.findOneOrFail(id)
     const deleteResult = await this.userRepository.delete(id)
     console.log(deleteResult)
     return user
@@ -131,15 +153,19 @@ export class UserService {
 
     console.log('user', user)
 
-    const roles: Record<UserRoles, any>[] = []
+    // const roles: Record<UserRoles, any>[] = []
+    const roles: UserRoles[] = []
     roleKeys.forEach((ea) => {
       if (user[ea]) {
-        const toPush = {
-          [ea]: user.id,
-        }
-        roles.push(toPush as Record<UserRoles, string>)
+        // const toPush = {
+        //   [ea]: user.id,
+        // }
+
+        // roles.push(toPush as Record<UserRoles, string>)
+        roles.push(ea)
       }
     })
+
     return roles
   }
 }

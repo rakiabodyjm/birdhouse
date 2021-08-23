@@ -7,14 +7,20 @@ import {
   Param,
   Delete,
   HttpException,
+  Query,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
+import { GetAllDspDto } from 'src/dsp/dto/get-all-dsp.dto'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
+import { Paginated } from 'src/types/Paginated'
 import { DspService } from './dsp.service'
 import { CreateDspDto } from './dto/create-dsp.dto'
 import { UpdateDspDto } from './dto/update-dsp.dto'
 
 @ApiTags('DSP Routes')
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('dsp')
 export class DspController {
   constructor(private readonly dspService: DspService) {}
@@ -25,8 +31,10 @@ export class DspController {
   }
 
   @Get()
-  async findAll(): Promise<Dsp[]> {
-    const dsps = await this.dspService.findAll()
+  async findAll(
+    @Query() searchQuery: GetAllDspDto,
+  ): Promise<Dsp[] | Promise<Paginated<Dsp>>> {
+    const dsps = await this.dspService.findAll(searchQuery)
     return dsps
   }
 

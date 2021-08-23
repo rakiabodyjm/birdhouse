@@ -20,7 +20,7 @@ export class Dsp {
   dsp_code: string
 
   @OneToOne(() => User, (user) => user.dsp, {
-    // cascade: true,
+    cascade: true,
     createForeignKeyConstraints: false,
   })
   @JoinColumn()
@@ -29,7 +29,6 @@ export class Dsp {
   @JoinColumn()
   @ManyToOne(() => MapId, (mapid) => mapid.dsp, {})
   area_id: MapId
-
   @Column({
     nullable: true,
   })

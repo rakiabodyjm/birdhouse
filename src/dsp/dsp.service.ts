@@ -1,6 +1,9 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Query } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { isNotEmptyObject } from 'class-validator'
+import { GetAllDspDto } from 'src/dsp/dto/get-all-dsp.dto'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
+import paginateFind from 'src/utils/paginate'
 import { Repository } from 'typeorm'
 import { CreateDspDto } from './dto/create-dsp.dto'
 import { UpdateDspDto } from './dto/update-dsp.dto'
@@ -16,23 +19,29 @@ export class DspService {
     return newDSP
   }
 
-  async findAll() {
-    try {
-      const dsps = await this.dspRepository
-        .find({
+  async findAll(getAllDspDto: GetAllDspDto) {
+    if (!isNotEmptyObject(getAllDspDto)) {
+      const dsps = await this.dspRepository.find({
+        relations: ['area_id', 'user'],
+      })
+      return dsps
+    } else {
+      return await paginateFind(
+        this.dspRepository,
+        {
+          limit: getAllDspDto.limit,
+          page: getAllDspDto.page,
+        },
+        {
           relations: ['area_id', 'user'],
-        })
-        .then((res) => {
-          return res
-        })
-        .catch((err) => {
-          console.error(err)
-        })
-
-      return dsps ? dsps : []
-    } catch (err) {
-      throw Error(err)
+        },
+      )
     }
+    // try {
+    //   return dsps ? dsps : []
+    // } catch (err) {
+    //   throw Error(err)
+    // }
   }
 
   async findOne(id: string) {
@@ -51,7 +60,7 @@ export class DspService {
     return {
       ...dsp,
       ...updateDspDto,
-    }
+    } as Dsp
     // const dsp = this.dspRepository
     //   .createQueryBuilder()
     //   .update(Dsp)

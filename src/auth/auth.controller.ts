@@ -2,8 +2,8 @@ import {
   Body,
   Controller,
   Get,
-  HttpCode,
   HttpException,
+  Param,
   Post,
   Req,
   UseGuards,
@@ -26,26 +26,29 @@ export class AuthController {
 
   @UseGuards(AuthGuard('local'))
   @Post('login')
-  async login(@Body() loginBody: LoginUserDto) {
+  async login(@Req() req, @Body() loginBody: LoginUserDto) {
     const { email, password, remember_me } = loginBody
-
+    const user = req.user
+    // console.log(req.user)
     try {
-      const user = await this.authService.validateUser(email, password)
+      // const user = await this.authService.validateUser(email, password)
       const userRole = await this.userService.getRole(user.id)
+      const access_token = this.jwtService.sign(
+        {
+          user_id: user.id,
+          email: email,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          roles: userRole,
+        },
+        {
+          expiresIn: remember_me ? '1d' : '1h',
+        },
+      )
       return {
-        success: 'Access Granted',
-        access_token: this.jwtService.sign(
-          {
-            user_id: user.id,
-            email: email,
-            first_name: user.first_name,
-            last_name: user.last_name,
-            roles: userRole,
-          },
-          {
-            expiresIn: remember_me ? '1d' : '1h',
-          },
-        ),
+        message: 'Access Granted',
+        access_token,
+        access_token_contents: this.jwtService.decode(access_token),
       }
     } catch (err) {
       console.log(err)
@@ -59,14 +62,25 @@ export class AuthController {
     return 'hello world'
   }
 
-  //   @UseGuards(AuthGuard('local'))
-  //   @Post('login')
-  //   async login(@Req() req: Request) {
-  //     return {
-  //       message: 'Authorized',
-  //       // user: req.user,
+  @Get('user')
+  @UseGuards(AuthGuard('jwt'))
+  async getUser(@Req() req: Request, @Param('id') id: string) {
+    console.log('request user ', req.user)
+    // const user = await this.userService.findOne(id)
+    // const userRole = await this.userService.getRole(user.id)
 
-  //     }
-  //     // return req.user
-  //   }
+    /**
+     *
+     */
+    // return {
+    //   ...user,
+    //   roles: userRole,
+    // }
+    return {
+      ...req.user,
+    }
+  }
+  // @UseGuards(AuthGuard('jwt'))
+  // @Post('refresh')
+  // async refreshToken() {}
 }

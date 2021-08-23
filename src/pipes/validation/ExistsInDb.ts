@@ -32,8 +32,8 @@ export function ExistsInDb(
               console.log(err)
               return false
             })
-          console.log('Exists in DB Invoked', entityRepositoryFindByField)
-          console.log('Exists in DB args', args)
+          // console.log('Exists in DB Invoked', entityRepositoryFindByField)
+          // console.log('Exists in DB args', args)
           // console.log(
           //   'entityRepositoryFindByField',
           //   entityRepositoryFindByField,

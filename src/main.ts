@@ -29,8 +29,21 @@ async function bootstrap() {
   app = app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
+      whitelist: true,
     }),
   )
+  /**
+   * enable cors
+   */
+  app.enableCors({
+    ...(process.env.NODE_ENV === 'production' && {
+      // credentials: true,
+      origin:
+        process.env.CLIENT_URL.indexOf(';') > -1
+          ? process.env.CLIENT_URL.split(';')
+          : process.env.CLIENT_URL,
+    }),
+  })
   const port = process.env.PORT || 6000
 
   await app.listen(port)

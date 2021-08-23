@@ -7,7 +7,7 @@ export class SQLDateGenerator {
     return new Date(this.param).getFullYear()
   }
   private getMonth() {
-    return new Date(this.param).getMonth()
+    return new Date(this.param).getMonth() + 1
   }
 
   private getDay() {

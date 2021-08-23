@@ -1,0 +1,20 @@
+### GET ADMIN ACCOUNTS
+
+GET http://localhost:6006/admin
+
+### CREATE NEW ADMIN
+POST http://localhost:6006/admin
+Content-Type: application/json
+
+{
+    # "name": "Janeo",
+    # "user": "9CF68DA5-F503-EC11-B661-00E18CEF5938"
+}
+###
+PATCH http://localhost:6006/admin/56ED1192-50FF-EB11-B661-00E18CEF5938
+Content-Type: application/json
+
+{
+    # "name": "Creator",
+    "user": "9CF68DA5-F503-EC11-B661-00E18CEF5938"
+}

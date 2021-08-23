@@ -7,30 +7,41 @@ Content-Type: application/json
     "first_name": "Janeo Miguel",
     "last_name": "Tiongson",
     "phone_number": "+639498460475", 
-    "email":"jm_pogi310@gmail.com",
+    "email":"jm_pogi310@yahoo.com",
     "password": "rakiabodyjm4690"
+    # "dsp": "B852D06E-A1FE-EB11-B661-00E18CEF5938"
 }
  
 ### SHOW ALL USERS
 GET http://localhost:6006/user/all
 
+
 ### CLEAR ALL USERS
 DELETE http://localhost:6006/user/clear
-###
-DELETE http://localhost:6006/user/E8EB7271-46FE-EB11-B661-00E18CEF5938
+Content-Type: application/json
+
+{
+    "email":"jm_pogi310@rakia.com",
+    "password":"rakiabodyjm4690"
+}
+
+###sDELETE http://localhost:6006/user/E18EB353-D403-EC11-B661-00E18CEF5938
 ### GET USER BY ID
-GET http://localhost:6006/user/648C4055-6DFE-EB11-B661-00E18CEF5938
+GET http://localhost:6006/user/9CF68DA5-F503-EC11-B661-00E18CEF5938
 ### UPDATE USER BY ID
-PATCH http://localhost:6006/user/648C4055-6DFE-EB11-B661-00E18CEF5938
+PATCH http://localhost:6006/user/9CF68DA5-F503-EC11-B661-00E18CEF5938
 Content-Type: application/json
 
 {
     # "password":"4690Astrid",
     # "email":"rakiabodyjm@yahoo.com",
-    "username": "rakiabodyjm"
-    # "dsp": "E9516987-2CFB-EB11-B661-00E18CEF5938",
-    # "dsp": "70BC518F-2EFC-EB11-B661-00E18CEF5938"
-    # "email": "rakiabodyjm@gmail.com"
+    # "username": "rakiabodyjm"
+    # "dsp": null
+    # "email": "rakiabodyjm@gmail.com",
+    # "first_name": "Janeo Miguel"
+    # "admin":"56ED1192-50FF-EB11-B661-00E18CEF5938"
+    "dsp": "B852D06E-A1FE-EB11-B661-00E18CEF5938"
+    # "admin": null
 }
 
 ### DISABLE/SUSPEND USER BY ID 

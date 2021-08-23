@@ -1,20 +1,26 @@
-import { Injectable } from '@nestjs/common'
+import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Paginated } from 'src/types/Paginated'
 import { GetAllUserDto } from 'src/user/dto/get-all-user.dto'
 import { User } from 'src/user/entities/user.entity'
-import { UserRoles } from 'src/user/types/UserRoles'
+import { UserTypes } from 'src/user/types/UserTypes'
 import paginateFind from 'src/utils/paginate'
 import { SQLDateGenerator } from 'src/utils/SQLDateGenerator'
 import { Like, Repository } from 'typeorm'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { isNotEmptyObject } from 'class-validator'
+import { Cache } from 'cache-manager'
+import { classToPlain, plainToClass } from 'class-transformer'
 
+//TODO replace relations array with Roles type array if module 'retailer' cerated
+
+//TODO fix entities (DSP Retailer ADMIN) default updated_at values
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -34,38 +40,37 @@ export class UserService {
   async findAll(
     params?: GetAllUserDto,
   ): Promise<User[] | Promise<Paginated<User>>> {
-    // const [, total] = await this.userRepository.findAndCount()
-    // const page = params?.page || 0
-    // const limit = params?.limit || 100
-    // const total_page = Math.ceil(total / limit)
     if (!isNotEmptyObject(params)) {
       return await this.userRepository.find({
-        relations: ['dsp', 'admin'],
+        // relations: ['dsp', 'admin'],
       })
     } else {
-      return paginateFind<User>(this.userRepository, params, {
-        relations: ['dsp', 'admin'],
+      return await paginateFind<User>(this.userRepository, params, {
+        // relations: ['dsp', 'admin'],
       })
     }
-    // const users = await this.userRepository.find({
-    //   relations: ['dsp', 'admin'],
-    // })
-    // return {
-    //   data: users,
-    //   metadata: {
-    //     total_page,
-    //     limit,
-    //     page,
-    //     total,
-    //   },
-    // }
   }
 
   async findOne(id: string): Promise<User> {
-    // return await this.userRepository.findByIds([id])[0]
-    return await this.userRepository.findOne(id, {
-      relations: ['dsp'],
-    })
+    /**
+     * apply caching since Authentication also relies on user data
+     */
+
+    const userCache: User = await this.cacheManager.get(id)
+    if (userCache) {
+      return userCache
+    }
+
+    try {
+      const user = await this.userRepository.findOneOrFail(id, {})
+
+      this.cacheManager.set(user.id, user, {
+        ttl: 10 * 60 * 1000,
+      })
+      return user
+    } catch (err) {
+      throw new Error(err.message)
+    }
   }
 
   async update(
@@ -73,21 +78,31 @@ export class UserService {
     updateUserDto: UpdateUserDto | Partial<UpdateUserDto>,
   ): Promise<User> {
     const userQuery: User = await this.userRepository.findOne(id, {
-      relations: ['dsp'],
+      // relations: ['dsp', 'admin'],
     })
-
     if (!userQuery) {
-      console.log('User Query', userQuery)
       throw new Error('User not found')
     }
-    const updatedUser: User = {
-      ...userQuery,
-      ...updateUserDto,
-      // updated_at: new Date(new SQLDateGenerator().timeNow().getSQLDate()),
-      updated_at: new SQLDateGenerator().timeNow().getSQLDateObject(),
+
+    /** mutate user class to accept updateuserdto params */
+    Object.keys(updateUserDto).forEach((key) => {
+      userQuery[key] = updateUserDto[key]
+    })
+    userQuery.updated_at = new SQLDateGenerator().timeNow().getSQLDateObject()
+
+    console.log('userquery', userQuery)
+    try {
+      await this.userRepository.save(userQuery)
+      // console.log('updateResults', updateResults)
+      // return plainToClass(User, user)
+      return userQuery
+    } catch (err) {
+      console.log(err)
     }
-    const user = await this.userRepository.save(updatedUser)
-    return user
+
+    /**
+     * apply plain object to class instance
+     */
   }
 
   async delete(id: string): Promise<User> {
@@ -118,7 +133,7 @@ export class UserService {
     return user
   }
 
-  async removeRole(id: string, roles: UserRoles[]) {
+  async removeRole(id: string, roles: UserTypes[]) {
     const user = await this.userRepository.findOne(id)
     roles.forEach(async (ea) => {
       this.userRepository.save({
@@ -145,7 +160,7 @@ export class UserService {
   }
 
   async getRole(id: string) {
-    const roleKeys: UserRoles[] = ['dsp']
+    const roleKeys: UserTypes[] = ['dsp', 'admin']
 
     const user = await this.userRepository.findOne(id, {
       relations: roleKeys,
@@ -153,15 +168,15 @@ export class UserService {
 
     console.log('user', user)
 
-    // const roles: Record<UserRoles, any>[] = []
-    const roles: UserRoles[] = []
+    // const roles: Record<UserTypes, any>[] = []
+    const roles: UserTypes[] = []
     roleKeys.forEach((ea) => {
       if (user[ea]) {
         // const toPush = {
         //   [ea]: user.id,
         // }
 
-        // roles.push(toPush as Record<UserRoles, string>)
+        // roles.push(toPush as Record<UserTypes, string>)
         roles.push(ea)
       }
     })

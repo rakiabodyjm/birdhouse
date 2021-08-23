@@ -1,6 +1,7 @@
 import { Exclude, Expose, Transform } from 'class-transformer'
 import { Admin } from 'src/admin/entities/admin.entity'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
+import { Roles, RolesArray } from 'src/types/Roles'
 import { Bcrypt } from 'src/utils/Bcrypt'
 import { SQLDateGenerator } from 'src/utils/SQLDateGenerator'
 import {
@@ -57,18 +58,43 @@ export class User {
 
   @OneToOne(() => Dsp, (dsp) => dsp.user, {
     /**
-     * "ensures" changes to user entity will affect the other one
+     * "cascade" ensures changes to user entity will affect the other one
      */
-    cascade: true,
+    // cascade: true,
     createForeignKeyConstraints: false,
     onDelete: 'CASCADE',
+    /**
+     * "eager" loads relationship so we don't have to specify relationship on find
+     */
+    eager: true,
   })
   dsp: Dsp
 
   @OneToOne(() => Admin, (admin) => admin.user, {
-    cascade: true,
+    /**
+     * "cascade" ensures changes to user entity will affect the other one
+     */
+    // cascade: true,
+
+    /**
+     * "eager" loads relationship so we don't have to specify relationship on find
+     */
+
+    eager: true,
     createForeignKeyConstraints: false,
     onDelete: 'CASCADE',
   })
   admin: Admin
+
+  @Expose()
+  roles?() {
+    const roles = []
+    RolesArray.forEach((ea) => {
+      if (this[ea]) {
+        roles.push(ea)
+      }
+    })
+
+    return roles
+  }
 }

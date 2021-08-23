@@ -15,6 +15,8 @@ import { Bcrypt } from 'src/utils/Bcrypt'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
 import { Admin } from 'src/admin/entities/admin.entity'
+import { User } from 'src/user/entities/user.entity'
+import { DspService } from 'src/dsp/dsp.service'
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
   // @IsNotEmpty({
@@ -54,13 +56,7 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   })
   active: boolean
 
-  // @Transform((params) => {
-  //   const { value } = params
-  //   console.log('value', value)
-  //   console.log(params)
-
-  //   return Bcrypt().generatePassword(value)
-  // })
+  @Transform(({ value }) => Bcrypt().generatePassword(value))
   password: string
 
   @IsOptional()

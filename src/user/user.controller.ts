@@ -19,24 +19,26 @@ import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { User } from 'src/user/entities/user.entity'
 import { v4 } from 'uuid'
-import { UserPasswordTransformer } from 'src/user/pipes/user-password-transformer.pipe'
 import { ApiTags } from '@nestjs/swagger'
 import { GetAllUserDto } from 'src/user/dto/get-all-user.dto'
 import { AuthGuard } from '@nestjs/passport'
+import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
+import { UserTransformer } from 'src/user/pipes/user-dto-transformer'
 
 @Controller('user')
 @ApiTags('User Routes')
 /**
  * serializes plain objects into classes to apply validation and transformation
  */
-
 @UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() createUserDto: CreateUserDto): Promise<{
+  async create(
+    @Body(new UserTransformer()) createUserDto: CreateUserDto,
+  ): Promise<{
     message: string
     user: User
   }> {
@@ -86,24 +88,41 @@ export class UserController {
 
   @Get('search')
   async search(@Query('find') searchString: string): Promise<User[]> {
-    return this.userService.search(searchString)
+    return this.userService
+      .search(searchString)
+      .then((res) => {
+        return res
+      })
+      .catch((err) => {
+        throw new HttpException(err, 400)
+      })
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.userService.findOne(id)
+    return this.userService
+      .findOne(id)
+      .then((res) => {
+        return res
+      })
+      .catch((err) => {
+        throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
+      })
   }
 
   @Patch(':id')
   async update(
-    @Param('id') id: string,
-    @Body(new UserPasswordTransformer())
-    updateUserDto: UpdateUserDto,
+    @Param() id: string,
+    @Body(new UserTransformer()) updateUserDto: UpdateUserDto,
+    // @Body() updateUserDto: UpdateUserDto,
   ): Promise<User> {
-    const user = await this.userService.update(id, updateUserDto)
-
-    // return (User, user)
-    return user
+    try {
+      console.log('updateuserdto', updateUserDto)
+      const user = await this.userService.update(id, updateUserDto)
+      return user
+    } catch (err) {
+      throw new HttpException(err.message, 400)
+    }
   }
 
   @Patch('suspend/:id')

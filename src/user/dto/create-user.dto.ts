@@ -10,12 +10,12 @@ import {
   MinLength,
 } from 'class-validator'
 import { Admin } from 'src/admin/entities/admin.entity'
+import { DspService } from 'src/dsp/dsp.service'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
 import { NoDuplicateInDb } from 'src/pipes/validation/NoDuplicateInDb'
 import { User } from 'src/user/entities/user.entity'
 import { Bcrypt } from 'src/utils/Bcrypt'
-import { v4 } from 'uuid'
 
 export class CreateUserDto {
   @ApiProperty()
@@ -77,11 +77,11 @@ export class CreateUserDto {
   @ExistsInDb(Dsp, null, {
     message: `DSP Account doesn't exist`,
   })
-  dsp?: Dsp
+  dsp: Dsp
 
   @IsOptional()
   @ExistsInDb(Admin, null, {
     message: `Admin Account doesn't exist`,
   })
-  admin?: Admin
+  admin: Admin
 }

@@ -4,7 +4,7 @@ import { FindManyOptions, Repository } from 'typeorm'
 export default async function paginateFind<T>(
   repository: Repository<T>,
   options: PaginateOptions,
-  findOptions: FindManyOptions<T>,
+  findOptions?: FindManyOptions<T>,
 ): Promise<Paginated<T>> {
   const [, total] = await repository.findAndCount()
   const page = options?.page || 0

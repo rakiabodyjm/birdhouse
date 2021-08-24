@@ -90,7 +90,6 @@ export class UserService {
     })
     userQuery.updated_at = new SQLDateGenerator().timeNow().getSQLDateObject()
 
-    console.log('userquery', userQuery)
     try {
       await this.userRepository.save(userQuery)
       // console.log('updateResults', updateResults)
@@ -98,6 +97,7 @@ export class UserService {
       return userQuery
     } catch (err) {
       console.log(err)
+      throw new Error(err.message)
     }
 
     /**

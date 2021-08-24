@@ -20,11 +20,11 @@ export class Dsp {
   dsp_code: string
 
   @OneToOne(() => User, (user) => user.dsp, {
-    cascade: true,
-    createForeignKeyConstraints: false,
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL',
   })
   @JoinColumn()
-  user: User
+  user?: User
 
   @JoinColumn()
   @ManyToOne(() => MapId, (mapid) => mapid.dsp, {})

@@ -18,7 +18,8 @@ export class Admin {
   name: string
 
   @OneToOne(() => User, (user) => user.admin, {
-    createForeignKeyConstraints: true,
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL',
   })
   @JoinColumn()
   user?: User

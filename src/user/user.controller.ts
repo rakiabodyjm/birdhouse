@@ -50,7 +50,6 @@ export class UserController {
     /**
      * Username unavailable
      */
-    console.log('duplicateUserName', duplicateUserName)
     if (duplicateUserName) {
       createUserDto.username = username + '-' + uuidTag
     } else {
@@ -117,7 +116,6 @@ export class UserController {
     // @Body() updateUserDto: UpdateUserDto,
   ): Promise<User> {
     try {
-      console.log('updateuserdto', updateUserDto)
       const user = await this.userService.update(id, updateUserDto)
       return user
     } catch (err) {

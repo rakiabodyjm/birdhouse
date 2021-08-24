@@ -13,7 +13,7 @@ export class Admin {
   id: string
 
   @Column({
-    nullable: true,
+    nullable: false,
   })
   name: string
 

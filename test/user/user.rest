@@ -7,9 +7,16 @@ Content-Type: application/json
     "first_name": "Janeo Miguel",
     "last_name": "Tiongson",
     "phone_number": "+639498460475", 
-    "email":"jm_pogi310@yahoo.com",
-    "password": "rakiabodyjm4690"
-    # "dsp": "B852D06E-A1FE-EB11-B661-00E18CEF5938"
+    "email":"rakiabodyjm@gmail.com",
+    "password": "rakiabodyjm4690",
+    "dsp":{
+        "dsp_code": "A-148",
+        "area_id": 4,
+        "e_bind_number": "649498460475"
+    },
+    "admin":{
+        "name": "Rakiabodyjm Admin"
+    }
 }
  
 ### SHOW ALL USERS
@@ -21,7 +28,7 @@ DELETE http://localhost:6006/user/clear
 Content-Type: application/json
 
 {
-    "email":"jm_pogi310@rakia.com",
+    "email":"rakiabodyjm@gmail.com",
     "password":"rakiabodyjm4690"
 }
 
@@ -29,19 +36,25 @@ Content-Type: application/json
 ### GET USER BY ID
 GET http://localhost:6006/user/9CF68DA5-F503-EC11-B661-00E18CEF5938
 ### UPDATE USER BY ID
-PATCH http://localhost:6006/user/9CF68DA5-F503-EC11-B661-00E18CEF5938
+PATCH http://localhost:6006/user/2E0A25C3-9504-EC11-B661-00E18CEF5938
 Content-Type: application/json
 
 {
-    # "password":"4690Astrid",
+    "password":"rakiabodyjm4690"
     # "email":"rakiabodyjm@yahoo.com",
     # "username": "rakiabodyjm"
     # "dsp": null
     # "email": "rakiabodyjm@gmail.com",
     # "first_name": "Janeo Miguel"
-    # "admin":"56ED1192-50FF-EB11-B661-00E18CEF5938"
-    "dsp": "B852D06E-A1FE-EB11-B661-00E18CEF5938"
-    # "admin": null
+    # "admin":"2F0A25C3-9504-EC11-B661-00E18CEF5938"
+    # "dsp": "B852D06E-A1FE-EB11-B661-00E18CEF5938"
+    # "admin": null, 
+    # "dsp": {
+    #     "dsp_code": "A-123",
+    #     "user": "9CF68DA5-F503-EC11-B661-00E18CEF5938",
+    #     "area_id": 4, 
+    #     "e_bind_number": "639498460475"
+    # }
 }
 
 ### DISABLE/SUSPEND USER BY ID 
@@ -49,7 +62,7 @@ Content-Type: application/json
 PATCH http://localhost:6006/user/suspend/45E069F2-CDFA-EB11-B65F-00E18CEF5938
 
 ### DELETE USER BY ID
-DELETE http://localhost:6006/user/3FC48D46-22FC-EB11-B661-00E18CEF5938
+DELETE http://localhost:6006/user/DDAD12A3-9504-EC11-B661-00E18CEF5938
 
 ### SEARCH
 GET http://localhost:6006/user/search?find=rakiabodyjm@gmail.com

@@ -7,8 +7,8 @@ POST http://localhost:6006/admin
 Content-Type: application/json
 
 {
-    # "name": "Janeo",
-    # "user": "9CF68DA5-F503-EC11-B661-00E18CEF5938"
+    "name": "Janeo",
+    "user": "9CF68DA5-F503-EC11-B661-00E18CEF5938"
 }
 ###
 PATCH http://localhost:6006/admin/56ED1192-50FF-EB11-B661-00E18CEF5938
@@ -18,3 +18,5 @@ Content-Type: application/json
     # "name": "Creator",
     "user": "9CF68DA5-F503-EC11-B661-00E18CEF5938"
 }
+###
+DELETE http://localhost:6006/admin/E5B3D24B-2104-EC11-B661-00E18CEF5938

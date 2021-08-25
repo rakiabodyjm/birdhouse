@@ -56,18 +56,15 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   })
   active: boolean
 
-  @Transform(({ value }) => Bcrypt().generatePassword(value))
-  password: string
-
-  @IsOptional()
-  @ExistsInDb(Dsp, 'id', {
-    message: `DSP doesn't exist`,
-  })
+  // @IsOptional()
+  // @ExistsInDb(Dsp, 'id', {
+  //   message: `DSP doesn't exist`,
+  // })
   dsp?: Dsp
 
-  @IsOptional()
-  @ExistsInDb(Admin, 'id', {
-    message: `Admin doesn't exist`,
-  })
+  // @IsOptional()
+  // @ExistsInDb(Admin, 'id', {
+  //   message: `Admin doesn't exist`,
+  // })
   admin?: Admin
 }

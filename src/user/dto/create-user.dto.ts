@@ -54,7 +54,10 @@ export class CreateUserDto {
   })
   email: string
 
-  @Transform(({ value }) => Bcrypt().generatePassword(value))
+  @Transform(({ value }) => {
+    console.log('Transforming password', value)
+    return Bcrypt().generatePassword(value)
+  })
   @ApiProperty()
   @IsNotEmpty({
     message: `Password cannot be empty`,
@@ -74,14 +77,18 @@ export class CreateUserDto {
   @ApiProperty({
     type: 'string',
   })
-  @ExistsInDb(Dsp, null, {
-    message: `DSP Account doesn't exist`,
-  })
-  dsp: Dsp
+  // @ExistsInDb(Dsp, null, {
+  //   message: `DSP Account doesn't exist`,
+  // })
+  dsp?: Dsp
 
+  // @IsOptional()
+  // @ExistsInDb(Admin, null, {
+  //   message: `Admin Account doesn't exist`,
+  // })
   @IsOptional()
-  @ExistsInDb(Admin, null, {
-    message: `Admin Account doesn't exist`,
+  @ApiProperty({
+    type: 'string',
   })
-  admin: Admin
+  admin?: Admin
 }

@@ -8,12 +8,18 @@ import { User } from 'src/user/entities/user.entity'
 import { Bcrypt } from 'src/utils/Bcrypt'
 import { getConnectionManager } from 'typeorm'
 
+/**
+ * User Transformer transforms password as bcryptGeneratedPassword
+ * Gets DSP entity from DB based on the body parameter dsp
+ * Gets Admin entity from DB based on the body parameter admin
+ */
+
 @Injectable()
 export class UserTransformer implements PipeTransform {
-  getEntity(Class: ClassConstructor<any>, id: any) {
+  getEntity(Entity: ClassConstructor<any>, id: any) {
     return getConnectionManager()
       .get('default')
-      .getRepository(Class)
+      .getRepository(Entity)
       .findOne(id)
       .then((res) => res)
   }
@@ -26,23 +32,19 @@ export class UserTransformer implements PipeTransform {
      */
     const returnValue = value
     if (metadata.type === 'body') {
-      if (returnValue.password) {
-        returnValue.password = Bcrypt().generatePassword(value.password)
-      }
       /**
-       * if DSP account is added into user account
+       * if existing DSP account is added into user account
        */
-      if (returnValue.dsp) {
+      if (typeof returnValue.dsp === 'string') {
         returnValue.dsp = await this.getEntity(Dsp, returnValue.dsp)
       }
       /**
-       * if Admin Account is added into user account
+       * if existing Admin Account is added into user account
        */
-      if (returnValue.admin) {
+      if (typeof returnValue.admin === 'string') {
         returnValue.admin = await this.getEntity(Admin, returnValue.admin)
       }
     }
-    console.log('usertransformer', returnValue)
 
     return returnValue
   }

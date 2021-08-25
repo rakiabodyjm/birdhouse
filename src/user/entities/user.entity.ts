@@ -60,13 +60,14 @@ export class User {
     /**
      * "cascade" ensures changes to user entity will affect the other one
      */
-    // cascade: true,
-    createForeignKeyConstraints: false,
-    onDelete: 'CASCADE',
+    cascade: true,
     /**
      * "eager" loads relationship so we don't have to specify relationship on find
      */
     eager: true,
+
+    // createForeignKeyConstraints: false,
+    onDelete: 'SET NULL',
   })
   dsp: Dsp
 
@@ -74,15 +75,15 @@ export class User {
     /**
      * "cascade" ensures changes to user entity will affect the other one
      */
-    // cascade: true,
+    cascade: true,
 
     /**
      * "eager" loads relationship so we don't have to specify relationship on find
      */
-
     eager: true,
-    createForeignKeyConstraints: false,
-    onDelete: 'CASCADE',
+
+    // createForeignKeyonstraints: false,
+    onDelete: 'SET NULL',
   })
   admin: Admin
 

@@ -19,4 +19,4 @@ Content-Type: application/json
     "user": "9CF68DA5-F503-EC11-B661-00E18CEF5938"
 }
 ###
-DELETE http://localhost:6006/admin/E5B3D24B-2104-EC11-B661-00E18CEF5938
+DELETE http://localhost:6006/admin/2F0A25C3-9504-EC11-B661-00E18CEF5938

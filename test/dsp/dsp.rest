@@ -4,9 +4,9 @@ Content-Type: application/json
 
 {
     "dsp_code": "A-103",
-    "user": "B852D06E-A1FE-EB11-B661-00E18CEF5938",
+    "user": null,
     "area_id": 2, 
-    "e_bind_number": "639498460475",
+    "e_bind_number": "639498460475"
 }
 ### GET ALL DSP
 GET http://localhost:6006/dsp
@@ -19,7 +19,7 @@ DELETE http://localhost:6006/dsp/clear
 Content-Type: application/json
 
 {
-    "username" :"rakiabodyjm",
+    "username" :"rakiabodyjm@gmail.com",
     "password": "rakiabodyjm4690"
 }
 

@@ -21,7 +21,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJha2lhY
 #     "password": "rakiabodyjm4690"
 # }
 ###
-GET http://localhost:6006/map-ids/?search=ILOCOS
+GET http://localhost:6006/map-ids/?search=132868
 
 ###
 GET http://localhost:6006/map-ids/

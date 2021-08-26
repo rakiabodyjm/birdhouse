@@ -1,0 +1,12 @@
+POST http://localhost:6006/subdistributor
+Content-Type: application/json
+
+{
+    "user": "674A19BB-9804-EC11-B661-00E18CEF5938",
+    "e_bind_number": "9913001601",
+    "id_number": "33-7854126-1",
+    "zip_code": "1423"
+}
+
+### 
+GET http://localhost:6006/subdistributor

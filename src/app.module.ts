@@ -4,14 +4,13 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { UserModule } from './user/user.module'
 import { ConfigModule } from '@nestjs/config'
-// import { MapIdService } from './map-id/map-id.service';
-// import { MapIdController } from './map-id/map-id.controller';
-// import { MapIdModule } from './map-id/map-id.module';
 import { MapIdsModule } from './map-ids/map-ids.module'
 import { DspModule } from './dsp/dsp.module'
 import { config } from 'dotenv'
 import { AdminModule } from './admin/admin.module'
 import { AuthModule } from './auth/auth.module'
+import { RetailersModule } from './retailers/retailers.module'
+import { SubdistributorModule } from './subdistributor/subdistributor.module'
 
 config()
 const additionalOptions = {
@@ -56,6 +55,8 @@ const additionalOptions = {
     UserModule,
     AdminModule,
     AuthModule,
+    RetailersModule,
+    SubdistributorModule,
   ],
   controllers: [AppController],
   providers: [AppService],

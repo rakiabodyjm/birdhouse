@@ -1,6 +1,7 @@
 import { Exclude, Expose, Transform } from 'class-transformer'
 import { Admin } from 'src/admin/entities/admin.entity'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
+import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
 import { Roles, RolesArray } from 'src/types/Roles'
 import { Bcrypt } from 'src/utils/Bcrypt'
 import { SQLDateGenerator } from 'src/utils/SQLDateGenerator'
@@ -42,6 +43,12 @@ export class User {
   @Column()
   @Exclude()
   password: string
+  @OneToOne(() => Subdistributor, (subd) => subd.user, {
+    eager: true,
+    cascade: true,
+    onDelete: 'SET NULL',
+  })
+  subdistributor: Subdistributor
 
   @Column({
     type: 'datetime',

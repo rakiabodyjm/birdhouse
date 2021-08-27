@@ -65,22 +65,8 @@ export class AuthController {
   @Get('user')
   @UseGuards(AuthGuard('jwt'))
   async getUser(@Req() req: Request, @Param('id') id: string) {
-    console.log('request user ', req.user)
-    // const user = await this.userService.findOne(id)
-    // const userRole = await this.userService.getRole(user.id)
-
-    /**
-     *
-     */
-    // return {
-    //   ...user,
-    //   roles: userRole,
-    // }
     return {
       ...req.user,
     }
   }
-  // @UseGuards(AuthGuard('jwt'))
-  // @Post('refresh')
-  // async refreshToken() {}
 }

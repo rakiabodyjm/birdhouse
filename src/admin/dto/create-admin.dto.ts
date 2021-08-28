@@ -1,10 +1,13 @@
-import { IsAlpha, IsString } from 'class-validator'
+import { ApiProperty } from '@nestjs/swagger'
+import { IsString } from 'class-validator'
 import { Admin } from 'src/admin/entities/admin.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
 import { NoDuplicateInDb } from 'src/pipes/validation/NoDuplicateInDb'
+import { CreateUserDto } from 'src/user/dto/create-user.dto'
 import { User } from 'src/user/entities/user.entity'
 
 export class CreateAdminDto {
+  @ApiProperty()
   @IsString({
     message: `Admin name must be string`,
   })
@@ -13,6 +16,9 @@ export class CreateAdminDto {
   })
   name: string
 
+  @ApiProperty({
+    type: String,
+  })
   @IsString({
     message: 'User must be string',
   })

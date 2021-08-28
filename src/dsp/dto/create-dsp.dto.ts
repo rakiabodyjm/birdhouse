@@ -2,6 +2,8 @@ import { PartialType } from '@nestjs/mapped-types'
 import {
   IsNotEmpty,
   IsNumber,
+  IsNumberString,
+  IsOptional,
   IsPhoneNumber,
   IsString,
   IsUUID,
@@ -12,8 +14,10 @@ import { NoDuplicateInDb } from 'src/pipes/validation/NoDuplicateInDb'
 import { MapId } from 'src/map-ids/entities/map-id.entity'
 import { CreateUserDto } from 'src/user/dto/create-user.dto'
 import { User } from 'src/user/entities/user.entity'
+import { ApiProperty } from '@nestjs/swagger'
 
-export class CreateDspDto extends PartialType(CreateUserDto) {
+export class CreateDspDto {
+  @ApiProperty()
   @IsNotEmpty({
     message: 'E-Bind Number should not be empty',
   })
@@ -22,6 +26,7 @@ export class CreateDspDto extends PartialType(CreateUserDto) {
   })
   e_bind_number: string
 
+  @ApiProperty()
   @ExistsInDb(MapId, 'area_id', {
     message: 'Area ID does not exist',
   })
@@ -29,12 +34,20 @@ export class CreateDspDto extends PartialType(CreateUserDto) {
   @IsNumber({}, { message: 'Invalid Area ID format' })
   area_id: MapId
 
+  @ApiProperty()
+  @IsNotEmpty({
+    message: `DSP Code should not be empty`,
+  })
   @IsString()
   @NoDuplicateInDb(Dsp, 'dsp_code', {
     message: 'DSP Code already exists',
   })
   dsp_code: string
 
+  @ApiProperty({
+    type: String,
+  })
+  @IsOptional()
   @ExistsInDb(User, 'id', {
     message: 'User ID does not exist',
   })

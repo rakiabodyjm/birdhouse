@@ -12,7 +12,6 @@ import { Dsp } from 'src/dsp/entities/dsp.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
 import { NoDuplicateInDb } from 'src/pipes/validation/NoDuplicateInDb'
 import { MapId } from 'src/map-ids/entities/map-id.entity'
-import { CreateUserDto } from 'src/user/dto/create-user.dto'
 import { User } from 'src/user/entities/user.entity'
 import { ApiProperty } from '@nestjs/swagger'
 
@@ -26,7 +25,10 @@ export class CreateDspDto {
   })
   e_bind_number: string
 
-  @ApiProperty()
+  @ApiProperty({
+    required: true,
+    type: 'string',
+  })
   @ExistsInDb(MapId, 'area_id', {
     message: 'Area ID does not exist',
   })
@@ -44,14 +46,12 @@ export class CreateDspDto {
   })
   dsp_code: string
 
-  @ApiProperty({
-    type: String,
-  })
+  @ApiProperty()
   @IsOptional()
   @ExistsInDb(User, 'id', {
     message: 'User ID does not exist',
   })
   @IsNotEmpty()
   @IsUUID()
-  user: User
+  user?: User
 }

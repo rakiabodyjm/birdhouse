@@ -1,5 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types'
-import { ApiProperty } from '@nestjs/swagger'
+import { ApiProperty, getSchemaPath } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
 import {
   IsEmail,
@@ -9,10 +8,10 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator'
+import { CreateAdminDto } from 'src/admin/dto/create-admin.dto'
 import { Admin } from 'src/admin/entities/admin.entity'
-import { DspService } from 'src/dsp/dsp.service'
+import { CreateDspDto } from 'src/dsp/dto/create-dsp.dto'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
-import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
 import { NoDuplicateInDb } from 'src/pipes/validation/NoDuplicateInDb'
 import { User } from 'src/user/entities/user.entity'
 import { Bcrypt } from 'src/utils/Bcrypt'
@@ -75,20 +74,15 @@ export class CreateUserDto {
 
   @IsOptional()
   @ApiProperty({
-    type: 'string',
+    type: CreateDspDto,
+    required: false,
   })
-  // @ExistsInDb(Dsp, null, {
-  //   message: `DSP Account doesn't exist`,
-  // })
   dsp?: Dsp
 
-  // @IsOptional()
-  // @ExistsInDb(Admin, null, {
-  //   message: `Admin Account doesn't exist`,
-  // })
   @IsOptional()
   @ApiProperty({
-    type: 'string',
+    type: CreateAdminDto,
+    required: true,
   })
   admin?: Admin
 }

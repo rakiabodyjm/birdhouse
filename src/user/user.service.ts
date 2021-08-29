@@ -51,17 +51,20 @@ export class UserService {
     }
   }
 
-  async findOne(id: string): Promise<User> {
+  async findOne(id: string, isCached?: boolean): Promise<User> {
     /**
      * apply caching since Authentication also relies on user data
      */
-
-    const userCache: User = await this.cacheManager.get(id)
-    if (userCache) {
-      return userCache
-    }
-
     try {
+      const userCache: User = await this.cacheManager.get(id)
+      if (userCache) {
+        if (isCached === true) {
+          return userCache
+        } else {
+          this.cacheManager.del(id)
+        }
+      }
+
       const user = await this.userRepository.findOneOrFail(id, {})
 
       this.cacheManager.set(user.id, user, {
@@ -91,9 +94,13 @@ export class UserService {
     userQuery.updated_at = new SQLDateGenerator().timeNow().getSQLDateObject()
 
     try {
-      await this.userRepository.save(userQuery)
-      // console.log('updateResults', updateResults)
-      // return plainToClass(User, user)
+      const user = await this.userRepository.save(userQuery)
+      if (await this.cacheManager.get(user.id)) {
+        this.cacheManager.set(user.id, user, {
+          ttl: 10 * 60 * 1000,
+        })
+      }
+
       return userQuery
     } catch (err) {
       console.log(err)
@@ -165,8 +172,6 @@ export class UserService {
     const user = await this.userRepository.findOne(id, {
       relations: roleKeys,
     })
-
-    console.log('user', user)
 
     // const roles: Record<UserTypes, any>[] = []
     const roles: UserTypes[] = []

@@ -1,12 +1,6 @@
 import { Dsp } from 'src/dsp/entities/dsp.entity'
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm'
+import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
+import { Column, Entity, OneToMany } from 'typeorm'
 
 @Entity()
 export class MapId {
@@ -18,16 +12,16 @@ export class MapId {
   })
   area_id: string
 
-  @Column({ nullable: false, type: 'nvarchar' })
+  @Column()
   area_name: string
 
-  @Column({ nullable: false, type: 'nvarchar' })
+  @Column()
   parent_name!: string
 
-  @Column({ nullable: false, type: 'nvarchar' })
+  @Column()
   parent_parent_name!: string
 
-  @Column({ nullable: false, type: 'nvarchar' })
+  @Column()
   area_parent_pp_name!: string
 
   @OneToMany(() => Dsp, (dsp) => dsp.area_id, {
@@ -35,4 +29,7 @@ export class MapId {
     createForeignKeyConstraints: false,
   })
   dsp?: Dsp[]
+
+  @OneToMany((type) => Subdistributor, (subd) => subd.map_id)
+  subdistributors: Subdistributor[]
 }

@@ -18,7 +18,7 @@ import { AdminService } from './admin.service'
 import { CreateAdminDto } from './dto/create-admin.dto'
 import { UpdateAdminDto } from './dto/update-admin.dto'
 
-@ApiTags('admin routes')
+@ApiTags('Admin Routes')
 @Controller('admin')
 @UseInterceptors(ClassSerializerInterceptor)
 export class AdminController {

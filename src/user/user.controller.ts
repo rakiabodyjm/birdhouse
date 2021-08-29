@@ -22,8 +22,8 @@ import { v4 } from 'uuid'
 import { ApiTags } from '@nestjs/swagger'
 import { GetAllUserDto } from 'src/user/dto/get-all-user.dto'
 import { AuthGuard } from '@nestjs/passport'
-import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
 import { UserTransformer } from 'src/user/pipes/user-dto-transformer'
+import { GetUserDto } from 'src/user/dto/get-user.dto'
 
 @Controller('user')
 @ApiTags('User Routes')
@@ -98,9 +98,9 @@ export class UserController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string, @Query() query: GetUserDto) {
     return this.userService
-      .findOne(id)
+      .findOne(id, query.cache)
       .then((res) => {
         return res
       })
@@ -115,6 +115,7 @@ export class UserController {
     @Body(new UserTransformer()) updateUserDto: UpdateUserDto,
     // @Body() updateUserDto: UpdateUserDto,
   ): Promise<User> {
+    console.log('updateuser', updateUserDto)
     try {
       const user = await this.userService.update(id, updateUserDto)
       return user

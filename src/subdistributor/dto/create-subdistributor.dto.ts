@@ -43,7 +43,9 @@ export class CreateSubdistributorDto {
   )
   @ApiProperty()
   zip_code: string
-  @NoDuplicateInDb(Subdistributor, 'user')
+  @NoDuplicateInDb(Subdistributor, 'user', {
+    message: 'User account already used by another Subdistributor Account',
+  })
   @ApiProperty()
   @IsNotEmpty()
   @IsUUID()

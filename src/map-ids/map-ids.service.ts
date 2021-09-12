@@ -21,8 +21,6 @@ export class MapIdsService {
   }
 
   async search({ search, page = 0, limit = 100 }: SearchMapDto) {
-    console.log('search', 'page', page, 'limt', limit)
-
     let maps = []
 
     if (search) {

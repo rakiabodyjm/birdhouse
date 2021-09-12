@@ -39,6 +39,6 @@ export class Dsp {
   @ManyToOne((type) => Subdistributor, (subd) => subd.dsp)
   subdistributor: Subdistributor
 
-  @OneToMany(() => Retailer, (retailer) => retailer.dsp)
+  @OneToMany((type) => Retailer, (retailer) => retailer.dsp)
   retailers: Retailer[]
 }

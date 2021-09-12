@@ -45,7 +45,11 @@ export class DspService {
   }
 
   async findOne(id: string) {
-    return await this.dspRepository.findOne(id)
+    try {
+      return await this.dspRepository.findOneOrFail(id)
+    } catch (err) {
+      throw err
+    }
   }
 
   async update(id: string, updateDspDto: UpdateDspDto) {
@@ -75,8 +79,10 @@ export class DspService {
     // return `This action updates a #${id} dsp`
   }
 
-  remove(id: number) {
-    this.dspRepository.delete(id)
+  async remove(id: string) {
+    const dspFind = await this.findOne(id)
+    await this.dspRepository.delete(id)
+    return dspFind
   }
 
   async clear() {

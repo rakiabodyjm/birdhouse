@@ -1,8 +1,15 @@
 import { Dsp } from 'src/dsp/entities/dsp.entity'
 import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
-import { Column, Entity, OneToMany } from 'typeorm'
+import { Column, Entity, Index, OneToMany } from 'typeorm'
 
 @Entity()
+@Index([
+  'area_name',
+  'area_id',
+  'area_parent_pp_name',
+  'parent_name',
+  'parent_parent_name',
+])
 export class MapId {
   // @PrimaryGeneratedColumn('increment')
   // id!: string

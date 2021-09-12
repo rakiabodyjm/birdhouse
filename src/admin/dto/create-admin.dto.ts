@@ -24,7 +24,7 @@ export class CreateAdminDto {
     message: `User account doesn't exist`,
   })
   @NoDuplicateInDb(Admin, 'user', {
-    message: `User account already used`,
+    message: `User account already used by another Admin Account`,
   })
   user?: User
 }

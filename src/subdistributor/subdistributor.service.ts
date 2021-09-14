@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { classToPlain, plainToClass } from 'class-transformer'
 import { isNotEmptyObject } from 'class-validator'
 import { GetAllSubdistributor } from 'src/subdistributor/dto/get-subdistributor.dto'
 import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
@@ -26,7 +27,7 @@ export class SubdistributorService {
     params?: GetAllSubdistributor,
   ): Promise<Subdistributor[] | Paginated<Subdistributor>> {
     if (!isNotEmptyObject(params)) {
-      return await this.subdRepository.find({})
+      return await this.subdRepository.find({ relations: ['user'] })
     } else {
       return await paginateFind<Subdistributor>(this.subdRepository, params, {
         relations: ['user'],
@@ -35,15 +36,47 @@ export class SubdistributorService {
     // return `This action returns all subdistributor`
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} subdistributor`
+  async findOne(id: string) {
+    try {
+      const subd = await this.subdRepository.findOneOrFail(id, {
+        relations: ['user'],
+      })
+      if (subd) {
+        return subd
+      }
+    } catch (err) {
+      throw new Error(err.message)
+    }
+
+    // return `This action returns a #${id} subdistributor`
   }
 
-  update(id: number, updateSubdistributorDto: UpdateSubdistributorDto) {
-    return `This action updates a #${id} subdistributor`
+  async update(id: string, updateSubdistributorDto: UpdateSubdistributorDto) {
+    try {
+      const subd: Subdistributor = await this.findOne(id)
+      console.log('dto', updateSubdistributorDto)
+      Object.keys(updateSubdistributorDto).forEach((key) => {
+        subd[key] = updateSubdistributorDto[key]
+      })
+      await this.subdRepository.update(id, subd)
+      return subd
+    } catch (err) {
+      throw new Error(err.message)
+    }
+
+    // return `This action updates a #${id} subdistributor`
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} subdistributor`
+  async remove(id: string) {
+    try {
+      const subd = await this.findOne(id)
+      const deleteResult = await this.subdRepository.delete(subd.id)
+      console.log(deleteResult)
+      return subd
+    } catch (err) {
+      throw new Error(err.message)
+    }
+
+    // return `This action removes a #${id} subdistributor`
   }
 }

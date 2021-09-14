@@ -52,7 +52,6 @@ export class Subdistributor {
     return this.user.last_name
   }
 
-  @Expose()
   owner_name() {
     return this.user ? `${this.user.first_name} ${this.user.last_name}` : null
   }

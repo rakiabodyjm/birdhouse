@@ -9,13 +9,18 @@ import {
   HttpCode,
   HttpStatus,
   Query,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+  HttpException,
 } from '@nestjs/common'
 import { SubdistributorService } from './subdistributor.service'
 import { CreateSubdistributorDto } from './dto/create-subdistributor.dto'
 import { UpdateSubdistributorDto } from './dto/update-subdistributor.dto'
 import { GetAllSubdistributor } from 'src/subdistributor/dto/get-subdistributor.dto'
+import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
 
 @Controller('subdistributor')
+@UseInterceptors(ClassSerializerInterceptor)
 export class SubdistributorController {
   constructor(private readonly subdistributorService: SubdistributorService) {}
 
@@ -32,20 +37,39 @@ export class SubdistributorController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.subdistributorService.findOne(+id)
+  async findOne(@Param('id') id: string): Promise<Subdistributor> {
+    try {
+      const subd = await this.subdistributorService.findOne(id)
+      return subd
+    } catch (err) {
+      throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
+    }
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateSubdistributorDto: UpdateSubdistributorDto,
   ) {
-    return this.subdistributorService.update(+id, updateSubdistributorDto)
+    console.log('subddtocontroller', updateSubdistributorDto)
+    try {
+      const subd = await this.subdistributorService.update(
+        id,
+        updateSubdistributorDto,
+      )
+      return subd
+    } catch (err) {
+      throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.subdistributorService.remove(+id)
+  async remove(@Param('id') id: string) {
+    try {
+      const subd = await this.subdistributorService.remove(id)
+      return subd
+    } catch (err) {
+      throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
+    }
   }
 }

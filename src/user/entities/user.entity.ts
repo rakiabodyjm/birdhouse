@@ -1,6 +1,7 @@
 import { Exclude, Expose, Transform } from 'class-transformer'
 import { Admin } from 'src/admin/entities/admin.entity'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
+import { Retailer } from 'src/retailers/entities/retailer.entity'
 import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
 import { Roles, RolesArray } from 'src/types/Roles'
 import { Bcrypt } from 'src/utils/Bcrypt'
@@ -9,8 +10,6 @@ import {
   Column,
   Entity,
   Index,
-  JoinColumn,
-  JoinTable,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm'
@@ -58,7 +57,8 @@ export class User {
 
   @Column({
     type: 'datetime',
-    default: new SQLDateGenerator().timeNow().getSQLDate(),
+    // default: new SQLDateGenerator().timeNow().getSQLDate(),
+    default: 'CURRENT_TIMESTAMP',
     nullable: false,
   })
   updated_at: Date
@@ -93,6 +93,9 @@ export class User {
     onDelete: 'SET NULL',
   })
   admin: Admin
+
+  @OneToOne((type) => Retailer, (retailer) => retailer.user)
+  retailer: Retailer
 
   @Expose()
   roles?() {

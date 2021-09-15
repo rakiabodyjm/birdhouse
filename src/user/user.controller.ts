@@ -24,6 +24,7 @@ import { GetAllUserDto } from 'src/user/dto/get-all-user.dto'
 import { AuthGuard } from '@nestjs/passport'
 import { UserTransformer } from 'src/user/pipes/user-dto-transformer'
 import { GetUserDto } from 'src/user/dto/get-user.dto'
+import { Paginated } from 'src/types/Paginated'
 
 @Controller('user')
 @ApiTags('User Routes')
@@ -70,7 +71,9 @@ export class UserController {
   }
 
   @Get('all')
-  async findAll(@Query() query: GetAllUserDto) {
+  async findAll(
+    @Query() query: GetAllUserDto,
+  ): Promise<Paginated<User> | User[]> {
     return await this.userService.findAll(query)
   }
 

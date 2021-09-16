@@ -1,0 +1,21 @@
+
+GET {{$dotenv HOST}}:{{$dotenv PORT}}/retailers
+###
+POST {{$dotenv HOST}}:{{$dotenv PORT}}/retailers
+Content-Type: application/json
+
+{
+    "subdistributor": "25FAED40-4907-EC11-B661-00E18CEF5938",
+    "dsp": "BA10C3F9-6D14-EC11-B663-00E18CEF5938",
+    "user": "674A19BB-9804-EC11-B661-00E18CEF5938", 
+    "e_bind_number": "9498460475", 
+    "id_type": "Driver's License",
+    "id_number": "019238-102938-3902"
+
+}
+
+###
+DELETE {{$dotenv HOST}}:{{$dotenv PORT}}/retailers/B9EC3682-EC16-EC11-B664-00E18CEF5938
+
+### 
+GET {{$dotenv HOST}}:{{$dotenv PORT}}/retailers/B9EC3682-EC16-EC11-B664-00E18CEF5938

@@ -8,7 +8,7 @@
 
 ###
 
-GET http://localhost:6006/map-ids?search=Roxas&page=0&limit=200
+GET http://localhost:6006/map-ids?search=Socorro&limit=200
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJha2lhYm9keWptQGdtYWlsLmNvbSIsInJvbGUiOltdLCJpYXQiOjE2Mjg5MjAyNzIsImV4cCI6MTYyOTAwNjY3Mn0.4BOTl6GZpjakfiMDjau4MCKZQ9bsOHEN10MtRqowWDE
 
 ###
@@ -21,7 +21,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJha2lhY
 #     "password": "rakiabodyjm4690"
 # }
 ###
-GET http://localhost:6006/map-ids/?search=132868
+GET http://localhost:6006/map-ids/?search=Punturin
 
 ###
 GET http://localhost:6006/map-ids/

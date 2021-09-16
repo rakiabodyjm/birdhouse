@@ -3,16 +3,22 @@ POST http://localhost:6006/dsp/
 Content-Type: application/json
 
 {
-    "dsp_code": "A-103",
-    "user": null,
+    "dsp_code": "A-443",
     "area_id": 2, 
     "e_bind_number": "639498460475"
+    # "user":{
+    #     "first_name": "Janeo Miguel",
+    #     "last_name": "Tiongson",
+    #     "phone_number": "+639498460475", 
+    #     "email":"rakiabodyjm@gmail.com"
+ 
+    # }
 }
 ### GET ALL DSP
 GET http://localhost:6006/dsp
 
 ### GET DSP WITH ID
-GET http://localhost:6006/dsp/DEB847C4-31F9-EB11-B65F-00E18CEF5938
+GET http://localhost:6006/dsp/B77E724F-AC16-EC11-B664-00E18CEF5938
 
 ### DELETE ALL DSP ACCONUT
 DELETE http://localhost:6006/dsp/clear
@@ -32,4 +38,5 @@ Content-Type: application/json
     # "user": "45E069F2-CDFA-EB11-B65F-00E18CEF5938",
     "user": "648C4055-6DFE-EB11-B661-00E18CEF5938"
 }
-
+###
+DELETE {{$dotenv HOST}}:{{$dotenv PORT}}/dsp/B77E724F-AC16-EC11-B664-00E18CEF5938

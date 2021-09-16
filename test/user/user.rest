@@ -20,7 +20,7 @@ Content-Type: application/json
 }
  
 ### SHOW ALL USERS
-GET http://localhost:6006/user/all
+GET http://localhost:6006/user/all?paginate
 
 
 ### CLEAR ALL USERS
@@ -47,13 +47,14 @@ Content-Type: application/json
     # "email": "rakiabodyjm@gmail.com",
     # "first_name": "Janeo Miguel"
     # "admin":"684A19BB-9804-EC11-B661-00E18CEF5938"
-    "dsp": "88A17787-EE06-EC11-B661-00E18CEF5938"
+    # "dsp": "88A17787-EE06-EC11-B661-00E18CEF5938"
     # "admin": null
     # "dsp": {
     #     "dsp_code": "A-123",
     #     "area_id": 4, 
     #     "e_bind_number": "639498460475"
     # }
+    "first_name": "Tiongson"
 }
 
 ### DISABLE/SUSPEND USER BY ID 

@@ -42,7 +42,15 @@ export class AuthController {
           roles: userRole,
         },
         {
-          expiresIn: remember_me ? '1d' : '1h',
+          // expiresIn: remember_me ? '1d' : '1h',
+          expiresIn:
+            process.env.NODE_ENV === 'development'
+              ? remember_me
+                ? '15m'
+                : '1m'
+              : remember_me
+              ? '1d'
+              : '1h',
         },
       )
       return {

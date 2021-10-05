@@ -11,29 +11,10 @@ import { AdminModule } from './admin/admin.module'
 import { AuthModule } from './auth/auth.module'
 import { RetailersModule } from './retailers/retailers.module'
 import { SubdistributorModule } from './subdistributor/subdistributor.module'
+import { LogsModule } from './logs/logs.module'
+import SQLConfig from 'root/ormconfig'
 
 config()
-const additionalOptions = {
-  type: 'mssql',
-  host: process.env.SQL_SERVER_HOST,
-  port: Number(process.env.SQL_SERVER_PORT),
-  username: process.env.SQL_SERVER_USERNAME,
-  password: process.env.SQL_SERVER_PASSWORD,
-  database: process.env.SQL_SERVER_DATABASE,
-  synchronize: true,
-  retryAttempts: 100,
-  // logging: true,
-  options: {
-    trustServerCertificate: process.env.NODE_ENV === 'development',
-  },
-  // entities: [User, MapId, Dsp],
-  autoLoadEntities: true,
-  pool: {
-    // idleTimeoutMillis: 100000,
-    // max: 14000,
-    // min: 0,
-  },
-} as TypeOrmModuleOptions
 
 @Module({
   imports: [
@@ -42,13 +23,7 @@ const additionalOptions = {
       envFilePath: '.development.env',
     }),
     TypeOrmModule.forRoot({
-      // entities: ['/dist/src/**/*.entity{.ts,.js}'],
-      // entities: [User],
-      // type: 'sqlite',
-      // database: ':memory:',
-      // logging: true,
-      // synchronize: true,
-      ...additionalOptions,
+      ...SQLConfig,
     }),
     MapIdsModule,
     DspModule,
@@ -57,6 +32,7 @@ const additionalOptions = {
     AuthModule,
     RetailersModule,
     SubdistributorModule,
+    LogsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

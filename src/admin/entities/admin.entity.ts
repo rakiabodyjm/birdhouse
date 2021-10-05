@@ -18,9 +18,10 @@ export class Admin {
   name: string
 
   @OneToOne(() => User, (user) => user.admin, {
-    onUpdate: 'CASCADE',
-    onDelete: 'SET NULL',
+    nullable: false,
   })
-  @JoinColumn()
-  user?: User
+  @JoinColumn({
+    name: 'user_id',
+  })
+  user: User
 }

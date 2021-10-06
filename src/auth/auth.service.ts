@@ -29,7 +29,6 @@ export class AuthService {
     if (!user) {
       throw new Error(`User doesn't exist`)
     }
-    console.log('password', password, 'user.password', user.password)
     const isPasswordCorrect = Bcrypt().isPasswordCorrect(
       password,
       user.password,

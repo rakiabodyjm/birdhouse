@@ -35,7 +35,7 @@ export class DspController {
   @Get()
   async findAll(
     @Query() searchQuery: GetAllDspDto,
-  ): Promise<Dsp[] | Promise<Paginated<Dsp>>> {
+  ): Promise<Dsp[] | Promise<Paginated<Dsp>> | number> {
     const dsps = await this.dspService.findAll(searchQuery)
     return dsps
   }
@@ -61,6 +61,21 @@ export class DspController {
     }
   }
 
+  @Delete('clear')
+  async clear(
+    @Body() body: { username: string; password: string },
+  ): Promise<{ message: `DSP records cleared` }> {
+    const { username, password } = body
+    try {
+      await this.dspService.clear()
+      return {
+        message: 'DSP records cleared',
+      }
+    } catch (err) {
+      console.error(err)
+      throw new HttpException(err.message, 400)
+    }
+  }
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<EntityMessage<Dsp>> {
     try {
@@ -71,16 +86,6 @@ export class DspController {
       }
     } catch (err) {
       throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
-    }
-  }
-  @Delete('clear')
-  async clear(
-    @Body() body: { username: string; password: string },
-  ): Promise<{ message: `DSP records cleared` }> {
-    const { username, password } = body
-    await this.dspService.clear()
-    return {
-      message: 'DSP records cleared',
     }
   }
 }

@@ -44,6 +44,18 @@ export class UserTransformer implements PipeTransform {
       if (typeof returnValue.admin === 'string') {
         returnValue.admin = await this.getEntity(Admin, returnValue.admin)
       }
+
+      // if (
+      //   typeof returnValue.dsp.area_id === 'object' &&
+      //   Array.isArray(returnValue.dsp.area_id)
+      // ) {
+      //   const areaIds = returnValue.dsp.area_id
+      //   returnValue.dsp.area_id = await Promise.all(
+      //     areaIds.map((ea) => {
+      //       return this.getEntity()
+      //     }),
+      //   )
+      // }
     }
 
     return returnValue

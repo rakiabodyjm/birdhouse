@@ -6,7 +6,9 @@ export default async function paginateFind<T>(
   options: PaginateOptions,
   findOptions?: FindManyOptions<T>,
 ): Promise<Paginated<T>> {
-  const [, total] = await repository.findAndCount()
+  const [, total] = await repository.findAndCount({
+    ...findOptions,
+  })
   const page = options?.page || 0
   const limit = options?.limit || 100
 

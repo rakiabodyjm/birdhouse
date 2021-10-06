@@ -1,9 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types'
 import {
+  IsArray,
   IsNotEmpty,
-  IsNumber,
-  IsNumberString,
-  IsOptional,
   IsPhoneNumber,
   IsString,
   IsUUID,
@@ -14,7 +12,7 @@ import { NoDuplicateInDb } from 'src/pipes/validation/NoDuplicateInDb'
 import { MapId } from 'src/map-ids/entities/map-id.entity'
 import { User } from 'src/user/entities/user.entity'
 import { ApiProperty } from '@nestjs/swagger'
-
+import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
 export class CreateDspDto {
   @ApiProperty()
   @IsNotEmpty({
@@ -29,12 +27,15 @@ export class CreateDspDto {
     required: true,
     type: 'string',
   })
-  @ExistsInDb(MapId, 'area_id', {
-    message: 'Area ID does not exist',
-  })
   @IsNotEmpty()
-  @IsNumber({}, { message: 'Invalid Area ID format' })
-  area_id: MapId
+  @IsArray({
+    message: 'Area ID must be of array format',
+  })
+  // area_ids: string
+  @ExistsInDb(MapId, 'area_id', {
+    message: `One or more of the area_id's does not exist`,
+  })
+  area_id: string[]
 
   @ApiProperty()
   @IsNotEmpty({
@@ -46,12 +47,22 @@ export class CreateDspDto {
   })
   dsp_code: string
 
+  @IsUUID()
+  @IsString()
+  @ExistsInDb(Subdistributor, 'id', {
+    message: `Subdistributor ID doesn't exist`,
+  })
+  @IsNotEmpty({
+    message: 'Subdistributor ID is Required',
+  })
+  subdistributor: Subdistributor
+
   @ApiProperty()
-  @IsOptional()
   @ExistsInDb(User, 'id', {
     message: 'User ID does not exist',
   })
+  @NoDuplicateInDb(Dsp, 'user_id')
   @IsNotEmpty()
   @IsUUID()
-  user?: User
+  user: User
 }

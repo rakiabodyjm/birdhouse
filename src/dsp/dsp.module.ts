@@ -11,7 +11,7 @@ import { MapIdsModule } from 'src/map-ids/map-ids.module'
     TypeOrmModule.forFeature([Dsp]),
     // UserModule,
     // forwardRef(() => UserModule),
-    // forwardRef(() => MapIdsModule),
+    forwardRef(() => MapIdsModule),
   ],
   controllers: [DspController],
   providers: [DspService],

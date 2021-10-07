@@ -10,6 +10,7 @@ import {
   ClassSerializerInterceptor,
   HttpException,
   HttpStatus,
+  Query,
 } from '@nestjs/common'
 import { RetailersService } from './retailers.service'
 import { CreateRetailerDto } from './dto/create-retailer.dto'
@@ -17,8 +18,11 @@ import { UpdateRetailerDto } from './dto/update-retailer.dto'
 import { Retailer } from 'src/retailers/entities/retailer.entity'
 import { Paginated } from 'src/types/Paginated'
 import { createEntityMessage } from 'src/types/EntityMessage'
+import { ApiTags } from '@nestjs/swagger'
+import { GetAllRetailerDto } from 'src/retailers/dto/get-all-retailer.dto'
 
-@Controller('retailers')
+@Controller('retailer')
+@ApiTags('Retailer Routes')
 @UseInterceptors(ClassSerializerInterceptor)
 export class RetailersController {
   constructor(private readonly retailersService: RetailersService) {}
@@ -29,8 +33,10 @@ export class RetailersController {
   }
 
   @Get()
-  findAll(): Promise<Paginated<Retailer> | Retailer[]> {
-    return this.retailersService.findAll()
+  findAll(
+    @Query() query: GetAllRetailerDto,
+  ): Promise<Paginated<Retailer> | Retailer[] | number> {
+    return this.retailersService.findAll(query)
   }
 
   @Get(':id')

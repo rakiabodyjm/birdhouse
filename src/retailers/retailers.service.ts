@@ -14,7 +14,11 @@ export class RetailersService {
   constructor(
     @InjectRepository(Retailer)
     private retailerRepository: Repository<Retailer>,
-  ) {}
+  ) {
+    this.relationsToLoad = ['dsp', 'subdistributor', 'user']
+  }
+
+  relationsToLoad: string[]
 
   async create(createRetailerDto: CreateRetailerDto): Promise<Retailer> {
     const newRetailer = this.retailerRepository.create(createRetailerDto)
@@ -27,22 +31,45 @@ export class RetailersService {
 
   async findAll(
     params?: GetAllRetailerDto,
-  ): Promise<Paginated<Retailer> | Retailer[]> {
+  ): Promise<Paginated<Retailer> | Retailer[] | number> {
     if (!isNotEmptyObject(params)) {
       return await this.retailerRepository.find({
-        relations: ['user', 'subdistributor', 'dsp'],
+        // relations: ['user', 'subdistributor', 'dsp'],
+        relations: this.relationsToLoad,
       })
     }
-    return await paginateFind<Retailer>(this.retailerRepository, params, {
-      relations: ['user', 'subdistributor', 'dsp'],
-    })
+    const whereQuery: { subdistributor?: string; dsp?: string } = {}
+    const { subdistributor, dsp } = params
+    if (subdistributor) {
+      whereQuery['subdistributor'] = subdistributor
+    }
+    if (dsp) {
+      whereQuery['dsp'] = dsp
+    }
+    const retailerQuery = await paginateFind<Retailer>(
+      this.retailerRepository,
+      params,
+      {
+        // relations: ['subdistributor', 'dsp'],
+        relations: this.relationsToLoad,
+        ...(isNotEmptyObject(whereQuery) && {
+          where: whereQuery,
+        }),
+      },
+    )
+
+    if (params?.countOnly) {
+      return retailerQuery.metadata.total
+    }
+    return retailerQuery
     // return `This action returns all retailers`
   }
 
   async findOne(id: string): Promise<Retailer | undefined> {
     const retailer: Retailer | undefined = await this.retailerRepository
       .findOneOrFail(id, {
-        relations: ['user', 'subdistributor', 'dsp'],
+        // relations: ['user', 'subdistributor', 'dsp'],
+        relations: this.relationsToLoad,
       })
       .then((res) => {
         return res

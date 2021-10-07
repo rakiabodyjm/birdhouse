@@ -17,6 +17,7 @@ import { MapIdsService } from './map-ids.service'
 // import { UpdateMapIdDto } from './dto/update-map-id.dto'
 import { SearchMapDto } from 'src/map-ids/dto/search-map-id.dto'
 import { ApiTags } from '@nestjs/swagger'
+import { MapId } from 'src/map-ids/entities/map-id.entity'
 
 // @UseGuards(AuthGuard('jwt'))
 @ApiTags('MapID Routes')
@@ -28,7 +29,7 @@ export class MapIdsController {
   //   return this.mapIdsService.findAll()
   // }
   @Get()
-  search(@Query() query?: SearchMapDto) {
+  search(@Query() query?: SearchMapDto): Promise<MapId[]> {
     return this.mapIdsService.search(query)
   }
 

@@ -14,14 +14,15 @@ export class MapIdsService {
   ) {}
 
   async findById(id: string) {
-    return await this.mapRepository.findOne(id)
+    return await this.mapRepository.findOneOrFail(id)
   }
+
   async findAll() {
     return await this.mapRepository.find()
   }
 
   async search({ search, page = 0, limit = 100 }: SearchMapDto) {
-    let maps = []
+    let maps: MapId[] = []
 
     if (search) {
       maps = await this.mapRepository
@@ -107,7 +108,6 @@ export class MapIdsService {
         .values(newArea[i])
         .execute()
         .catch((err) => {
-          console.log(err)
           errFound = true
         })
 
@@ -126,5 +126,24 @@ export class MapIdsService {
     return {
       mapIds: (await this.mapRepository.find()).length,
     }
+  }
+
+  async getMapIdsFromArray(args: string[]): Promise<MapId[]> {
+    let mapIds: MapId[] = []
+    mapIds = await Promise.all(
+      args.map(async (ea) => {
+        try {
+          const mapID = await this.findById(ea)
+          if (!mapID) {
+            throw new Error('One or More Map ID does not exist')
+          }
+          return mapID
+        } catch (err) {
+          throw err
+        }
+      }),
+    )
+
+    return mapIds
   }
 }

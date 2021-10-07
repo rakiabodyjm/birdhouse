@@ -1,11 +1,4 @@
-import {
-  ArrayContains,
-  IsEnum,
-  IsNumber,
-  IsNumberString,
-  IsOptional,
-  IsString,
-} from 'class-validator'
+import { IsNumberString, IsOptional, IsString } from 'class-validator'
 
 // enum FieldValues {
 //   area_id = 'area_id',

@@ -20,29 +20,39 @@ export function ExistsInDb(
       target: object.constructor,
       propertyName: propertyName,
       constraints: [],
-      // options: { ...validationOptions },
       options: validationOptions,
       validator: {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         async validate(value: any, args: ValidationArguments) {
-          const entityRepositoryFindByField = await getConnectionManager()
-            .get('default')
-            .getRepository(property)
-            .findOne(value)
-            .catch((err) => {
-              console.log(err)
-              return false
-            })
-          // console.log('Exists in DB Invoked', entityRepositoryFindByField)
-          // console.log('Exists in DB args', args)
-          // console.log(
-          //   'entityRepositoryFindByField',
-          //   entityRepositoryFindByField,
-          // )
-          if (!entityRepositoryFindByField) {
+          async function lookUp(param: any) {
+            return await getConnectionManager()
+              .get('default')
+              .getRepository(property)
+              .findOneOrFail({
+                [field || args.property]: param,
+              })
+              .catch((err) => {
+                console.error(err)
+                throw err
+              })
+          }
+          try {
+            if (typeof value === 'object' && Array.isArray(value)) {
+              await Promise.all(
+                value.map(async (ea) => {
+                  await lookUp(ea)
+                }),
+              )
+            } else {
+              const propertyLookup = await lookUp(value)
+              if (!propertyLookup) {
+                return false
+              }
+            }
+            return true
+          } catch (err) {
             return false
           }
-          // console.log('args', args)
-          return true
         },
       },
     })

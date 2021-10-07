@@ -6,6 +6,8 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -21,24 +23,43 @@ export class Dsp {
   dsp_code: string
 
   @OneToOne(() => User, (user) => user.dsp, {
-    onUpdate: 'CASCADE',
-    onDelete: 'SET NULL',
+    nullable: false,
   })
-  @JoinColumn()
-  user?: User
+  @JoinColumn({
+    name: 'user_id',
+  })
+  user: User
 
-  @JoinColumn()
-  @ManyToOne(() => MapId, (mapid) => mapid.dsp, {})
-  area_id: MapId
-
-  @Column({
+  @ManyToMany(() => MapId, (mapid) => mapid.dsp, {
+    cascade: true,
     nullable: true,
   })
+  @JoinTable({
+    name: 'dsp_area_id',
+    joinColumn: {
+      name: 'dsp_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'area_id',
+      referencedColumnName: 'area_id',
+    },
+  })
+  area_id: MapId[]
+
+  @Column()
   e_bind_number: string
 
-  @ManyToOne((type) => Subdistributor, (subd) => subd.dsp)
+  @ManyToOne((type) => Subdistributor, (subd) => subd.dsp, {
+    nullable: false,
+  })
+  @JoinColumn({
+    name: 'subdistributor_id',
+  })
   subdistributor: Subdistributor
 
-  @OneToMany((type) => Retailer, (retailer) => retailer.dsp)
-  retailers: Retailer[]
+  @OneToMany((type) => Retailer, (retailer) => retailer.dsp, {
+    onDelete: 'SET NULL',
+  })
+  retailer?: Retailer[]
 }

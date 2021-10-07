@@ -1,4 +1,4 @@
-import { ClassConstructor, classToPlain } from 'class-transformer'
+import { ClassConstructor } from 'class-transformer'
 import {
   registerDecorator,
   ValidationArguments,

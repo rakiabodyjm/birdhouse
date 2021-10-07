@@ -18,8 +18,10 @@ import { CreateSubdistributorDto } from './dto/create-subdistributor.dto'
 import { UpdateSubdistributorDto } from './dto/update-subdistributor.dto'
 import { GetAllSubdistributor } from 'src/subdistributor/dto/get-subdistributor.dto'
 import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
+import { ApiTags } from '@nestjs/swagger'
 
 @Controller('subdistributor')
+@ApiTags('Subdistributor Routes')
 @UseInterceptors(ClassSerializerInterceptor)
 export class SubdistributorController {
   constructor(private readonly subdistributorService: SubdistributorService) {}
@@ -27,7 +29,6 @@ export class SubdistributorController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createSubdistributorDto: CreateSubdistributorDto) {
-    console.log(createSubdistributorDto)
     return this.subdistributorService.create(createSubdistributorDto)
   }
 
@@ -51,7 +52,6 @@ export class SubdistributorController {
     @Param('id') id: string,
     @Body() updateSubdistributorDto: UpdateSubdistributorDto,
   ) {
-    console.log('subddtocontroller', updateSubdistributorDto)
     try {
       const subd = await this.subdistributorService.update(
         id,
@@ -71,5 +71,10 @@ export class SubdistributorController {
     } catch (err) {
       throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
     }
+  }
+
+  @Delete()
+  async clear() {
+    return this.subdistributorService.clear()
   }
 }

@@ -15,20 +15,34 @@ import {
 export class Retailer {
   @PrimaryGeneratedColumn('uuid')
   id: string
+
+  @JoinColumn({
+    name: 'subdistributor_id',
+  })
   @Expose()
-  @ManyToOne((type) => Subdistributor, (subd) => subd.retailers)
+  @ManyToOne((type) => Subdistributor, (subd) => subd.retailer, {
+    onDelete: 'SET NULL',
+    // eager: true,
+  })
   subdistributor: Subdistributor
 
   @Expose()
-  @ManyToOne((type) => Dsp, (dsp) => dsp.retailers)
-  dsp: Dsp
+  @ManyToOne((type) => Dsp, (dsp) => dsp.retailer, {
+    onDelete: 'SET NULL',
+    // eager: true,
+  })
+  @JoinColumn({
+    name: 'dsp_id',
+  })
+  dsp?: Dsp
 
   @Expose()
   @OneToOne((type) => User, (user) => user.retailer, {
-    onUpdate: 'CASCADE',
-    onDelete: 'SET NULL',
+    nullable: false,
   })
-  @JoinColumn()
+  @JoinColumn({
+    name: 'user_id',
+  })
   user: User
 
   @Column()

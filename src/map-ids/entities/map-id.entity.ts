@@ -1,6 +1,13 @@
 import { Dsp } from 'src/dsp/entities/dsp.entity'
 import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
-import { Column, Entity, Index, OneToMany } from 'typeorm'
+import {
+  Column,
+  Entity,
+  Index,
+  ManyToMany,
+  OneToOne,
+  PrimaryColumn,
+} from 'typeorm'
 
 @Entity()
 @Index([
@@ -14,29 +21,24 @@ export class MapId {
   // @PrimaryGeneratedColumn('increment')
   // id!: string
 
-  @Column({
-    primary: true,
-  })
+  @PrimaryColumn()
   area_id: string
 
-  @Column()
+  @Column({})
   area_name: string
 
-  @Column()
-  parent_name!: string
+  @Column({})
+  parent_name: string
 
-  @Column()
-  parent_parent_name!: string
+  @Column({})
+  parent_parent_name: string
 
-  @Column()
-  area_parent_pp_name!: string
+  @Column({})
+  area_parent_pp_name: string
 
-  @OneToMany(() => Dsp, (dsp) => dsp.area_id, {
-    onDelete: 'CASCADE',
-    createForeignKeyConstraints: false,
-  })
-  dsp?: Dsp[]
+  @ManyToMany(() => Dsp, (dsp) => dsp.area_id, {})
+  dsp?: Dsp
 
-  @OneToMany((type) => Subdistributor, (subd) => subd.map_id)
-  subdistributors: Subdistributor[]
+  @OneToOne((type) => Subdistributor, (subd) => subd.area_id, {})
+  subdistributor?: Subdistributor
 }

@@ -7,6 +7,8 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -18,31 +20,27 @@ export class Subdistributor {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
+  @Column({
+    nullable: false,
+  })
+  name: string
+
   @Column()
   e_bind_number: string
 
-  @JoinColumn()
-  @OneToOne((type) => User, (user) => user.subdistributor, {
-    onUpdate: 'CASCADE',
-    onDelete: 'SET NULL',
-  })
-  user?: User
-
-  @Column()
+  @Column({})
   id_number: string
 
-  @OneToMany((type) => Dsp, (dsp) => dsp.subdistributor)
-  dsp?: Dsp[]
-
-  @OneToMany((type) => Retailer, (retailer) => retailer.subdistributor)
-  @JoinColumn()
-  retailers: Retailer[]
-
-  @ManyToOne((type) => MapId, (mapid) => mapid.subdistributors)
-  map_id: MapId
+  @Column({})
+  id_type: string
 
   @Column()
   zip_code: string
+
+  // @Column({
+  //   type: 'date',
+  // })
+  // birthdate: Date
 
   owner_first_name() {
     return this.user.first_name
@@ -55,4 +53,35 @@ export class Subdistributor {
   owner_name() {
     return this.user ? `${this.user.first_name} ${this.user.last_name}` : null
   }
+
+  @JoinColumn({
+    name: 'user_id',
+  })
+  @OneToOne((type) => User, (user) => user.subdistributor, {
+    nullable: false,
+  })
+  user: User
+
+  @OneToOne((type) => MapId, (mapid) => mapid.subdistributor, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({
+    name: 'area_id',
+  })
+  area_id: MapId
+
+  @OneToMany((type) => Dsp, (dsp) => dsp.subdistributor, {
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL',
+    nullable: true,
+  })
+  dsp?: Dsp[]
+
+  @OneToMany((type) => Retailer, (retailer) => retailer.subdistributor)
+  retailer?: Retailer[]
+
+  retailer_total: number
+  dsp_total: number
+  // dsp_total: number
 }

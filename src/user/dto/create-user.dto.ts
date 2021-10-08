@@ -1,7 +1,10 @@
 import { ApiProperty, getSchemaPath } from '@nestjs/swagger'
+
 import { Transform } from 'class-transformer'
 import {
+  Allow,
   IsEmail,
+  IsEmpty,
   IsNotEmpty,
   IsOptional,
   IsPhoneNumber,
@@ -13,6 +16,10 @@ import { Admin } from 'src/admin/entities/admin.entity'
 import { CreateDspDto } from 'src/dsp/dto/create-dsp.dto'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
 import { NoDuplicateInDb } from 'src/pipes/validation/NoDuplicateInDb'
+import { CreateRetailerDto } from 'src/retailers/dto/create-retailer.dto'
+import { Retailer } from 'src/retailers/entities/retailer.entity'
+import { CreateSubdistributorDto } from 'src/subdistributor/dto/create-subdistributor.dto'
+import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
 import { User } from 'src/user/entities/user.entity'
 import { Bcrypt } from 'src/utils/Bcrypt'
 
@@ -53,6 +60,17 @@ export class CreateUserDto {
   })
   email: string
 
+  @IsNotEmpty({
+    message: `Address 1 is Required`,
+  })
+  address1: string
+
+  @MaxLength(255, {
+    message: `Address 2 too long`,
+  })
+  @IsOptional()
+  address2: string
+
   @Transform(({ value }) => {
     console.log('Transforming password', value)
     return Bcrypt().generatePassword(value)
@@ -66,6 +84,7 @@ export class CreateUserDto {
   })
   password: string
 
+  @IsOptional()
   @ApiProperty()
   @NoDuplicateInDb(User, null, {
     message: 'Username already used',
@@ -82,7 +101,32 @@ export class CreateUserDto {
   @IsOptional()
   @ApiProperty({
     type: CreateAdminDto,
-    required: true,
+    required: false,
   })
   admin?: Admin
+
+  @IsOptional()
+  @ApiProperty({
+    type: CreateSubdistributorDto,
+    required: false,
+  })
+  subdistributor?: Subdistributor
+
+  @Allow()
+  // @IsOptional()
+  @ApiProperty({
+    type: CreateRetailerDto,
+    required: false,
+  })
+  retailer?: Retailer
+
+  @IsEmpty({
+    message: `Created at and Updated at values are fixed`,
+  })
+  create_at: Date
+
+  @IsEmpty({
+    message: `Created at and Updated at values are fixed`,
+  })
+  updated_at
 }

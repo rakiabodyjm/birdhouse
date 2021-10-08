@@ -3,15 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Paginated } from 'src/types/Paginated'
 import { GetAllUserDto } from 'src/user/dto/get-all-user.dto'
 import { User } from 'src/user/entities/user.entity'
-import { UserTypes } from 'src/user/types/UserTypes'
+import { Roles, UserTypes } from 'src/types/Roles'
 import paginateFind from 'src/utils/paginate'
-import { SQLDateGenerator } from 'src/utils/SQLDateGenerator'
 import { Like, Repository } from 'typeorm'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { isNotEmptyObject } from 'class-validator'
 import { Cache } from 'cache-manager'
-import { classToPlain, plainToClass } from 'class-transformer'
 
 //TODO replace relations array with Roles type array if module 'retailer' cerated
 
@@ -91,7 +89,6 @@ export class UserService {
     Object.keys(updateUserDto).forEach((key) => {
       userQuery[key] = updateUserDto[key]
     })
-    userQuery.updated_at = new SQLDateGenerator().timeNow().getSQLDateObject()
 
     try {
       const user = await this.userRepository.save(userQuery)
@@ -167,21 +164,13 @@ export class UserService {
   }
 
   async getRole(id: string) {
-    const roleKeys: UserTypes[] = ['dsp', 'admin']
-
-    const user = await this.userRepository.findOne(id, {
-      relations: roleKeys,
-    })
+    const roleKeys: UserTypes[] = Object.values(Roles)
+    const user = await this.findOne(id)
 
     // const roles: Record<UserTypes, any>[] = []
     const roles: UserTypes[] = []
     roleKeys.forEach((ea) => {
       if (user[ea]) {
-        // const toPush = {
-        //   [ea]: user.id,
-        // }
-
-        // roles.push(toPush as Record<UserTypes, string>)
         roles.push(ea)
       }
     })

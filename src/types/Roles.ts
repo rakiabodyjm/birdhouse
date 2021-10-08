@@ -4,5 +4,6 @@ export enum Roles {
   RETAILER = 'retailer',
   SUBDISTRIBUTOR = 'subdistributor',
 }
-
+export type UserRoles = Roles
+export type UserTypes = `${Roles}`
 export const RolesArray = Object.values(Roles)

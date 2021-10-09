@@ -3,10 +3,10 @@ import { Admin } from 'src/admin/entities/admin.entity'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
 import { Retailer } from 'src/retailers/entities/retailer.entity'
 import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
-import { Roles, RolesArray } from 'src/types/Roles'
-import { Bcrypt } from 'src/utils/Bcrypt'
+import { RolesArray } from 'src/types/Roles'
 import { SQLDateGenerator } from 'src/utils/SQLDateGenerator'
 import {
+  AfterUpdate,
   Column,
   Entity,
   Index,
@@ -29,6 +29,14 @@ export class User {
   @Column()
   phone_number: string
 
+  @Column()
+  address1: string
+
+  @Column({
+    default: null,
+  })
+  address2: string
+
   @Exclude()
   @Column({ default: true })
   active: boolean
@@ -42,26 +50,43 @@ export class User {
   @Column()
   @Exclude()
   password: string
-  @OneToOne(() => Subdistributor, (subd) => subd.user, {
-    eager: true,
-    cascade: true,
-    onDelete: 'SET NULL',
-  })
-  subdistributor: Subdistributor
 
   @Column({
     type: 'datetime',
+    // default: 'CURRENT_TIMESTAMP',
     default: new SQLDateGenerator().timeNow().getSQLDate(),
   })
   created_at: Date
 
   @Column({
     type: 'datetime',
-    // default: new SQLDateGenerator().timeNow().getSQLDate(),
-    default: 'CURRENT_TIMESTAMP',
-    nullable: false,
+    default: new SQLDateGenerator().timeNow().getSQLDate(),
+    // default: 'CURRENT_TIMESTAMP',
+    // nullable: false,
   })
-  updated_at: Date
+  updated_at: Date | string
+
+  @Expose()
+  roles?() {
+    const roles = []
+    RolesArray.forEach((ea) => {
+      if (this[ea]) {
+        roles.push(ea)
+      }
+    })
+
+    return roles
+  }
+
+  /**
+   * Relationships
+   */
+  @OneToOne((type) => Retailer, (retailer) => retailer.user, {
+    eager: true,
+    onDelete: 'SET NULL',
+    cascade: true,
+  })
+  retailer?: Retailer
 
   @OneToOne(() => Dsp, (dsp) => dsp.user, {
     /**
@@ -76,7 +101,7 @@ export class User {
     // createForeignKeyConstraints: false,
     onDelete: 'SET NULL',
   })
-  dsp: Dsp
+  dsp?: Dsp
 
   @OneToOne(() => Admin, (admin) => admin.user, {
     /**
@@ -89,23 +114,19 @@ export class User {
      */
     eager: true,
 
-    // createForeignKeyonstraints: false,
     onDelete: 'SET NULL',
   })
-  admin: Admin
+  admin?: Admin
 
-  @OneToOne((type) => Retailer, (retailer) => retailer.user)
-  retailer: Retailer
+  @OneToOne(() => Subdistributor, (subd) => subd.user, {
+    eager: true,
+    cascade: true,
+    onDelete: 'SET NULL',
+  })
+  subdistributor?: Subdistributor
 
-  @Expose()
-  roles?() {
-    const roles = []
-    RolesArray.forEach((ea) => {
-      if (this[ea]) {
-        roles.push(ea)
-      }
-    })
-
-    return roles
+  @AfterUpdate()
+  setUpdatedAt() {
+    this.updated_at = new SQLDateGenerator().timeNow().getSQLDate()
   }
 }

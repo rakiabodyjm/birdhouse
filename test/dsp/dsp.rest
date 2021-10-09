@@ -3,22 +3,17 @@ POST http://localhost:6006/dsp/
 Content-Type: application/json
 
 {
-    "dsp_code": "A-443",
-    "area_id": 2, 
-    "e_bind_number": "639498460475"
-    # "user":{
-    #     "first_name": "Janeo Miguel",
-    #     "last_name": "Tiongson",
-    #     "phone_number": "+639498460475", 
-    #     "email":"rakiabodyjm@gmail.com"
- 
-    # }
+    "dsp_code": "Realm1000 DSP Account",
+    "e_bind_number": "639498460475", 
+    "subdistributor": "CFB5D438-BC21-EC11-B665-00E18CEF5938",
+    "user": "EFA8FEF1-BB21-EC11-B665-00E18CEF5938", 
+    "area_id": ["2"] 
 }
 ### GET ALL DSP
 GET http://localhost:6006/dsp
 
 ### GET DSP WITH ID
-GET http://localhost:6006/dsp/B77E724F-AC16-EC11-B664-00E18CEF5938
+GET http://localhost:6006/dsp/2892E48F-C221-EC11-B665-00E18CEF5938
 
 ### DELETE ALL DSP ACCONUT
 DELETE http://localhost:6006/dsp/clear
@@ -30,13 +25,21 @@ Content-Type: application/json
 }
 
 ### UPDATE DSP ACCOUNT
-PATCH http://localhost:6006/dsp/B852D06E-A1FE-EB11-B661-00E18CEF5938
+PATCH http://localhost:6006/dsp/2892E48F-C221-EC11-B665-00E18CEF5938
 Content-Type: application/json
 
 {
-    # "e_bind_number": "9498460475",
+    # "dsp_code": "Breanne Testing",
+    # "e_bind_number": "9931293332"
     # "user": "45E069F2-CDFA-EB11-B65F-00E18CEF5938",
-    "user": "648C4055-6DFE-EB11-B661-00E18CEF5938"
+    # "user": "648C4055-6DFE-EB11-B661-00E18CEF5938"
+    "area_id": ["1", "2"]
+    # "area_id" : null
 }
 ###
-DELETE {{$dotenv HOST}}:{{$dotenv PORT}}/dsp/B77E724F-AC16-EC11-B664-00E18CEF5938
+DELETE {{$dotenv HOST}}:{{$dotenv PORT}}/dsp/65D172A9-2C21-EC11-B665-00E18CEF5938
+
+###
+GET {{$dotenv REST_HOST}}/dsp?subdistributor=CFB5D438-BC21-EC11-B665-00E18CEF5938&limit=1&page=0&countOnly=false
+
+###

@@ -1,21 +1,33 @@
 
-GET {{$dotenv HOST}}:{{$dotenv PORT}}/retailers
+GET {{$dotenv HOST}}:{{$dotenv PORT}}/retailer
 ###
-POST {{$dotenv HOST}}:{{$dotenv PORT}}/retailers
+POST {{$dotenv HOST}}:{{$dotenv PORT}}/retailer
 Content-Type: application/json
 
 {
-    "subdistributor": "25FAED40-4907-EC11-B661-00E18CEF5938",
-    "dsp": "BA10C3F9-6D14-EC11-B663-00E18CEF5938",
-    "user": "674A19BB-9804-EC11-B661-00E18CEF5938", 
-    "e_bind_number": "9498460475", 
-    "id_type": "Driver's License",
-    "id_number": "019238-102938-3902"
+    "store_name": "Janeo Miguel's Store",
+    "e_bind_number": "09498460475", 
+    "id_type": "LTO Driver's License",
+    "id_number": "2014-14123-123T", 
+    "user" : "EFA8FEF1-BB21-EC11-B665-00E18CEF5938", 
+    "subdistributor": "CFB5D438-BC21-EC11-B665-00E18CEF5938", 
+    "dsp": "BCFD02B7-BD24-EC11-B665-00E18CEF5938"
+}
+###
+PATCH {{$dotenv HOST}}:{{$dotenv PORT}}/retailer/9BA6546D-C024-EC11-B665-00E18CEF5938
+Content-Type: application/json
 
+{
+    # "store_name": "Breanne's Store",
+  "store_name": "REALM1000 STORE"
 }
 
 ###
-DELETE {{$dotenv HOST}}:{{$dotenv PORT}}/retailers/B9EC3682-EC16-EC11-B664-00E18CEF5938
+DELETE {{$dotenv HOST}}:{{$dotenv PORT}}/retailer/B9EC3682-EC16-EC11-B664-00E18CEF5938
 
 ### 
-GET {{$dotenv HOST}}:{{$dotenv PORT}}/retailers/B9EC3682-EC16-EC11-B664-00E18CEF5938
+GET {{$dotenv HOST}}:{{$dotenv PORT}}/retailer/B9EC3682-EC16-EC11-B664-00E18CEF5938
+###PAGINATED
+GET {{$dotenv HOST}}:{{$dotenv PORT}}/retailer?page=0&limit=2&dsp=BCFD02B7-BD24-EC11-B665-00E18CEF5938&countOnly=false
+
+

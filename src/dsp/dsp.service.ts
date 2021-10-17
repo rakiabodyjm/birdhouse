@@ -2,6 +2,7 @@ import { Injectable, Query } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { isNotEmptyObject } from 'class-validator'
 import { GetAllDspDto } from 'src/dsp/dto/get-all-dsp.dto'
+import { SearchDspDto } from 'src/dsp/dto/search-dsp.dto'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
 import { MapIdsService } from 'src/map-ids/map-ids.service'
 import paginateFind from 'src/utils/paginate'
@@ -65,6 +66,35 @@ export class DspService {
     }
   }
 
+  async searchDsp(searchString: SearchDspDto['searchQuery']) {
+    return this.dspRepository.find({
+      where: [
+        {
+          dsp_code: searchString,
+        },
+        {
+          e_bind_number: searchString,
+        },
+        {
+          user: {
+            first_name: searchString,
+          },
+        },
+        {
+          user: {
+            last_name: searchString,
+          },
+        },
+        {
+          subdistributor: {
+            name: searchString,
+          },
+        },
+      ],
+      relations: this.includedRelations,
+      take: 100,
+    })
+  }
   async findOne(id?: string) {
     try {
       return await this.dspRepository.findOneOrFail(id, {

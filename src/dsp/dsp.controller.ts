@@ -14,6 +14,7 @@ import {
 } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { GetAllDspDto } from 'src/dsp/dto/get-all-dsp.dto'
+import { SearchDspDto } from 'src/dsp/dto/search-dsp.dto'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
 import EntityMessage from 'src/types/EntityMessage'
 import { Paginated } from 'src/types/Paginated'
@@ -38,6 +39,12 @@ export class DspController {
   ): Promise<Dsp[] | Promise<Paginated<Dsp>> | number> {
     const dsps = await this.dspService.findAll(searchQuery)
     return dsps
+  }
+
+  @Get('search')
+  search(@Query() searchQueryDto: SearchDspDto): Promise<Dsp[]> {
+    const { searchQuery } = searchQueryDto
+    return this.dspService.searchDsp(searchQuery)
   }
 
   @Get(':id')

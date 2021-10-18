@@ -5,6 +5,7 @@ import { User } from 'src/user/entities/user.entity'
 import {
   Column,
   Entity,
+  Index,
   JoinColumn,
   JoinTable,
   ManyToMany,
@@ -15,6 +16,7 @@ import {
 } from 'typeorm'
 
 @Entity()
+@Index(['dsp_code', 'e_bind_number'])
 export class Dsp {
   @PrimaryGeneratedColumn('uuid')
   id: string

@@ -3,14 +3,11 @@ import {
   Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
   HttpStatus,
   HttpException,
-  Req,
   Query,
-  UseGuards,
+  ClassSerializerInterceptor,
+  UseInterceptors,
 } from '@nestjs/common'
 import { MapIdsService } from './map-ids.service'
 // import { CreateMapIdDto } from './dto/search-map-id.dto'
@@ -22,6 +19,7 @@ import { MapId } from 'src/map-ids/entities/map-id.entity'
 // @UseGuards(AuthGuard('jwt'))
 @ApiTags('MapID Routes')
 @Controller('map-ids')
+@UseInterceptors(ClassSerializerInterceptor)
 export class MapIdsController {
   constructor(private readonly mapIdsService: MapIdsService) {}
   // @Get()
@@ -30,6 +28,7 @@ export class MapIdsController {
   // }
   @Get()
   search(@Query() query?: SearchMapDto): Promise<MapId[]> {
+    console.log('mapidQuery', query)
     return this.mapIdsService.search(query)
   }
 

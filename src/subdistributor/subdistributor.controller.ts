@@ -19,6 +19,7 @@ import { UpdateSubdistributorDto } from './dto/update-subdistributor.dto'
 import { GetAllSubdistributor } from 'src/subdistributor/dto/get-subdistributor.dto'
 import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
 import { ApiTags } from '@nestjs/swagger'
+import { SearchSubdistributorDto } from 'src/subdistributor/dto/search-subdistributor.dto'
 
 @Controller('subdistributor')
 @ApiTags('Subdistributor Routes')
@@ -35,6 +36,12 @@ export class SubdistributorController {
   @Get()
   findAll(@Query() getAllSubd: GetAllSubdistributor) {
     return this.subdistributorService.findAll(getAllSubd)
+  }
+
+  @Get('search')
+  search(@Query() searchQueryDto: SearchSubdistributorDto) {
+    const { searchQuery } = searchQueryDto
+    return this.subdistributorService.searchAll(searchQuery)
   }
 
   @Get(':id')

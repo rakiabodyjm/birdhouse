@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { classToPlain, plainToClass } from 'class-transformer'
 import { isNotEmptyObject } from 'class-validator'
-import { MapIdsService } from 'src/map-ids/map-ids.service'
 import { GetAllSubdistributor } from 'src/subdistributor/dto/get-subdistributor.dto'
+import { SearchSubdistributorDto } from 'src/subdistributor/dto/search-subdistributor.dto'
 import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
 import { Paginated } from 'src/types/Paginated'
 import paginateFind from 'src/utils/paginate'
-import { Repository } from 'typeorm'
+import { Like, Repository } from 'typeorm'
 import { CreateSubdistributorDto } from './dto/create-subdistributor.dto'
 import { UpdateSubdistributorDto } from './dto/update-subdistributor.dto'
 
@@ -45,6 +44,41 @@ export class SubdistributorService {
       })
     }
     // return `This action returns all subdistributor`
+  }
+
+  /**
+   *
+   * @param searchQuery
+   * Search by subdistributor's name, area_name, user last_name first_name
+   *
+   */
+  async searchAll(searchQuery: SearchSubdistributorDto['searchQuery']) {
+    const likeSearchQuery = Like(`%${searchQuery}%`)
+
+    return await this.subdRepository.find({
+      where: [
+        {
+          name: likeSearchQuery,
+        },
+        {
+          area_id: {
+            area_name: likeSearchQuery,
+          },
+        },
+        {
+          user: {
+            last_name: likeSearchQuery,
+          },
+        },
+        {
+          user: {
+            first_name: likeSearchQuery,
+          },
+        },
+      ],
+      relations: ['area_id', 'user'],
+      take: 100,
+    })
   }
 
   async findOne(id: string) {

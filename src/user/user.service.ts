@@ -152,15 +152,15 @@ export class UserService {
 
   async search(search: string) {
     const fieldsToSearch = ['username', 'email', 'first_name', 'last_name']
-    return await this.userRepository
-      .find({
-        where: fieldsToSearch.map((ea) => ({
+    return await this.userRepository.find({
+      take: 100,
+      where: [
+        ...fieldsToSearch.map((ea) => ({
           [ea]: Like(`%${search}%`),
         })),
-      })
-      .then((res) => {
-        return res.slice(0, 50)
-      })
+        {},
+      ],
+    })
   }
 
   async getRole(id: string) {

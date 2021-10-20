@@ -3,7 +3,6 @@ Content-Type: application/json
 
 {
     "e_bind_number": "+639498460475",
-    "id_number": "33-7854126-1",
     "zip_code": "1423", 
     "id_type": "LTO Driver's License",
     "id_number":"10293-89123-2398", 
@@ -36,3 +35,5 @@ DELETE {{$dotenv REST_HOST}}/subdistributor
 
 GET {{$dotenv REST_HOST}}/subdistributor?page=0
 
+### SEARCH 
+GET {{$dotenv REST_HOST}}/subdistributor/search?searchQuery=John Doe

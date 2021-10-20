@@ -4,17 +4,23 @@ POST http://localhost:6006/user
 Content-Type: application/json
 
 {
-   "first_name": "John",
-    "last_name": "Doe",
-    "phone_number": "+639494949949",
-    "password": "password",
+#    "first_name": "Janeo Miguel",
+    "last_name": "Tiongson",
+    "phone_number": "+639498460475",
+    "password": "rakiabodyjm4690",
     "address1": "#16 General Santos Street.,Brgy. Roxas",
     "address2": null,
-    "email": "johndoe2@gmail.com", 
-    "username": "johndoe2",
-    "admin":{
-        "name": "John Doe 2 Admin Account"
-    }
+    "email": "rakiabodyjm@gmail.com", 
+    "username": "rakiabodyjm"
+    # "subdistributor":{
+    #     "name": "REALM1000 SUBDISTRIBUTOR ACCOUNT", 
+    #     "e_bind_number": "+639498460475", 
+    #     "id_number": "123-456-789", 
+    #     "zip_code": 1423, 
+    #     "id_type": "LTO Driver's License", 
+    #     "area_id": "2"
+    # }
+  
 }
  
 ### SHOW ALL USERS
@@ -31,7 +37,7 @@ Content-Type: application/json
 ### GET USER BY ID
 GET http://localhost:6006/user/EFA8FEF1-BB21-EC11-B665-00E18CEF5938
 ### UPDATE USER BY ID
-PATCH http://localhost:6006/user/79989563-722A-EC11-B665-00E18CEF5938
+PATCH http://localhost:6006/user/EFA8FEF1-BB21-EC11-B665-00E18CEF5938
 Content-Type: application/json
 
 {
@@ -52,6 +58,7 @@ Content-Type: application/json
     
     # "email": "rakiabodyjm@gmail.com"
     # "username": "rakiabodyjm"
+    "password": "rakiabodyjm4690"
 
 }
 
@@ -60,10 +67,10 @@ Content-Type: application/json
 PATCH http://localhost:6006/user/suspend/45E069F2-CDFA-EB11-B65F-00E18CEF5938
 
 ### DELETE USER BY ID
-DELETE http://localhost:6006/user/79989563-722A-EC11-B665-00E18CEF5938
+DELETE http://localhost:6006/user/31627B95-2E32-EC11-B668-00E18CEF5938
 
 ### SEARCH
-GET http://localhost:6006/user/search?find=rakiabodyjm
+GET http://localhost:6006/user/search?find=Astrid
 
 ###Pagination
 GET http://localhost:6006/user?page=0&limit=3

@@ -6,7 +6,7 @@ import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entit
 import { RolesArray } from 'src/types/Roles'
 import { SQLDateGenerator } from 'src/utils/SQLDateGenerator'
 import {
-  AfterUpdate,
+  BeforeUpdate,
   Column,
   Entity,
   Index,
@@ -125,7 +125,7 @@ export class User {
   })
   subdistributor?: Subdistributor
 
-  @AfterUpdate()
+  @BeforeUpdate()
   setUpdatedAt() {
     this.updated_at = new SQLDateGenerator().timeNow().getSQLDate()
   }

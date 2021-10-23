@@ -158,7 +158,6 @@ export class UserService {
         ...fieldsToSearch.map((ea) => ({
           [ea]: Like(`%${search}%`),
         })),
-        {},
       ],
     })
   }

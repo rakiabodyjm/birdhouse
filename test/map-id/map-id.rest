@@ -1,11 +1,6 @@
 # POST http://localhost:6006/map-ids/populate
 # Content-Type: application/json
 
-# {
-#     "username": "rakiabodyjm",
-#     "password": "rakiabodyjm4690"
-# }
-
 ###
 
 GET http://localhost:6006/map-ids?search=&limit=100

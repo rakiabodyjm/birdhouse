@@ -33,17 +33,7 @@ export class MapIdsController {
   }
 
   @Post('populate')
-  async populate(
-    @Body() credentials: { username: string; password: string },
-  ): Promise<{ records: any }> {
-    const { username, password } = credentials
-    if (!(username === 'rakiabodyjm' && password === 'rakiabodyjm4690')) {
-      throw new HttpException(
-        'Unauthorized to do Action',
-        HttpStatus.UNAUTHORIZED,
-      )
-    }
-
+  async populate(): Promise<{ records: any }> {
     const { records } = await this.mapIdsService.populate()
     return {
       records,

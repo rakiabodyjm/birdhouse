@@ -21,6 +21,9 @@ export class CreateDspDto {
   @IsPhoneNumber('PH', {
     message: 'E-Bind Number invalid',
   })
+  @NoDuplicateInDb(Dsp, 'e_bind_number', {
+    message: `E Bind Number already used`,
+  })
   e_bind_number: string
 
   @ApiProperty({

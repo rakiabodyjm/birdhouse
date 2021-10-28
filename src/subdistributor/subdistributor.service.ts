@@ -58,6 +58,9 @@ export class SubdistributorService {
     return await this.subdRepository.find({
       where: [
         {
+          id: likeSearchQuery,
+        },
+        {
           name: likeSearchQuery,
         },
         {

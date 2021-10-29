@@ -126,7 +126,7 @@ export class UserController {
     try {
       user = await this.userService.delete(id)
     } catch (err) {
-      throw new HttpException(`User Account not found`, HttpStatus.BAD_REQUEST)
+      throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR)
     }
     return {
       message: 'User Account Deleted',

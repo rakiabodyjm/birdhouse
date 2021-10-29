@@ -32,7 +32,7 @@ export function ExistsInDb(
                 [field || args.property]: param,
               })
               .catch((err) => {
-                console.error(err)
+                // console.error(err)
                 throw err
               })
           }

@@ -70,6 +70,9 @@ export class DspService {
     return this.dspRepository.find({
       where: [
         {
+          id: searchString,
+        },
+        {
           dsp_code: searchString,
         },
         {

@@ -22,7 +22,7 @@ export class NoDuplicateInDbConstraints
         [columnName || args.property]: incomingValue,
       })
       .catch((err) => {
-        console.error('Error in NoDuplicateInDbP', err)
+        // console.error('Error in NoDuplicateInDbP', err)
         return null
       })
     if (searchForDuplicate) {

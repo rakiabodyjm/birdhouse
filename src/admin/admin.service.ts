@@ -13,7 +13,7 @@ import { UpdateAdminDto } from './dto/update-admin.dto'
 export class AdminService {
   constructor(
     @InjectRepository(Admin)
-    private readonly adminRepository: Repository<Admin>,
+    private adminRepository: Repository<Admin>,
   ) {}
   async create(createAdminDto: CreateAdminDto) {
     const newAdmin = this.adminRepository.create(createAdminDto)
@@ -46,7 +46,7 @@ export class AdminService {
   }
 
   findOne(id: string) {
-    return this.adminRepository.findOne(id)
+    return this.adminRepository.findOneOrFail(id)
   }
 
   async update(id: string, updateAdminDto: UpdateAdminDto) {

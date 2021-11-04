@@ -1,5 +1,5 @@
 import { CacheModule, Module } from '@nestjs/common'
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm'
+import { TypeOrmModule } from '@nestjs/typeorm'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { UserModule } from './user/user.module'
@@ -12,6 +12,8 @@ import { AuthModule } from './auth/auth.module'
 import { RetailersModule } from './retailers/retailers.module'
 import { SubdistributorModule } from './subdistributor/subdistributor.module'
 import { LogsModule } from './logs/logs.module'
+import { CeasarModule } from './ceasar/ceasar.module'
+import { ExternalCeasarModule } from './external-ceasar/external-ceasar.module'
 import SQLConfig from 'root/ormconfig'
 
 config()
@@ -20,19 +22,20 @@ config()
   imports: [
     CacheModule.register(),
     ConfigModule.forRoot({
-      envFilePath: '.development.env',
+      envFilePath: '.env',
+      isGlobal: true,
     }),
-    TypeOrmModule.forRoot({
-      ...SQLConfig,
-    }),
+    TypeOrmModule.forRoot(SQLConfig),
+    UserModule,
     MapIdsModule,
     DspModule,
-    UserModule,
     AdminModule,
     AuthModule,
     RetailersModule,
     SubdistributorModule,
     LogsModule,
+    CeasarModule,
+    ExternalCeasarModule,
   ],
   controllers: [AppController],
   providers: [AppService],

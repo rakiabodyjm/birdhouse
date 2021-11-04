@@ -936,6 +936,13 @@
     semver "^7.3.4"
     tar "^6.1.0"
 
+"@nestjs/axios@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@nestjs/axios/-/axios-0.0.3.tgz#f53ba265e15687b9acb036642ed5f29998695bd1"
+  integrity sha512-Cc+D2S2uesthRpalmZEPdm5wF2N9ji4l9Wsb2vFaug/CVWg2BoegHm0L1jzFUL+6kS+mXWSFvwXJmofv+7bajw==
+  dependencies:
+    axios "0.23.0"
+
 "@nestjs/cli@^7.6.0":
   version "7.6.0"
   resolved "https://registry.npmjs.org/@nestjs/cli/-/cli-7.6.0.tgz"
@@ -1228,6 +1235,13 @@
   integrity sha512-jOdnI/3qTpHABjM5cx1Hc0sKsPoYCp+DP/GJRGtDlPd7fiV9oXGGIcjW/ZOxLIvjGz8MA+uMZI9metHlgqbgwQ==
   dependencies:
     "@types/node" "*"
+
+"@types/axios@^0.14.0":
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/@types/axios/-/axios-0.14.0.tgz#ec2300fbe7d7dddd7eb9d3abf87999964cafce46"
+  integrity sha1-7CMA++fX3d1+udOr+HmZlkyvzkY=
+  dependencies:
+    axios "*"
 
 "@types/babel__core@^7.0.0", "@types/babel__core@^7.1.7":
   version "7.1.15"
@@ -2188,12 +2202,26 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.11.0.tgz#d61f46d83b2519250e2784daf5b09479a8b41c59"
   integrity sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==
 
+axios@*:
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.24.0.tgz#804e6fa1e4b9c5288501dd9dff56a7a0940d20d6"
+  integrity sha512-Q6cWsys88HoPgAaFAVUb0WpPk0O8iTeisR9IMqy9G8AbO4NlpVknrnQS03zzF9PGAWgO3cgletO3VjV/P7VztA==
+  dependencies:
+    follow-redirects "^1.14.4"
+
 axios@0.21.1, axios@^0.21.1:
   version "0.21.1"
   resolved "https://registry.npmjs.org/axios/-/axios-0.21.1.tgz"
   integrity sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
   dependencies:
     follow-redirects "^1.10.0"
+
+axios@0.23.0:
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.23.0.tgz#b0fa5d0948a8d1d75e3d5635238b6c4625b05149"
+  integrity sha512-NmvAE4i0YAv5cKq8zlDoPd1VLKAqX5oLuZKs8xkJa4qi6RGn0uhCYFjWtHHC9EM/MwOwYWOs53W+V0aqEXq1sg==
+  dependencies:
+    follow-redirects "^1.14.4"
 
 babel-jest@^26.6.3:
   version "26.6.3"
@@ -3830,6 +3858,11 @@ follow-redirects@^1.10.0:
   version "1.14.1"
   resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.14.1.tgz"
   integrity sha512-HWqDgT7ZEkqRzBvc2s64vSZ/hfOceEol3ac/7tKwzuvEyWx3/4UegXh5oBOIotkGsObyk3xznnSRVADBgWSQVg==
+
+follow-redirects@^1.14.4:
+  version "1.14.5"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.5.tgz#f09a5848981d3c772b5392309778523f8d85c381"
+  integrity sha512-wtphSXy7d4/OR+MvIFbCVBDzZ5520qV8XfPklSN5QtxuMUJZ+b0Wnst1e1lCDocfzuCkHqj8k0FpZqO+UIaKNA==
 
 for-in@^1.0.2:
   version "1.0.2"

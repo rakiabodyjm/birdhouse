@@ -5,6 +5,8 @@ import {
   IsNumberString,
   IsPhoneNumber,
   IsUUID,
+  MaxLength,
+  MinLength,
 } from 'class-validator'
 import { MapId } from 'src/map-ids/entities/map-id.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
@@ -29,6 +31,7 @@ export class CreateSubdistributorDto {
   })
   id_number: string
 
+  @MinLength(3)
   @ApiProperty()
   @IsNotEmpty({
     message: `ID Type missing`,
@@ -73,4 +76,10 @@ export class CreateSubdistributorDto {
   @IsNotEmpty()
   @IsUUID()
   user: User
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @MaxLength(26)
+  @MinLength(3)
+  name: string
 }

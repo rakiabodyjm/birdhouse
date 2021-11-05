@@ -1,3 +1,9 @@
+import { Admin } from 'src/admin/entities/admin.entity'
+import { Dsp } from 'src/dsp/entities/dsp.entity'
+import { Retailer } from 'src/retailers/entities/retailer.entity'
+import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
+import { User } from 'src/user/entities/user.entity'
+
 export enum Roles {
   ADMIN = 'admin',
   DSP = 'dsp',
@@ -7,3 +13,5 @@ export enum Roles {
 export type UserRoles = Roles
 export type UserTypes = `${Roles}`
 export const RolesArray = Object.values(Roles)
+export type UserTypesAndUser = `${Roles}` | 'user' | 'admin'
+export type AccountTypes = Subdistributor | Dsp | Retailer | Admin | User

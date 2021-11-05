@@ -1,3 +1,4 @@
+import { Ceasar } from 'src/ceasar/entities/ceasar.entity'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
 import { MapId } from 'src/map-ids/entities/map-id.entity'
 import { Retailer } from 'src/retailers/entities/retailer.entity'
@@ -80,4 +81,7 @@ export class Subdistributor {
   retailer_total: number
   dsp_total: number
   // dsp_total: number
+
+  // @OneToOne((type) => Ceasar, (ceasar) => ceasar.subdistributor)
+  ceasar_wallet?: Ceasar
 }

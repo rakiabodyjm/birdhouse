@@ -20,7 +20,12 @@ export function ExistsInDb(
       target: object.constructor,
       propertyName: propertyName,
       constraints: [],
-      options: validationOptions,
+      options: {
+        ...validationOptions,
+        message: validationOptions?.message
+          ? validationOptions.message
+          : `${propertyName} doesn't exist`,
+      },
       validator: {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         async validate(value: any, args: ValidationArguments) {

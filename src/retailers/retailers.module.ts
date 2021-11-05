@@ -10,5 +10,6 @@ import { SubdistributorModule } from 'src/subdistributor/subdistributor.module'
   imports: [TypeOrmModule.forFeature([Retailer])],
   controllers: [RetailersController],
   providers: [RetailersService],
+  exports: [RetailersService],
 })
 export class RetailersModule {}

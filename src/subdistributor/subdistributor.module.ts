@@ -8,5 +8,6 @@ import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entit
   imports: [TypeOrmModule.forFeature([Subdistributor])],
   controllers: [SubdistributorController],
   providers: [SubdistributorService],
+  exports: [SubdistributorService],
 })
 export class SubdistributorModule {}

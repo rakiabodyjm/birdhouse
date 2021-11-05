@@ -1,4 +1,5 @@
 import { Expose } from 'class-transformer'
+import { Ceasar } from 'src/ceasar/entities/ceasar.entity'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
 import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
 import { User } from 'src/user/entities/user.entity'
@@ -56,4 +57,7 @@ export class Retailer {
 
   @Column()
   id_number: string
+
+  // @OneToOne(() => Ceasar, (ceasar) => ceasar.retailer)
+  ceasar_wallet?: Ceasar
 }

@@ -15,5 +15,6 @@ import { MapIdsModule } from 'src/map-ids/map-ids.module'
   ],
   controllers: [DspController],
   providers: [DspService],
+  exports: [DspService],
 })
 export class DspModule {}

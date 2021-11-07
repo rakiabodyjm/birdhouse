@@ -3,23 +3,44 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Paginated } from 'src/types/Paginated'
 import { GetAllUserDto } from 'src/user/dto/get-all-user.dto'
 import { User } from 'src/user/entities/user.entity'
-import { Roles, UserTypes } from 'src/types/Roles'
+import { Roles, RolesArray, UserTypes } from 'src/types/Roles'
 import paginateFind from 'src/utils/paginate'
 import { Like, Repository } from 'typeorm'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { isNotEmptyObject } from 'class-validator'
 import { Cache } from 'cache-manager'
+import { GetUserDtoQuery } from 'src/user/dto/get-user-query.dto'
+import { DspService } from 'src/dsp/dsp.service'
+import { AdminService } from 'src/admin/admin.service'
+import { RetailersService } from 'src/retailers/retailers.service'
+import { SubdistributorService } from 'src/subdistributor/subdistributor.service'
 
-//TODO replace relations array with Roles type array if module 'retailer' cerated
+interface AccountRetrieve extends Record<UserTypes, any> {
+  dsp: DspService
+  admin: AdminService
+  retailer: RetailersService
+  subdistributor: SubdistributorService
+}
 
-//TODO fix entities (DSP Retailer ADMIN) default updated_at values
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    @Inject(DspService) private dspService: DspService,
+    @Inject(AdminService) private adminService: AdminService,
+    @Inject(RetailersService) private retailerService: RetailersService,
+    @Inject(SubdistributorService)
+    private subdistributorService: SubdistributorService,
   ) {}
+
+  accountRetrieve: AccountRetrieve = {
+    dsp: this.dspService,
+    admin: this.adminService,
+    retailer: this.retailerService,
+    subdistributor: this.subdistributorService,
+  }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const userSearch = await this.userRepository.findOne({
@@ -71,6 +92,42 @@ export class UserService {
       return user
     } catch (err) {
       throw new Error(err.message)
+    }
+  }
+
+  async findOneQuery(params: GetUserDtoQuery) {
+    const accountTypeKeys = <Array<keyof GetUserDtoQuery & string>>(
+      Object.keys(params)
+    )
+
+    if (accountTypeKeys.length === 0) {
+      throw new Error(
+        'Must have one of the following queries: ' +
+          'user, ' +
+          RolesArray.join(', '),
+      )
+    }
+
+    if (accountTypeKeys.length > 1) {
+      throw new Error('Must only have one query from: ' + RolesArray)
+    }
+    const accountType = accountTypeKeys[0]
+
+    try {
+      if (accountType !== 'user') {
+        const account = await this.accountRetrieve[accountType].findOne(
+          params[accountType],
+        )
+        if (!account.user) {
+          throw new Error(`Account has no User`)
+        }
+        return this.findOne(account.user.id)
+      } else {
+        return this.findOne(params[accountType])
+      }
+    } catch (err) {
+      console.error(err)
+      throw new Error(err)
     }
   }
 

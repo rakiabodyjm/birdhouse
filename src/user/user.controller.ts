@@ -6,7 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  HttpCode,
   HttpStatus,
   HttpException,
   UseInterceptors,
@@ -24,15 +23,15 @@ import { UserTransformer } from 'src/user/pipes/user-dto-transformer'
 import { GetUserDto } from 'src/user/dto/get-user.dto'
 import { Paginated } from 'src/types/Paginated'
 import { plainToClass } from 'class-transformer'
+import { GetUserDtoQuery } from 'src/user/dto/get-user-query.dto'
 
 @ApiTags('User Routes')
-@Controller('user')
 @UseInterceptors(ClassSerializerInterceptor)
+@Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  @HttpCode(HttpStatus.CREATED)
   async create(
     @Body(new UserTransformer())
     createUserDto: CreateUserDto,
@@ -74,6 +73,16 @@ export class UserController {
   @Get()
   async findAll(@Query() query): Promise<Paginated<User> | User[]> {
     return await this.userService.findAll(plainToClass(GetAllUserDto, query))
+  }
+
+  @Get('query')
+  async getUserWhere(@Query() query: GetUserDtoQuery) {
+    try {
+      const user = await this.userService.findOneQuery(query)
+      return user
+    } catch (err) {
+      throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
+    }
   }
 
   @Get('search')

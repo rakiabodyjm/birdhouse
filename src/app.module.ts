@@ -14,6 +14,9 @@ import { SubdistributorModule } from './subdistributor/subdistributor.module'
 import { LogsModule } from './logs/logs.module'
 import { CeasarModule } from './ceasar/ceasar.module'
 import { ExternalCeasarModule } from './external-ceasar/external-ceasar.module'
+import { AssetModule } from './asset/asset.module'
+import { InventoryModule } from './inventory/inventory.module'
+import { TransactionModule } from './transaction/transaction.module'
 import SQLConfig from 'root/ormconfig'
 
 config()
@@ -36,6 +39,9 @@ config()
     LogsModule,
     CeasarModule,
     ExternalCeasarModule,
+    InventoryModule,
+    AssetModule,
+    TransactionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

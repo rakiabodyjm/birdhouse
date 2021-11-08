@@ -1,0 +1,19 @@
+POST {{$dotenv REST_HOST}}/external-ceasar
+Content-Type: application/json
+
+{
+    "first_name": "Janeo Miguel", 
+    "last_name": "Tiongson", 
+    "cp_number": "09498460475", 
+    "email": "rakiabodyjm@gmail.com", 
+    "role": "user"
+}
+
+###
+GET {{$dotenv REST_HOST}}/external-ceasar
+
+###
+DELETE {{$dotenv REST_HOST}}/external-ceasar
+
+###
+GET {{$dotenv REST_HOST}}/external-ceasar/1

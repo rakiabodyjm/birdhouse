@@ -1,0 +1,22 @@
+### 
+GET {{$dotenv REST_HOST}}/ceasar
+
+###
+GET {{$dotenv REST_HOST}}/ceasar
+
+###
+GET {{$dotenv REST_HOST}}/ceasar/BCD6AF67-AB3D-EC11-B669-00E18CEF5938
+###
+GET {{$dotenv REST_HOST}}/ceasar/account?user=AE02DF31-DD2B-EC11-B666-00E18CEF5935
+###
+POST {{$dotenv REST_HOST}}/ceasar
+Content-Type: application/json
+
+{
+    "subdistributor" : "CFB5D438-BC21-EC11-B665-00E18CEF5938"
+    # "user": "AE02DF31-DD2B-EC11-B666-00E18CEF5935"
+}
+
+###
+DELETE {{$dotenv REST_HOST}}/ceasar
+

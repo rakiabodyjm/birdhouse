@@ -77,4 +77,4 @@ GET http://localhost:6006/user?page=0&limit=3
 
 
 ###
-# GET http://localhost:6006/user/get-user-by-account?subdistributor=CFB5D438-BC21-EC11-B665-00E18CEF5938
+GET http://localhost:6006/user/query?admin=0A03B39E-C121-EC11-B665-00E18CEF5938

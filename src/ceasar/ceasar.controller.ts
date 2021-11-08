@@ -13,6 +13,7 @@ import {
   NotFoundException,
   InternalServerErrorException,
 } from '@nestjs/common'
+import { ApiTags } from '@nestjs/swagger'
 import { GetAllCeasarDto } from 'src/ceasar/dto/get-all-ceasar.dto'
 import { GetCeasarDto } from 'src/ceasar/dto/get-ceasar.dto'
 import { Ceasar } from 'src/ceasar/entities/ceasar.entity'
@@ -23,6 +24,7 @@ import { CeasarService } from './ceasar.service'
 import { CreateCeasarDto } from './dto/create-ceasar.dto'
 
 @Controller('ceasar')
+@ApiTags('Ceasar Routes')
 @UseInterceptors(ClassSerializerInterceptor)
 export class CeasarController {
   constructor(

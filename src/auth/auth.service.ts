@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common'
 import { isEmail } from 'class-validator'
-import { LoginUserDto } from 'src/auth/dto/login.dto'
 import { User } from 'src/user/entities/user.entity'
 import { UserService } from 'src/user/user.service'
 import { Bcrypt } from 'src/utils/Bcrypt'

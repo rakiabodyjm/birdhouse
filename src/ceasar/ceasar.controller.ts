@@ -50,8 +50,8 @@ export class CeasarController {
     // get account type submitted
     const accountType = <UserTypesAndUser>Object.keys(createCeasarDto)[0]
 
-    //get existence of user
     try {
+      //get existence of user
       const user = await this.userService.findOneQuery({
         [accountType]: createCeasarDto[accountType],
       })

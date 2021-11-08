@@ -13,9 +13,11 @@ import {
 import { ExternalCeasarService } from './external-ceasar.service'
 import { CreateExternalCeasarDto } from './dto/create-external-ceasar.dto'
 import { ExternalCeasar } from 'src/external-ceasar/entities/external-ceasar.entity'
+import { ApiTags } from '@nestjs/swagger'
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('external-ceasar')
+@ApiTags('External Ceasar')
 export class ExternalCeasarController {
   constructor(private readonly externalCeasarService: ExternalCeasarService) {}
 

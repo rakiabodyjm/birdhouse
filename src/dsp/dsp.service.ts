@@ -6,7 +6,7 @@ import { SearchDspDto } from 'src/dsp/dto/search-dsp.dto'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
 import { MapIdsService } from 'src/map-ids/map-ids.service'
 import paginateFind from 'src/utils/paginate'
-import { Repository } from 'typeorm'
+import { Like, Repository } from 'typeorm'
 import { CreateDspDto } from './dto/create-dsp.dto'
 import { UpdateDspDto } from './dto/update-dsp.dto'
 
@@ -74,27 +74,27 @@ export class DspService {
     return this.dspRepository.find({
       where: [
         {
-          id: searchString,
+          id: Like(`%${searchString}%`),
         },
         {
-          dsp_code: searchString,
+          dsp_code: Like(`%${searchString}%`),
         },
         {
-          e_bind_number: searchString,
+          e_bind_number: Like(`%${searchString}%`),
         },
         {
           user: {
-            first_name: searchString,
+            first_name: Like(`%${searchString}%`),
           },
         },
         {
           user: {
-            last_name: searchString,
+            last_name: Like(`%${searchString}%`),
           },
         },
         {
           subdistributor: {
-            name: searchString,
+            name: Like(`%${searchString}%`),
           },
         },
       ],

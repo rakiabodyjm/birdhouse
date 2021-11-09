@@ -6,6 +6,7 @@ import { User } from 'src/user/entities/user.entity'
 import {
   Column,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   OneToOne,
@@ -13,6 +14,7 @@ import {
 } from 'typeorm'
 
 @Entity()
+@Index(['id', 'store_name', 'e_bind_number', 'id_number'])
 export class Retailer {
   @PrimaryGeneratedColumn('uuid')
   id: string

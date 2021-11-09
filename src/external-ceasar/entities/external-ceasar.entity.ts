@@ -21,16 +21,23 @@ export class ExternalCeasar {
   @Column()
   role: UserTypesAndUser
 
-  @Column()
+  @Column('decimal', {
+    precision: 18,
+    scale: 2,
+  })
   ceasar_coin: number
 
-  @Column({
+  @Column('decimal', {
     nullable: true,
+    precision: 18,
+    scale: 2,
   })
   dollar: number
 
-  @Column({
+  @Column('decimal', {
     nullable: true,
+    precision: 18,
+    scale: 2,
   })
   peso: number
 }

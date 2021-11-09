@@ -8,7 +8,8 @@ Content-Type: application/json
     "id_number":"10293-89123-2398", 
     "user": "A4588092-B321-EC11-B665-00E18CEF5938", 
     "area_id": "1",
-    "user": "EFA8FEF1-BB21-EC11-B665-00E18CEF5938", 
+    # "user": "EFA8FEF1-BB21-EC11-B665-00E18CEF5938", 
+    "name": "REALM1000 SUBD", 
 
 }
 

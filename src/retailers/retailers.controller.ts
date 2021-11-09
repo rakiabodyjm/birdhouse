@@ -20,6 +20,7 @@ import { Paginated } from 'src/types/Paginated'
 import { createEntityMessage } from 'src/types/EntityMessage'
 import { ApiTags } from '@nestjs/swagger'
 import { GetAllRetailerDto } from 'src/retailers/dto/get-all-retailer.dto'
+import SearchRetailerDto from 'src/retailers/dto/search-retailer.dto'
 
 @Controller('retailer')
 @ApiTags('Retailer Routes')
@@ -37,6 +38,13 @@ export class RetailersController {
     @Query() query: GetAllRetailerDto,
   ): Promise<Paginated<Retailer> | Retailer[] | number> {
     return this.retailersService.findAll(query)
+  }
+
+  @Get('search')
+  async search(
+    @Query() searchQueryDto: SearchRetailerDto,
+  ): Promise<Retailer[]> {
+    return this.retailersService.search(searchQueryDto['searchQuery'])
   }
 
   @Get(':id')

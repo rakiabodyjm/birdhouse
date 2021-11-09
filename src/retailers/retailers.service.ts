@@ -5,7 +5,7 @@ import { GetAllRetailerDto } from 'src/retailers/dto/get-all-retailer.dto'
 import { Retailer } from 'src/retailers/entities/retailer.entity'
 import { Paginated } from 'src/types/Paginated'
 import paginateFind from 'src/utils/paginate'
-import { Repository } from 'typeorm'
+import { Like, Repository } from 'typeorm'
 import { CreateRetailerDto } from './dto/create-retailer.dto'
 import { UpdateRetailerDto } from './dto/update-retailer.dto'
 
@@ -84,6 +84,31 @@ export class RetailersService {
     // return `This action returns a #${id} retailer`
   }
 
+  async search(query: string) {
+    return this.retailerRepository.find({
+      where: [
+        {
+          id: Like(`%${query}%`),
+        },
+        {
+          e_bind_number: Like(`%${query}%`),
+        },
+        {
+          store_name: Like(`%${query}%`),
+        },
+        {
+          subdistributor: {
+            name: Like(`%${query}%`),
+          },
+        },
+        {
+          id_number: Like(`%${query}%`),
+        },
+      ],
+      relations: this.relationsToLoad,
+      take: 100,
+    })
+  }
   async update(
     id: string,
     updateRetailerDto: UpdateRetailerDto,

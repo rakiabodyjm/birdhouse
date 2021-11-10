@@ -3,10 +3,10 @@ POST http://localhost:6006/dsp/
 Content-Type: application/json
 
 {
-    "dsp_code": "Realm1000 DSP Account",
-    "e_bind_number": "639498460475", 
-    "subdistributor": "CFB5D438-BC21-EC11-B665-00E18CEF5938",
-    "user": "EFA8FEF1-BB21-EC11-B665-00E18CEF5938", 
+    "dsp_code": "John Doe DSP Account",
+    "e_bind_number": "639498460473", 
+    "subdistributor": "AF02DF31-DD2B-EC11-B666-00E18CEF5935",
+    "user": "42AF890C-F442-EC11-B66B-00E18CEF5938", 
     "area_id": ["2"] 
 }
 ### GET ALL DSP
@@ -44,4 +44,4 @@ GET {{$dotenv REST_HOST}}/dsp?subdistributor=CFB5D438-BC21-EC11-B665-00E18CEF593
 
 ###SEARCH
 
-GET {{$dotenv REST_HOST}}/dsp/search?searchQuery=Realm
+GET {{$dotenv REST_HOST}}/dsp/search?searchQuery=anne&subdistributor=CFB5D438-BC21-EC11-B665-00E18CEF5938

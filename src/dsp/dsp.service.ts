@@ -70,9 +70,21 @@ export class DspService {
     }
   }
 
-  async searchDsp(searchString: SearchDspDto['searchQuery']) {
+  async searchDsp(
+    searchString: string,
+    whereQuery: Omit<SearchDspDto, 'searchQuery'>,
+  ) {
+    // const { searchQuery: searchString, subdistributor: subdistributorQuery } =
+    //   searchDspDto
+    const { subdistributor } = whereQuery
     return this.dspRepository.find({
+      ...(subdistributor && { subdistributor }),
       where: [
+        {
+          subdistributor: {
+            name: Like(`%${searchString}%`),
+          },
+        },
         {
           id: Like(`%${searchString}%`),
         },
@@ -92,12 +104,8 @@ export class DspService {
             last_name: Like(`%${searchString}%`),
           },
         },
-        {
-          subdistributor: {
-            name: Like(`%${searchString}%`),
-          },
-        },
       ],
+
       relations: this.includedRelations,
       take: 100,
     })

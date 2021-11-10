@@ -43,8 +43,9 @@ export class DspController {
 
   @Get('search')
   search(@Query() searchQueryDto: SearchDspDto): Promise<Dsp[]> {
-    const { searchQuery } = searchQueryDto
-    return this.dspService.searchDsp(searchQuery)
+    const query = searchQueryDto['searchQuery']
+
+    return this.dspService.searchDsp(query || '', searchQueryDto)
   }
 
   @Get(':id')

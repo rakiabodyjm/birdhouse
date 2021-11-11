@@ -44,7 +44,9 @@ export class RetailersController {
   async search(
     @Query() searchQueryDto: SearchRetailerDto,
   ): Promise<Retailer[]> {
-    return this.retailersService.search(searchQueryDto['searchQuery'])
+    const query = searchQueryDto['searchQuery']
+
+    return this.retailersService.search(query, searchQueryDto)
   }
 
   @Get(':id')

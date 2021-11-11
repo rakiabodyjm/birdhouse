@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { isNotEmptyObject } from 'class-validator'
+import { SearchDspDto } from 'src/dsp/dto/search-dsp.dto'
 import { GetAllRetailerDto } from 'src/retailers/dto/get-all-retailer.dto'
+import SearchRetailerDto from 'src/retailers/dto/search-retailer.dto'
 import { Retailer } from 'src/retailers/entities/retailer.entity'
 import { Paginated } from 'src/types/Paginated'
 import paginateFind from 'src/utils/paginate'
@@ -84,8 +86,14 @@ export class RetailersService {
     // return `This action returns a #${id} retailer`
   }
 
-  async search(query: string) {
+  async search(
+    query: string,
+    options?: Omit<SearchRetailerDto, 'searchQuery'>,
+  ) {
+    const { dsp, subdistributor } = options
     return this.retailerRepository.find({
+      ...(dsp && { dsp }),
+      ...(subdistributor && { subdistributor }),
       where: [
         {
           id: Like(`%${query}%`),

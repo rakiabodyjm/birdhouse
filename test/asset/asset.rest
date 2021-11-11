@@ -1,0 +1,44 @@
+patch
+### GET ALL
+GET {{$dotenv REST_HOST}}/asset
+
+
+###SEARCH
+GET {{$dotenv REST_HOST}}/asset?page=0
+
+###
+GET {{$dotenv REST_HOST}}/asset/75BB24AD-E941-EC11-B66B-00E18CEF5938
+###CREATE
+
+POST {{$dotenv REST_HOST}}/asset
+Content-Type: application/json
+
+{
+    "code": "R1000", 
+    "name": "DITO REGULAR SIM",     
+    "description": "REALM1000 ISSUED DITO REGULAR SIM",
+    "unit_price": 20.23, 
+    "srp_for_subd": 23.34, 
+    "srp_for_dsp": 25, 
+    "srp_for_retailer": 30, 
+    "srp_for_user": 40
+}
+###
+PATCH {{$dotenv REST_HOST}}/asset/7F87C28F-5342-EC11-B66B-00E18CEF5938
+Content-Type: application/json
+
+{
+    # "code": "R1001", 
+    "srp_for_subd": 1.2
+    
+    
+}
+
+###
+DELETE {{$dotenv REST_HOST}}/asset/BC62712C-E541-EC11-B66B-00E18CEF5938
+
+###
+DELETE {{$dotenv REST_HOST}}/asset/clear
+
+###
+DELETE {{$dotenv REST_HOST}}/asset/soft-delete/7F87C28F-5342-EC11-B66B-00E18CEF5938

@@ -1,5 +1,3 @@
-import { ClassConstructor } from 'class-transformer'
-
 class EntityMessage<T> {
   message: string
   entity: T

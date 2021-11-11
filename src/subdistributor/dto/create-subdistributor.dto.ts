@@ -23,6 +23,9 @@ export class CreateSubdistributorDto {
     },
   )
   @IsPhoneNumber('PH')
+  @NoDuplicateInDb(Subdistributor, 'e_bind_number', {
+    message: `E Bind Number Already used`,
+  })
   e_bind_number: string
 
   @ApiProperty()

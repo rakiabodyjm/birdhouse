@@ -14,7 +14,7 @@ Content-Type: application/json
     "dsp": "BCFD02B7-BD24-EC11-B665-00E18CEF5938"
 }
 ###
-PATCH {{$dotenv HOST}}:{{$dotenv PORT}}/retailer/9BA6546D-C024-EC11-B665-00E18CEF5938
+PATCH {{$dotenv HOST}}:{{$dotenv PORT}}/retailer/6D82910C-C321-EC11-B665-00E18CEF5938
 Content-Type: application/json
 
 {
@@ -33,4 +33,4 @@ GET {{$dotenv HOST}}:{{$dotenv PORT}}/retailer?page=0&limit=2&dsp=BCFD02B7-BD24-
 ### 
 GET {{$dotenv REST_HOST}}/retailer?subdistributor=CFB5D438-BC21-EC11-B665-00E18CEF5938
 ###
-GET {{$dotenv REST_HOST}}/retailer/search?searchQuery=Realm
+GET {{$dotenv REST_HOST}}/retailer/search?searchQuery=bry&subdistributor=CFB5D438-BC21-EC11-B665-00E18CEF5938

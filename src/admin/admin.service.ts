@@ -46,7 +46,9 @@ export class AdminService {
   }
 
   findOne(id: string) {
-    return this.adminRepository.findOneOrFail(id)
+    return this.adminRepository.findOneOrFail(id, {
+      relations: ['user'],
+    })
   }
 
   async update(id: string, updateAdminDto: UpdateAdminDto) {

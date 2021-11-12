@@ -1,4 +1,3 @@
-import { TypeOrmModuleOptions } from '@nestjs/typeorm'
 import { config } from 'dotenv'
 import { SqlServerConnectionOptions } from 'typeorm/driver/sqlserver/SqlServerConnectionOptions'
 
@@ -14,13 +13,17 @@ const SQLConfig: SqlServerConnectionOptions & {
   database: process.env.SQL_SERVER_DATABASE,
   synchronize: true,
   options: {
-    trustServerCertificate: process.env.NODE_ENV === 'development',
+    trustServerCertificate:
+      process.env.NODE_ENV === 'development' ||
+      process.env.NODE_ENV === 'test' ||
+      false,
   },
-  entities: ['dist/src/**/*.entity.js'],
+  entities: ['dist/src/**/*.entity{.ts,.js}'],
   migrations: ['dist/src/db/migrations/*.js'],
   cli: {
     migrationsDir: 'src/db/migrations',
   },
+  logging: true,
 }
 
 export default SQLConfig

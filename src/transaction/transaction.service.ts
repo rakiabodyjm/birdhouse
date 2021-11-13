@@ -1,26 +1,36 @@
-import { Injectable } from '@nestjs/common';
-import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { Inject, Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { InventoryService } from 'src/inventory/inventory.service'
+import { Transaction } from 'src/transaction/entities/transaction.entity'
+import { Repository } from 'typeorm'
+import { CreateTransactionDto } from './dto/create-transaction.dto'
+import { UpdateTransactionDto } from './dto/update-transaction.dto'
 
 @Injectable()
 export class TransactionService {
-  create(createTransactionDto: CreateTransactionDto) {
-    return 'This action adds a new transaction';
-  }
+  constructor(
+    @InjectRepository(Transaction)
+    readonly transactionRepository: Repository<Transaction>,
+    inventoryService: InventoryService,
+  ) {}
 
-  findAll() {
-    return `This action returns all transaction`;
-  }
+  // create(createTransactionDto: CreateTransactionDto) {
+  //   // return 'This action adds a new transaction';
+  // }
 
-  findOne(id: number) {
-    return `This action returns a #${id} transaction`;
-  }
+  // findAll() {
+  //   return `This action returns all transaction`
+  // }
 
-  update(id: number, updateTransactionDto: UpdateTransactionDto) {
-    return `This action updates a #${id} transaction`;
-  }
+  // findOne(id: number) {
+  //   return `This action returns a #${id} transaction`
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} transaction`;
-  }
+  // update(id: number, updateTransactionDto: UpdateTransactionDto) {
+  //   return `This action updates a #${id} transaction`
+  // }
+
+  // remove(id: number) {
+  //   return `This action removes a #${id} transaction`
+  // }
 }

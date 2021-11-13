@@ -12,7 +12,10 @@ import { JwtService } from '@nestjs/jwt'
 import { AuthGuard } from '@nestjs/passport'
 import { ApiTags } from '@nestjs/swagger'
 import { Request } from 'express'
+import { Role } from 'src/auth/decorators/roles.decorator'
 import { LoginUserDto } from 'src/auth/dto/login.dto'
+import { RolesGuard } from 'src/auth/guards/roles.guard'
+import { Roles } from 'src/types/Roles'
 import { UserService } from 'src/user/user.service'
 import { AuthService } from './auth.service'
 @ApiTags('Authentication Routes')
@@ -76,5 +79,12 @@ export class AuthController {
     return {
       ...req.user,
     }
+  }
+
+  @Get('role')
+  @Role(Roles.ADMIN)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  getOnlyAsAdmin() {
+    return 'hello admin'
   }
 }

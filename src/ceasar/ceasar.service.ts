@@ -66,7 +66,7 @@ export class CeasarService {
     })
 
     const newCeasar = await this.ceasarRepository.save(ceasarCreate)
-    return this.injectCeasar(newCeasar)
+    return this.injectExternalCeasar(newCeasar)
   }
 
   async findAll(
@@ -78,14 +78,15 @@ export class CeasarService {
           take: 100,
         })
         .then((res) => {
-          return this.injectCeasar(res)
+          return this.injectExternalCeasar(res)
         })
     } else {
       return await paginateFind<Ceasar>(this.ceasarRepository, params, {}).then(
         async (paginatedCeasar) => {
           const externalCeasarData = await Promise.all(
             paginatedCeasar.data.map(
-              async (ceasar) => this.injectCeasar(ceasar) as Promise<Ceasar>,
+              async (ceasar) =>
+                this.injectExternalCeasar(ceasar) as Promise<Ceasar>,
             ),
           )
           return {
@@ -105,14 +106,37 @@ export class CeasarService {
     }
   }
 
+  // injectCeasar<T extends Record<any, any>>(
+  //   entity: T,
+  //   entityType: UserTypesAndUser,
+  // ): Promise<T>
+  injectCeasar<T extends Record<any, any>>(
+    entities: T[],
+    entity: UserTypesAndUser,
+  ): Promise<T[]> {
+    return Promise.all(
+      entities.map(async (ea) => ({
+        ...ea,
+        ceasar_wallet: await this.findOne({
+          [entity]: ea.id,
+        }).catch((err) => {
+          return null
+        }),
+      })),
+    )
+  }
+
   findOne<T = GetCeasarDto>(accountQuery: T): Promise<Ceasar>
   findOne<T = string>(ceasarId: T): Promise<Ceasar>
-  findOne(id) {
+  findOne(id: GetCeasarDto | string) {
     if (typeof id === 'string') {
       const ceasar = this.ceasarRepository
         .findOneOrFail(id)
         .then(async (res) => {
-          return this.injectCeasar(res)
+          return await this.injectExternalCeasar(res).catch((err) => {
+            // console.error(err)
+            return null
+          })
         })
         .catch((err) => {
           // console.error(err)
@@ -128,7 +152,10 @@ export class CeasarService {
           account_type,
         })
         .then(async (res) => {
-          return await this.injectCeasar(res)
+          return await this.injectExternalCeasar(res).catch((err) => {
+            console.error(err)
+            return null
+          })
         })
         .catch((err) => {
           // console.error(err)
@@ -138,9 +165,9 @@ export class CeasarService {
     }
   }
 
-  private injectCeasar<T>(localCeasar: T): Promise<T>
-  private injectCeasar<T>(localCeasar: T[]): Promise<T[]>
-  private async injectCeasar(localCeasar): Promise<Ceasar | Ceasar[]> {
+  private injectExternalCeasar<T>(localCeasar: T): Promise<T>
+  private injectExternalCeasar<T>(localCeasar: T[]): Promise<T[]>
+  private async injectExternalCeasar(localCeasar): Promise<Ceasar | Ceasar[]> {
     if (!Array.isArray(localCeasar)) {
       //TODO handle error
       const ceasarExternalData$ = this.axiosService
@@ -150,7 +177,8 @@ export class CeasarService {
       const ceasarExternalData = await firstValueFrom(
         ceasarExternalData$,
       ).catch((err) => {
-        console.error(err)
+        // return null
+
         throw new Error(err)
       })
       return {
@@ -160,7 +188,7 @@ export class CeasarService {
     } else {
       return Promise.all(
         localCeasar.map(async (ceasar) => {
-          return { ...(await this.injectCeasar(ceasar)) }
+          return { ...(await this.injectExternalCeasar(ceasar)) }
         }),
       )
     }

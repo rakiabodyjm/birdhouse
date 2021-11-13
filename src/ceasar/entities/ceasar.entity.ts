@@ -1,17 +1,20 @@
-import { Expose } from 'class-transformer'
 import { ExternalCeasar } from 'src/external-ceasar/entities/external-ceasar.entity'
+import Inventory from 'src/inventory/entities/inventory.entity'
+import { Transaction } from 'src/transaction/entities/transaction.entity'
 import { UserTypesAndUser } from 'src/types/Roles'
 import {
   Column,
   CreateDateColumn,
   Entity,
   Index,
+  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
 
 @Entity()
-@Index(['account_id'])
+@Index(['id', 'account_id', 'ceasar_id'])
 export class Ceasar {
   @PrimaryGeneratedColumn('uuid')
   id: string
@@ -39,6 +42,11 @@ export class Ceasar {
   })
   updated_at: Date
 
+  @OneToOne((type) => Inventory, (inventory) => inventory.ceasar)
+  inventory: Inventory
+
+  @OneToMany((type) => Transaction, (transaction) => transaction.buyer)
+  transactions: Transaction[]
   // @JoinColumn({
   //   name: 'user_account',
   // })

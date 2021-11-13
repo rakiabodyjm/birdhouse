@@ -1,8 +1,10 @@
+import Inventory from 'src/inventory/entities/inventory.entity'
 import {
   Column,
   DeleteDateColumn,
   Entity,
   Index,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm'
 
@@ -58,4 +60,7 @@ export default class Asset {
     type: 'datetime',
   })
   deleted_at: Date
+
+  @OneToMany((type) => Inventory, (inventory) => inventory.asset)
+  inventory: Inventory[]
 }

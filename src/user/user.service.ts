@@ -42,6 +42,7 @@ export class UserService {
     subdistributor: this.subdistributorService,
   }
 
+  relations: ['ceasar']
   async create(createUserDto: CreateUserDto): Promise<User> {
     const userSearch = await this.userRepository.findOne({
       email: createUserDto.email,
@@ -74,8 +75,10 @@ export class UserService {
     /**
      * apply caching since Authentication also relies on user data
      */
+
     try {
       const userCache: User = await this.cacheManager.get(id)
+
       if (userCache) {
         if (isCached === true) {
           return userCache
@@ -84,7 +87,13 @@ export class UserService {
         }
       }
 
-      const user = await this.userRepository.findOneOrFail(id, {})
+      const user = await this.userRepository
+        .findOneOrFail({
+          id,
+        })
+        .catch((err) => {
+          throw new Error(err.message)
+        })
 
       this.cacheManager.set(user.id, user, {
         ttl: 10 * 60 * 1000,

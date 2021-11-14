@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { isNotEmptyObject } from 'class-validator'
+import { CeasarService } from 'src/ceasar/ceasar.service'
+import { Ceasar } from 'src/ceasar/entities/ceasar.entity'
 import { GetAllSubdistributor } from 'src/subdistributor/dto/get-subdistributor.dto'
 import { SearchSubdistributorDto } from 'src/subdistributor/dto/search-subdistributor.dto'
 import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
@@ -16,8 +18,9 @@ export class SubdistributorService {
   constructor(
     @InjectRepository(Subdistributor)
     private subdRepository: Repository<Subdistributor>,
+    private ceasarService: CeasarService,
   ) {
-    this.relationsToLoad = ['user', 'area_id']
+    this.relationsToLoad = ['user']
   }
   async create(createSubdistributorDto: CreateSubdistributorDto) {
     const { area_id: areaIdString } = createSubdistributorDto
@@ -34,10 +37,31 @@ export class SubdistributorService {
   async findAll(
     params?: GetAllSubdistributor,
   ): Promise<Subdistributor[] | Paginated<Subdistributor>> {
+    // console.log(Object.keys(this.ceasarService))
     if (!isNotEmptyObject(params)) {
-      return await this.subdRepository.find({
-        relations: this.relationsToLoad,
-      })
+      return await this.subdRepository
+        .find({
+          relations: this.relationsToLoad,
+        })
+        .then(async (res) => {
+          // return Promise.all(
+          //   res.map(
+          //     async (subd) =>
+          //       ({
+          //         ...subd,
+          //         ceasar_wallet: await this.ceasarService
+          //           .findOne({
+          //             subdistributor: subd.id,
+          //           })
+          //           .catch((err) => null),
+          //       } as Subdistributor),
+          //   ),
+          // )
+          return (await this.ceasarService.injectCeasar(
+            res,
+            'subdistributor',
+          )) as Subdistributor[]
+        })
     } else {
       return await paginateFind<Subdistributor>(this.subdRepository, params, {
         relations: this.relationsToLoad,

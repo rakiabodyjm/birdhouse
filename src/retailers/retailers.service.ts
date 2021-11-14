@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { isNotEmptyObject } from 'class-validator'
-import { SearchDspDto } from 'src/dsp/dto/search-dsp.dto'
 import { GetAllRetailerDto } from 'src/retailers/dto/get-all-retailer.dto'
 import SearchRetailerDto from 'src/retailers/dto/search-retailer.dto'
 import { Retailer } from 'src/retailers/entities/retailer.entity'
 import { Paginated } from 'src/types/Paginated'
 import paginateFind from 'src/utils/paginate'
-import { Like, Repository } from 'typeorm'
+import createQueryBuilderAndIncludeRelations from 'src/utils/queryBuilderWithRelations'
+import { Repository } from 'typeorm'
 import { CreateRetailerDto } from './dto/create-retailer.dto'
 import { UpdateRetailerDto } from './dto/update-retailer.dto'
 
@@ -90,32 +90,44 @@ export class RetailersService {
     query: string,
     options?: Omit<SearchRetailerDto, 'searchQuery'>,
   ) {
-    const { dsp, subdistributor } = options
-    return this.retailerRepository.find({
-      ...(dsp && { dsp }),
-      ...(subdistributor && { subdistributor }),
-      where: [
+    const { subdistributor, dsp } = options
+    const searchQuery = `%${query}%`
+
+    const result: Promise<Retailer[]> = this.retailerRepository
+      .createQueryBuilder('retailer')
+      .leftJoinAndSelect('retailer.subdistributor', 'subdistributor')
+      .leftJoinAndSelect('retailer.dsp', 'dsp ')
+      .andWhere(
+        subdistributor ? `retailer.subdistributor = :subdistributor` : `1=1`,
         {
-          id: Like(`%${query}%`),
+          subdistributor,
         },
+      )
+      .andWhere(dsp ? `retailer.dsp = :dsp` : `1=1`, {
+        dsp,
+      })
+      .andWhere(
+        `(retailer.store_name like :searchQuery OR retailer.e_bind_number like :searchQuery OR subdistributor.name like :searchQuery OR dsp.dsp_code like :searchQuery) 
+        
+        `,
         {
-          e_bind_number: Like(`%${query}%`),
+          searchQuery,
         },
-        {
-          store_name: Like(`%${query}%`),
-        },
-        {
-          subdistributor: {
-            name: Like(`%${query}%`),
-          },
-        },
-        {
-          id_number: Like(`%${query}%`),
-        },
-      ],
-      relations: this.relationsToLoad,
-      take: 100,
-    })
+      )
+      .getMany()
+
+    if (
+      (await result).reduce((acc, ea) => {
+        if (ea.subdistributor.id !== subdistributor) {
+          return true
+        }
+        return acc
+      }, false)
+    ) {
+      console.log('Discrepancy in Subd')
+    }
+
+    return result
   }
   async update(
     id: string,

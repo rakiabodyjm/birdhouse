@@ -6,7 +6,8 @@ import { SearchDspDto } from 'src/dsp/dto/search-dsp.dto'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
 import { MapIdsService } from 'src/map-ids/map-ids.service'
 import paginateFind from 'src/utils/paginate'
-import { Like, Repository } from 'typeorm'
+import createQueryBuilderAndIncludeRelations from 'src/utils/queryBuilderWithRelations'
+import { Repository } from 'typeorm'
 import { CreateDspDto } from './dto/create-dsp.dto'
 import { UpdateDspDto } from './dto/update-dsp.dto'
 
@@ -74,41 +75,25 @@ export class DspService {
     searchString: string,
     whereQuery: Omit<SearchDspDto, 'searchQuery'>,
   ) {
-    // const { searchQuery: searchString, subdistributor: subdistributorQuery } =
-    //   searchDspDto
     const { subdistributor } = whereQuery
-    return this.dspRepository.find({
-      ...(subdistributor && { subdistributor }),
-      where: [
-        {
-          subdistributor: {
-            name: Like(`%${searchString}%`),
-          },
-        },
-        {
-          id: Like(`%${searchString}%`),
-        },
-        {
-          dsp_code: Like(`%${searchString}%`),
-        },
-        {
-          e_bind_number: Like(`%${searchString}%`),
-        },
-        {
-          user: {
-            first_name: Like(`%${searchString}%`),
-          },
-        },
-        {
-          user: {
-            last_name: Like(`%${searchString}%`),
-          },
-        },
-      ],
-
+    let query = createQueryBuilderAndIncludeRelations(this.dspRepository, {
+      entityName: 'dsp',
       relations: this.includedRelations,
-      take: 100,
-    })
+    }).where(
+      'subdistributor.name like :searchString OR user.first_name like :searchString OR user.last_name like :searchString OR dsp.dsp_code like :searchString OR dsp.e_bind_number like :searchString',
+    )
+
+    if (subdistributor) {
+      query = query.andWhere('dsp.subdistributor = :subdistributor')
+    }
+
+    return query
+      .setParameters({
+        searchString: `%${searchString}%`,
+        subdistributor,
+      })
+      .take(100)
+      .getMany()
   }
   async findOne(id?: string) {
     try {

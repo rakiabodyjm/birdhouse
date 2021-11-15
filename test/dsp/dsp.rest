@@ -44,4 +44,6 @@ GET {{$dotenv REST_HOST}}/dsp?subdistributor=CFB5D438-BC21-EC11-B665-00E18CEF593
 
 ###SEARCH
 
-GET {{$dotenv REST_HOST}}/dsp/search?searchQuery=anne&subdistributor=CFB5D438-BC21-EC11-B665-00E18CEF5938
+GET {{$dotenv REST_HOST}}/dsp/search?searchQuery=arj&subdistributor=CFB5D438-BC21-EC11-B665-00E18CEF5938
+###
+GET {{$dotenv REST_HOST}}/dsp/search?searchQuery=jo&subdistributor=AF02DF31-DD2B-EC11-B666-00E18CEF5935

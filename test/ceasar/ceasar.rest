@@ -13,10 +13,13 @@ POST {{$dotenv REST_HOST}}/ceasar
 Content-Type: application/json
 
 {
-    "subdistributor" : "CFB5D438-BC21-EC11-B665-00E18CEF5938"
+    #"subdistributor": "CFB5D438-BC21-EC11-B665-00E18CEF5938",
     # "user": "AE02DF31-DD2B-EC11-B666-00E18CEF5935"
+    "admin":"0A03B39E-C121-EC11-B665-00E18CEF5938"
+    
 }
 
 ###
 DELETE {{$dotenv REST_HOST}}/ceasar
+
 

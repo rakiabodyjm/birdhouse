@@ -4,14 +4,14 @@ POST http://localhost:6006/user
 Content-Type: application/json
 
 {
-#    "first_name": "Janeo Miguel",
-    "last_name": "Tiongson",
+   "first_name": "John Doe",
+    "last_name": "Retailer",
     "phone_number": "+639498460475",
     "password": "rakiabodyjm4690",
     "address1": "#16 General Santos Street.,Brgy. Roxas",
     "address2": null,
-    "email": "rakiabodyjm@gmail.com", 
-    "username": "rakiabodyjm"
+    "email": "johndoereatiler@gmail.com", 
+    
     # "subdistributor":{
     #     "name": "REALM1000 SUBDISTRIBUTOR ACCOUNT", 
     #     "e_bind_number": "+639498460475", 
@@ -20,6 +20,14 @@ Content-Type: application/json
     #     "id_type": "LTO Driver's License", 
     #     "area_id": "2"
     # }
+    "retailer":{
+        "store_name": "Janeo Miguel's Store",
+        "e_bind_number": "09498460475", 
+        "id_type": "LTO Driver's License",
+        "id_number": "2014-14123-123T", 
+        "subdistributor": "AF02DF31-DD2B-EC11-B666-00E18CEF5935", 
+        "dsp": "B675433E-F36B-1410-86C5-00E785D37B7B"
+    }
   
 }
  

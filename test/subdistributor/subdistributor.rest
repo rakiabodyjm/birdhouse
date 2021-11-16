@@ -37,4 +37,4 @@ DELETE {{$dotenv REST_HOST}}/subdistributor
 GET {{$dotenv REST_HOST}}/subdistributor?page=0
 
 ### SEARCH 
-GET {{$dotenv REST_HOST}}/subdistributor/search?searchQuery=John Doe
+GET {{$dotenv REST_HOST}}/subdistributor/search?searchQuery=Janeo

@@ -80,7 +80,7 @@ export class DspService {
       entityName: 'dsp',
       relations: this.includedRelations,
     }).where(
-      'subdistributor.name like :searchString OR user.first_name like :searchString OR user.last_name like :searchString OR dsp.dsp_code like :searchString OR dsp.e_bind_number like :searchString',
+      '(subdistributor.name like :searchString OR user.first_name like :searchString OR user.last_name like :searchString OR dsp.dsp_code like :searchString OR dsp.e_bind_number like :searchString)',
     )
 
     if (subdistributor) {

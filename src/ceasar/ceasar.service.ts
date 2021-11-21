@@ -165,9 +165,9 @@ export class CeasarService {
     }
   }
 
-  private injectExternalCeasar<T>(localCeasar: T): Promise<T>
-  private injectExternalCeasar<T>(localCeasar: T[]): Promise<T[]>
-  private async injectExternalCeasar(localCeasar): Promise<Ceasar | Ceasar[]> {
+  injectExternalCeasar<T>(localCeasar: T): Promise<T>
+  injectExternalCeasar<T>(localCeasar: T[]): Promise<T[]>
+  async injectExternalCeasar(localCeasar): Promise<Ceasar | Ceasar[]> {
     if (!Array.isArray(localCeasar)) {
       //TODO handle error
       const ceasarExternalData$ = this.axiosService

@@ -1,4 +1,4 @@
-import { ExternalCeasar } from 'src/external-ceasar/entities/external-ceasar.entity'
+import { Expose } from 'class-transformer'
 import Inventory from 'src/inventory/entities/inventory.entity'
 import { Transaction } from 'src/transaction/entities/transaction.entity'
 import { UserTypesAndUser } from 'src/types/Roles'
@@ -28,8 +28,6 @@ export class Ceasar {
   @Column()
   ceasar_id: string
 
-  data?: ExternalCeasar
-
   @CreateDateColumn({
     type: 'datetime',
     default: () => 'CURRENT_TIMESTAMP',
@@ -42,8 +40,8 @@ export class Ceasar {
   })
   updated_at: Date
 
-  @OneToOne((type) => Inventory, (inventory) => inventory.ceasar)
-  inventory: Inventory
+  @OneToMany((type) => Inventory, (inventory) => inventory.ceasar)
+  inventory: Inventory[]
 
   @OneToMany((type) => Transaction, (transaction) => transaction.buyer)
   transactions: Transaction[]

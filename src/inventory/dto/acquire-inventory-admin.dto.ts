@@ -1,10 +1,12 @@
-import { IsNotEmpty, IsNumber } from 'class-validator'
+import { Transform } from 'class-transformer'
+import { IsNotEmpty, IsNumber, IsPositive, IsUUID } from 'class-validator'
 import Asset from 'src/asset/entities/asset.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
 
 export class AcquireInventoryAdmin {
   @IsNumber()
   @IsNotEmpty()
+  @IsPositive()
   quantity: number
 
   @IsNotEmpty({
@@ -13,7 +15,8 @@ export class AcquireInventoryAdmin {
   @ExistsInDb(Asset, 'id', {
     message: `Asset doesn't exist`,
   })
-  asset: Asset
+  @IsUUID()
+  asset: string
 
   //   @IsNotEmpty({
   //     message: `Ceasar ID should not be empty`,

@@ -108,7 +108,6 @@ export class RetailersService {
       })
       .andWhere(
         `(retailer.store_name like :searchQuery OR retailer.e_bind_number like :searchQuery OR subdistributor.name like :searchQuery OR dsp.dsp_code like :searchQuery) 
-        
         `,
         {
           searchQuery,

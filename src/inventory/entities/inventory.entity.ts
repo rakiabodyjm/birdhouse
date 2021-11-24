@@ -5,7 +5,6 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm'
 
@@ -26,6 +25,6 @@ export default class Inventory {
   @JoinColumn({
     name: 'ceasar_id',
   })
-  @OneToOne((type) => Ceasar, (ceasar) => ceasar.inventory)
+  @ManyToOne((type) => Ceasar, (ceasar) => ceasar.inventory)
   ceasar: Ceasar
 }

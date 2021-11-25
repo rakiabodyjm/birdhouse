@@ -23,7 +23,7 @@ const SQLConfig: SqlServerConnectionOptions & {
   cli: {
     migrationsDir: 'src/db/migrations',
   },
-  logging: true,
+  // logging: true,
 }
 
 export default SQLConfig

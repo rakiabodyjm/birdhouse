@@ -3,8 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { InventoryService } from 'src/inventory/inventory.service'
 import { Transaction } from 'src/transaction/entities/transaction.entity'
 import { Repository } from 'typeorm'
-import { CreateTransactionDto } from './dto/create-transaction.dto'
-import { UpdateTransactionDto } from './dto/update-transaction.dto'
 
 @Injectable()
 export class TransactionService {
@@ -14,6 +12,7 @@ export class TransactionService {
     inventoryService: InventoryService,
   ) {}
 
+  adminAcquire() {}
   // create(createTransactionDto: CreateTransactionDto) {
   //   // return 'This action adds a new transaction';
   // }

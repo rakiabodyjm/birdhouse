@@ -11,7 +11,6 @@ import { AdminModule } from './admin/admin.module'
 import { AuthModule } from './auth/auth.module'
 import { RetailersModule } from './retailers/retailers.module'
 import { SubdistributorModule } from './subdistributor/subdistributor.module'
-import { LogsModule } from './logs/logs.module'
 import { CeasarModule } from './ceasar/ceasar.module'
 import { ExternalCeasarModule } from './external-ceasar/external-ceasar.module'
 import { AssetModule } from './asset/asset.module'
@@ -36,7 +35,6 @@ config()
     AuthModule,
     RetailersModule,
     SubdistributorModule,
-    LogsModule,
     CeasarModule,
     ExternalCeasarModule,
     InventoryModule,

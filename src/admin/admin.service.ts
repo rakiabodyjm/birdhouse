@@ -4,6 +4,7 @@ import { isNotEmptyObject } from 'class-validator'
 import { GetAllAdminDto } from 'src/admin/dto/get-all-admin.dto'
 import { Admin } from 'src/admin/entities/admin.entity'
 import { Paginated } from 'src/types/Paginated'
+import { UserTypesAndUser } from 'src/types/Roles'
 import paginateFind from 'src/utils/paginate'
 import { Repository } from 'typeorm'
 import { CreateAdminDto } from './dto/create-admin.dto'
@@ -14,7 +15,11 @@ export class AdminService {
   constructor(
     @InjectRepository(Admin)
     private adminRepository: Repository<Admin>,
-  ) {}
+  ) {
+    this.relationsToLoad = ['user']
+  }
+  relationsToLoad: UserTypesAndUser[]
+
   async create(createAdminDto: CreateAdminDto) {
     const newAdmin = this.adminRepository.create(createAdminDto)
     await this.adminRepository.save(newAdmin)
@@ -26,7 +31,7 @@ export class AdminService {
   async findAll(query: GetAllAdminDto): Promise<Admin[] | Paginated<Admin>> {
     if (!isNotEmptyObject(query)) {
       const admins = await this.adminRepository.find({
-        relations: ['user'],
+        relations: this.relationsToLoad,
       })
       return admins
     } else {
@@ -37,7 +42,7 @@ export class AdminService {
           page: query.page,
         },
         {
-          relations: ['user'],
+          relations: this.relationsToLoad,
         },
       )
     }
@@ -47,7 +52,7 @@ export class AdminService {
 
   findOne(id: string) {
     return this.adminRepository.findOneOrFail(id, {
-      relations: ['user'],
+      relations: this.relationsToLoad,
     })
   }
 

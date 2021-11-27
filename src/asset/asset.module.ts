@@ -9,5 +9,6 @@ import { AssetController } from 'src/asset/asset.controller'
   imports: [TypeOrmModule.forFeature([Asset])],
   controllers: [AssetController],
   providers: [AssetService],
+  exports: [AssetService],
 })
 export class AssetModule {}

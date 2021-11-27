@@ -12,6 +12,7 @@ import {
   HttpException,
   HttpStatus,
   BadRequestException,
+  NotFoundException,
 } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 // import { GetAllAssetDto } from 'src/assets/dto/get-all-asset.dto'
@@ -24,6 +25,9 @@ import { UpdateAssetDto } from './dto/update-asset.dto'
 @Controller('asset')
 @ApiTags('Asset Routes')
 @UseInterceptors(ClassSerializerInterceptor)
+//TODO put authentication guards
+// @UseGuards(AuthGuard('jwt'), RolesGuard)
+// @Role(Roles.ADMIN)
 export class AssetController {
   constructor(private readonly assetsService: AssetService) {}
 
@@ -42,6 +46,18 @@ export class AssetController {
     return this.assetsService.findAll(query).catch((err) => {
       throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
     })
+  }
+
+  @Get('/search')
+  search(
+    @Query('searchQuery') searchQuery: string,
+    @Query('withDeleted') withDeleted?: true,
+  ) {
+    return this.assetsService
+      .search(searchQuery, { withDeleted })
+      .catch((err) => {
+        throw new NotFoundException(err.message)
+      })
   }
 
   @Get(':id')

@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { clear } from 'console'
 import { GetAllAssetDto } from 'src/asset/dto/get-all-asset.dto'
 import Asset from 'src/asset/entities/asset.entity'
 
 import { Paginated } from 'src/types/Paginated'
 import paginateFind from 'src/utils/paginate'
-import { Repository } from 'typeorm'
+import { Like, Repository } from 'typeorm'
 import { CreateAssetDto } from './dto/create-asset.dto'
 import { UpdateAssetDto } from './dto/update-asset.dto'
 
@@ -23,20 +22,38 @@ export class AssetService {
   }
 
   findAll(params: GetAllAssetDto): Promise<Paginated<Asset> | Asset[]> {
+    const { withDeleted } = params
+    delete params.withDeleted
     try {
       if ('page' in params || 'limit' in params) {
         const { limit, page } = params
+        delete params.page
+        delete params.limit
 
-        return paginateFind(this.assetRepository, {
-          page: page,
-          limit: limit,
-        })
+        return paginateFind(
+          this.assetRepository,
+          {
+            page: page,
+            limit: limit,
+          },
+          {
+            where: {
+              ...params,
+            },
+            ...(withDeleted && {
+              withDeleted: true,
+            }),
+          },
+        )
       } else {
         return this.assetRepository.find({
           where: {
             ...params,
           },
           take: 100,
+          ...(withDeleted && {
+            withDeleted: true,
+          }),
         })
       }
     } catch (err) {
@@ -46,7 +63,9 @@ export class AssetService {
 
   findOne(id: string) {
     return this.assetRepository
-      .findOneOrFail(id)
+      .findOneOrFail(id, {
+        withDeleted: true,
+      })
       .then((asset) => asset)
       .catch((err) => {
         throw new Error(err.message)
@@ -103,6 +122,38 @@ export class AssetService {
           .catch((err) => {
             throw new Error(err.message)
           })
+      })
+      .catch((err) => {
+        throw new Error(err.message)
+      })
+  }
+
+  unDelete(id: string) {
+    return this.findOne(id)
+  }
+  search(
+    searchQuery: string,
+    options?: {
+      withDeleted?: true
+    },
+  ) {
+    const { withDeleted } = options
+    const likeSearchQuery = Like(`%${searchQuery}%`)
+    return this.assetRepository
+      .find({
+        where: [
+          {
+            name: likeSearchQuery,
+          },
+          {
+            code: likeSearchQuery,
+          },
+          {
+            description: likeSearchQuery,
+          },
+        ],
+        withDeleted,
+        take: 100,
       })
       .catch((err) => {
         throw new Error(err.message)

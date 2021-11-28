@@ -6,6 +6,7 @@ import {
   Index,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm'
 
 @Entity()
@@ -55,6 +56,11 @@ export default class Asset {
 
   @Column()
   active: boolean
+
+  @UpdateDateColumn({
+    type: 'datetime',
+  })
+  updated_at: Date
 
   @DeleteDateColumn({
     type: 'datetime',

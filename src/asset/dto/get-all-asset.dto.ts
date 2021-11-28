@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus } from '@nestjs/common'
+import { BadRequestException } from '@nestjs/common'
 import { ApiProperty, PartialType } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
 import { IsBoolean, IsOptional } from 'class-validator'
@@ -21,20 +21,52 @@ export class GetAllAssetDto extends PartialType(PaginateOptions) {
   description: string
 
   @Transform(({ value }) => {
-    if (!['true', 'false'].includes(value)) {
-      throw new HttpException(
-        `Invalid boolean value for countOnly`,
-        HttpStatus.BAD_REQUEST,
-      )
-    }
-
-    if (value === 'true') {
-      return true
-    } else {
-      return false
+    try {
+      if (value) {
+        if (value === 'true') {
+          return true
+        } else if (value === 'false') {
+          return false
+        } else {
+          throw new Error(
+            `active parameter must only be of values true or false`,
+          )
+        }
+      } else {
+        throw new Error(
+          `Value must be either true, false or not defined in parameters`,
+        )
+      }
+    } catch (err) {
+      throw new BadRequestException(err.message)
     }
   })
-  @IsBoolean()
   @IsOptional()
+  @IsBoolean()
+  withDeleted?: true
+
+  @Transform(({ value }) => {
+    try {
+      if (value) {
+        if (value === 'true') {
+          return true
+        } else if (value === 'false') {
+          return false
+        } else {
+          throw new Error(
+            `active parameter must only be of values true or false`,
+          )
+        }
+      } else {
+        throw new Error(
+          `Value must be either true, false or not defined in parameters`,
+        )
+      }
+    } catch (err) {
+      throw new BadRequestException(err.message)
+    }
+  })
+  @IsOptional()
+  @IsBoolean()
   active: boolean
 }

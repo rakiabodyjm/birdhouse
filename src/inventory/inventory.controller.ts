@@ -30,9 +30,10 @@ import { Paginated } from 'src/types/Paginated'
 import Inventory from 'src/inventory/entities/inventory.entity'
 import { GetAllInventoryDto } from 'src/inventory/dto/get-all-inventory.dto'
 import { AssetService } from 'src/asset/asset.service'
+import { InventoryLoggerInterceptor } from 'src/inventory/interceptor/inventory-logger.interceptor'
 
 @Controller('inventory')
-@UseInterceptors(ClassSerializerInterceptor)
+@UseInterceptors(ClassSerializerInterceptor, InventoryLoggerInterceptor)
 export class InventoryController {
   constructor(
     private readonly inventoryService: InventoryService,
@@ -100,12 +101,13 @@ export class InventoryController {
       })
   }
 
-  @Get()
+  @Get('')
   findAll(
     @Query('page')
     page: GetAllInventoryDto['page'],
     @Query('limit') limit: GetAllInventoryDto['limit'],
-    @Query('disabled') disabled?: true,
+    @Query('disabled') disabled?: GetAllInventoryDto['disabled'],
+    @Query() inventoryDto?: GetAllInventoryDto,
   ): Promise<Inventory[] | Paginated<Inventory>> {
     const getAllInventoryDto = {
       ...(page && {
@@ -117,9 +119,11 @@ export class InventoryController {
       ...(disabled && {
         disabled,
       }),
+      ...inventoryDto,
     }
 
     return this.inventoryService.findAll(getAllInventoryDto).catch((err) => {
+      console.error(err)
       throw new BadRequestException(err.message)
     })
   }

@@ -1,3 +1,5 @@
+
+###
 POST {{$dotenv REST_HOST}}/auth/login
 Content-Type: application/json
 
@@ -7,32 +9,38 @@ Content-Type: application/json
     "remember_me":true
 }
 ###
-POST {{$dotenv REST_HOST}}/inventory
-Content-Type: application/json
+# POST {{$dotenv REST_HOST}}/inventory
+# Content-Type: application/json
 
-{
-    "quantity": 100, 
-    "asset": "8A50FDA5-ED42-EC11-B66B-00E18CEF5938", 
-    "ceasar": "E5CF66BA-1543-EC11-B66B-00E18CEF5938"
-}
+# {
+#     "quantity": 100, 
+#     "asset": "8A50FDA5-ED42-EC11-B66B-00E18CEF5938", 
+#     "ceasar": "E5CF66BA-1543-EC11-B66B-00E18CEF5938"
+# }
 
 ###
 POST {{$dotenv REST_HOST}}/inventory/admin-acquire
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBOEZFRjEtQkIyMS1FQzExLUI2NjUtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJKYW5lbyBNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIiwiZHNwIiwicmV0YWlsZXIiLCJzdWJkaXN0cmlidXRvciJdLCJpYXQiOjE2MzY2NTY5NDgsImV4cCI6MTYzNjY1Nzg0OH0.xXhBHHAlTlYplnostXrnlGABRGhxH8lL4lnV0NOYmK4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBOEZFRjEtQkIyMS1FQzExLUI2NjUtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJKYW5lbyBNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIiwiZHNwIiwicmV0YWlsZXIiLCJzdWJkaXN0cmlidXRvciJdLCJpYXQiOjE2Mzg0MzQ1NzMsImV4cCI6MTYzODQzNTQ3M30.Fk9dcO14BIaLsYckMPR-kduyPRx2oUPSgQR_zuZDuuI
 Content-Type: application/json
 
 {
-    "quantity": 100,
-    "asset" : "8A50FDA5-ED42-EC11-B66B-00E18CEF5938"
+    "quantity": 50,
+    "asset" : "DFF4B5F3-2053-EC11-B66F-00E18CEF5938"
     
 }
 ###
 GET {{$dotenv REST_HOST}}/inventory
 
 ###
-GET {{$dotenv REST_HOST}}/inventory/D50ECECB-1543-EC11-B66B-00E18CEF5938
+GET {{$dotenv REST_HOST}}/inventory?page=0
+
 ###
-PATCH {{$dotenv REST_HOST}}/inventory/D50ECECB-1543-EC11-B66B-00E18CEF5938
+GET {{$dotenv REST_HOST}}/inventory/CB021921-2A53-EC11-B66F-00E18CEF5938"
+###
+
+
+PATCH {{$dotenv REST_HOST}}/inventory/CB021921-2A53-EC11-B66F-00E18CEF5938"
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBOEZFRjEtQkIyMS1FQzExLUI2NjUtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJKYW5lbyBNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIiwiZHNwIiwicmV0YWlsZXIiLCJzdWJkaXN0cmlidXRvciJdLCJpYXQiOjE2Mzg0MTYyNTcsImV4cCI6MTYzODQxNzE1N30.RN90B6DFYiz07c5G93fUZLQmMkX2Ens6CHf7bsXlUDs
 Content-Type: application/json
 
 {
@@ -43,3 +51,6 @@ Content-Type: application/json
 DELETE {{$dotenv REST_HOST}}/inventory/
 
 ### 
+
+DELETE {{$dotenv REST_HOST}}/inventory/9EED7766-BC47-EC11-B66C-00E18CEF5938
+s

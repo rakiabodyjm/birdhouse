@@ -10,7 +10,7 @@ Content-Type: application/json
     "password": "rakiabodyjm4690",
     "address1": "#16 General Santos Street.,Brgy. Roxas",
     "address2": null,
-    "email": "johndoereatiler@gmail.com", 
+    "email": "johndoereatiler@gmail.com"
     
     # "subdistributor":{
     #     "name": "REALM1000 SUBDISTRIBUTOR ACCOUNT", 
@@ -20,14 +20,14 @@ Content-Type: application/json
     #     "id_type": "LTO Driver's License", 
     #     "area_id": "2"
     # }
-    "retailer":{
-        "store_name": "Janeo Miguel's Store",
-        "e_bind_number": "09498460475", 
-        "id_type": "LTO Driver's License",
-        "id_number": "2014-14123-123T", 
-        "subdistributor": "AF02DF31-DD2B-EC11-B666-00E18CEF5935", 
-        "dsp": "B675433E-F36B-1410-86C5-00E785D37B7B"
-    }
+    # "retailer":{
+    #     "store_name": "Janeo Miguel's Store",
+    #     "e_bind_number": "09498460475", 
+    #     "id_type": "LTO Driver's License",
+    #     "id_number": "2014-14123-123T", 
+    #     "subdistributor": "AF02DF31-DD2B-EC11-B666-00E18CEF5935", 
+    #     "dsp": "B675433E-F36B-1410-86C5-00E785D37B7B"
+    # }
   
 }
  
@@ -45,7 +45,7 @@ Content-Type: application/json
 ### GET USER BY ID
 GET http://localhost:6006/user/EFA8FEF1-BB21-EC11-B665-00E18CEF5938
 ### UPDATE USER BY ID
-PATCH http://localhost:6006/user/EFA8FEF1-BB21-EC11-B665-00E18CEF5938
+PATCH http://localhost:6006/user/7DFD1A99-3132-EC11-B668-00E18CEF5938
 Content-Type: application/json
 
 {
@@ -75,7 +75,13 @@ Content-Type: application/json
 PATCH http://localhost:6006/user/suspend/45E069F2-CDFA-EB11-B65F-00E18CEF5938
 
 ### DELETE USER BY ID
-DELETE http://localhost:6006/user/31627B95-2E32-EC11-B668-00E18CEF5938
+DELETE http://localhost:6006/user/E7099886-CC46-EC11-B66C-00E18CEF5938
+
+
+
+
+
+
 
 ### SEARCH
 GET http://localhost:6006/user/search?find=Astrid

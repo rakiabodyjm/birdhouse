@@ -1,14 +1,28 @@
-patch
+
+###LOGIN FOR ADMIN ONLY
+POST {{$dotenv REST_HOST}}/auth/login
+Content-Type: application/json
+
+{
+    "email": "rakiabodyjm@gmail.com", 
+    "password": "rakiabodyjm4690", 
+    "remember_me": true
+}
+
+
+
 ### GET ALL
 GET {{$dotenv REST_HOST}}/asset
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBOEZFRjEtQkIyMS1FQzExLUI2NjUtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbUBnbWFpbC5jb20iLCJmaXJzdF9uYW1lIjoiSmFuZW8gTWlndWVsIiwibGFzdF9uYW1lIjoiVGlvbmdzb24iLCJyb2xlcyI6WyJhZG1pbiIsImRzcCIsInJldGFpbGVyIiwic3ViZGlzdHJpYnV0b3IiXSwiaWF0IjoxNjM4NDE3NDU1LCJleHAiOjE2Mzg0MTgzNTV9.6de9ABWuE3nZkKxK3NPWFk6z7dIePPQgdbAfRl7lpqI
 
 
 ###SEARCH
-GET {{$dotenv REST_HOST}}/asset?page=0
+GET {{$dotenv REST_HOST}}/asset?withDeleted=true&query=hello
 
 ###
-GET {{$dotenv REST_HOST}}/asset/75BB24AD-E941-EC11-B66B-00E18CEF5938
+GET {{$dotenv REST_HOST}}/asset/DFF4B5F3-2053-EC11-B66F-00E18CEF5938
 ###CREATE
+
 
 POST {{$dotenv REST_HOST}}/asset
 Content-Type: application/json
@@ -35,10 +49,16 @@ Content-Type: application/json
 }
 
 ###
-DELETE {{$dotenv REST_HOST}}/asset/BC62712C-E541-EC11-B66B-00E18CEF5938
+DELETE {{$dotenv REST_HOST}}/asset/9EED7766-BC47-EC11-B66C-00E18CEF5938
 
 ###
 DELETE {{$dotenv REST_HOST}}/asset/clear
 
 ###
-DELETE {{$dotenv REST_HOST}}/asset/soft-delete/7F87C28F-5342-EC11-B66B-00E18CEF5938
+DELETE {{$dotenv REST_HOST}}/asset/soft-delete/DFF4B5F3-2053-EC11-B66F-00E18CEF5938
+
+###SEARCH
+GET {{$dotenv REST_HOST}}/asset/search?searchQuery=DITO
+
+### GET WITH DELETED
+GET {{$dotenv REST_HOST}}/asset?withDeleted=true

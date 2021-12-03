@@ -37,8 +37,10 @@ export class DspService {
     newDSP.area_id = await this.mapidService.getMapIdsFromArray(area_id)
     // newDSP.area_id = area_id
 
-    await this.dspRepository.save(this.dspRepository.create(newDSP as Dsp))
-    return newDSP as Dsp
+    const dspSave = await this.dspRepository.save(
+      this.dspRepository.create(newDSP),
+    )
+    return dspSave
   }
 
   async findAll(getAllDspDto: GetAllDspDto) {

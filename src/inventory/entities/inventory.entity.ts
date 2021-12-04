@@ -27,4 +27,7 @@ export default class Inventory {
   })
   @ManyToOne((type) => Ceasar, (ceasar) => ceasar.inventory)
   ceasar: Ceasar
+
+  @Column()
+  active: boolean
 }

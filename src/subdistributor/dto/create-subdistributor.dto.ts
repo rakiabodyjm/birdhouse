@@ -54,7 +54,7 @@ export class CreateSubdistributorDto {
   @IsNotEmpty({
     message: 'Area ID Required',
   })
-  area_id: MapId
+  area_id: string
 
   @IsNumberString(
     {

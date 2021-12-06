@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { isNotEmptyObject } from 'class-validator'
 import { CeasarService } from 'src/ceasar/ceasar.service'
-import { Ceasar } from 'src/ceasar/entities/ceasar.entity'
+import { MapIdsService } from 'src/map-ids/map-ids.service'
 import { GetAllSubdistributor } from 'src/subdistributor/dto/get-subdistributor.dto'
 import { SearchSubdistributorDto } from 'src/subdistributor/dto/search-subdistributor.dto'
 import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
@@ -19,6 +19,7 @@ export class SubdistributorService {
     @InjectRepository(Subdistributor)
     private subdRepository: Repository<Subdistributor>,
     private ceasarService: CeasarService,
+    private mapidService: MapIdsService,
   ) {
     this.relationsToLoad = ['user']
   }
@@ -28,8 +29,14 @@ export class SubdistributorService {
     const newSubdistributor = {
       ...createSubdistributorDto,
     }
-    const subdistributor = this.subdRepository.create(newSubdistributor)
+    const area_id = await this.mapidService.findById(areaIdString)
 
+    const subdistributor = this.subdRepository.create({
+      ...newSubdistributor,
+      area_id,
+    })
+
+    console.log(subdistributor)
     const subdSave = await this.subdRepository.save(subdistributor)
     return subdSave
   }

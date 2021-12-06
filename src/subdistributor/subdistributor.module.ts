@@ -4,9 +4,14 @@ import { SubdistributorController } from './subdistributor.controller'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
 import { CeasarModule } from 'src/ceasar/ceasar.module'
+import { MapIdsModule } from 'src/map-ids/map-ids.module'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Subdistributor]), CeasarModule],
+  imports: [
+    TypeOrmModule.forFeature([Subdistributor]),
+    CeasarModule,
+    MapIdsModule,
+  ],
   controllers: [SubdistributorController],
   providers: [SubdistributorService],
   exports: [SubdistributorService],

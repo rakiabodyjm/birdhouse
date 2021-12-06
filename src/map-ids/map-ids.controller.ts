@@ -28,7 +28,6 @@ export class MapIdsController {
   // }
   @Get()
   search(@Query() query?: SearchMapDto): Promise<MapId[]> {
-    console.log('mapidQuery', query)
     return this.mapIdsService.search(query)
   }
 

@@ -41,6 +41,9 @@ export class CreateRetailerDto {
   @IsNotEmpty({
     message: `E Bind Number or DITO Phone Number required`,
   })
+  @NoDuplicateInDb(Retailer, 'e_bind_number', {
+    message: `E Bind Number already used`,
+  })
   e_bind_number: string
 
   @ApiProperty()

@@ -61,7 +61,6 @@ export class Subdistributor {
 
   @OneToOne((type) => MapId, (mapid) => mapid.subdistributor, {
     nullable: false,
-    onDelete: 'CASCADE',
     eager: true,
   })
   @JoinColumn({
@@ -70,13 +69,13 @@ export class Subdistributor {
   area_id: MapId
 
   @OneToMany((type) => Dsp, (dsp) => dsp.subdistributor, {
-    onUpdate: 'CASCADE',
-    onDelete: 'SET NULL',
     nullable: true,
   })
   dsp?: Dsp[]
 
-  @OneToMany((type) => Retailer, (retailer) => retailer.subdistributor)
+  @OneToMany((type) => Retailer, (retailer) => retailer.subdistributor, {
+    nullable: true,
+  })
   retailer?: Retailer[]
 
   retailer_total: number

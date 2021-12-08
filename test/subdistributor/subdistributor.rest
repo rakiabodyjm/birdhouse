@@ -1,3 +1,5 @@
+GET {{$dotenv REST_HOST}}/user/
+###
 POST http://localhost:6006/subdistributor
 Content-Type: application/json
 
@@ -6,10 +8,9 @@ Content-Type: application/json
     "zip_code": "1423", 
     "id_type": "LTO Driver's License",
     "id_number":"10293-89123-2398", 
-    "user": "A4588092-B321-EC11-B665-00E18CEF5938", 
+    "user": "EFA8FEF1-BB21-EC11-B665-00E18CEF5938", 
     "area_id": "1",
-    # "user": "EFA8FEF1-BB21-EC11-B665-00E18CEF5938", 
-    "name": "REALM1000 SUBD", 
+    "name": "REALM1000 SUBD"
 
 }
 
@@ -20,7 +21,7 @@ GET http://localhost:6006/subdistributor
 GET {{$dotenv HOST}}:{{$dotenv PORT}}/subdistributor/CFB5D438-BC21-EC11-B665-00E18CEF5938
 ###
 
-DELETE {{$dotenv HOST}}:{{$dotenv PORT}}/subdistributor/811642AC-E420-EC11-B665-00E18CEF5938
+DELETE {{$dotenv HOST}}:{{$dotenv PORT}}/subdistributor/8C7245E4-B357-EC11-B670-00E18CEF5938
 ###
 PATCH {{$dotenv HOST}}:{{$dotenv PORT}}/subdistributor/5360AFB5-4107-EC11-B661-00E18CEF5938
 Content-Type: application/json

@@ -9,6 +9,8 @@ Content-Type: application/json
     "remember_me":true
 }
 ###
+GET {{$dotenv REST_HOST}}/asset/
+###
 # POST {{$dotenv REST_HOST}}/inventory
 # Content-Type: application/json
 
@@ -20,19 +22,19 @@ Content-Type: application/json
 
 ###
 POST {{$dotenv REST_HOST}}/inventory/admin-acquire
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBOEZFRjEtQkIyMS1FQzExLUI2NjUtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJKYW5lbyBNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIiwiZHNwIiwicmV0YWlsZXIiLCJzdWJkaXN0cmlidXRvciJdLCJpYXQiOjE2Mzg0MzQ1NzMsImV4cCI6MTYzODQzNTQ3M30.Fk9dcO14BIaLsYckMPR-kduyPRx2oUPSgQR_zuZDuuI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBOEZFRjEtQkIyMS1FQzExLUI2NjUtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJKYW5lbyBNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIiwiZHNwIiwicmV0YWlsZXIiLCJzdWJkaXN0cmlidXRvciJdLCJpYXQiOjE2Mzg3ODI3MjIsImV4cCI6MTYzODc4MzYyMn0.FSyONHbCD-cHgwdSluYpIVBKLeqZIIvEtfEIRxa6vw0
 Content-Type: application/json
 
 {
     "quantity": 50,
-    "asset" : "DFF4B5F3-2053-EC11-B66F-00E18CEF5938"
+    "asset" : "7C9E3648-0047-EC11-B66C-00E18CEF5938"
     
 }
 ###
 GET {{$dotenv REST_HOST}}/inventory
 
 ###
-GET {{$dotenv REST_HOST}}/inventory?page=0
+GET {{$dotenv REST_HOST}}/inventory?page=0&admin=0A03B39E-C121-EC11-B665-00E18CEF5938
 
 ###
 GET {{$dotenv REST_HOST}}/inventory/CB021921-2A53-EC11-B66F-00E18CEF5938"

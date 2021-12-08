@@ -5,7 +5,7 @@ Content-Type: application/json
 {
     "dsp_code": "John Doe DSP Account",
     "e_bind_number": "639498460473", 
-    "subdistributor": "AF02DF31-DD2B-EC11-B666-00E18CEF5935",
+    "subdistributor": "FDC28593-B957-EC11-B670-00E18CEF5938",
     "user": "42AF890C-F442-EC11-B66B-00E18CEF5938", 
     "area_id": ["2"] 
 }

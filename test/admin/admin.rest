@@ -8,7 +8,7 @@ Content-Type: application/json
 
 {
     "name": "Janeo",
-    "user": "EFA8FEF1-BB21-EC11-B665-00E18CEF5934"
+    "user": "EFA8FEF1-BB21-EC11-B665-00E18CEF5938"
 }
 ###
 PATCH http://localhost:6006/admin/0A03B39E-C121-EC11-B665-00E18CEF5938
@@ -19,7 +19,7 @@ Content-Type: application/json
     # "user": null
 }
 ###
-DELETE http://localhost:6006/admin/2F0A25C3-9504-EC11-B661-00E18CEF5938
+DELETE http://localhost:6006/admin/0A03B39E-C121-EC11-B665-00E18CEF5938
 
 ### Pagination
 GET http://localhost:6006/admin?page=0&limit=3

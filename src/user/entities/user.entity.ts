@@ -84,7 +84,6 @@ export class User {
    */
   @OneToOne((type) => Retailer, (retailer) => retailer.user, {
     eager: true,
-    onDelete: 'SET NULL',
     cascade: true,
   })
   retailer?: Retailer
@@ -100,7 +99,6 @@ export class User {
     eager: true,
 
     // createForeignKeyConstraints: false,
-    onDelete: 'SET NULL',
   })
   dsp?: Dsp
 
@@ -114,15 +112,12 @@ export class User {
      * "eager" loads relationship so we don't have to specify relationship on find
      */
     eager: true,
-
-    onDelete: 'SET NULL',
   })
   admin?: Admin
 
   @OneToOne(() => Subdistributor, (subd) => subd.user, {
     eager: true,
     cascade: true,
-    onDelete: 'SET NULL',
   })
   subdistributor?: Subdistributor
 

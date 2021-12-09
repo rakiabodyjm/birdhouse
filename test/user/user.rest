@@ -75,7 +75,8 @@ Content-Type: application/json
 PATCH http://localhost:6006/user/suspend/45E069F2-CDFA-EB11-B65F-00E18CEF5938
 
 ### DELETE USER BY ID
-DELETE http://localhost:6006/user/E7099886-CC46-EC11-B66C-00E18CEF5938
+DELETE http://localhost:6006/user/AE02DF31-DD2B-EC11-B666-00E18CEF5935
+
 
 
 

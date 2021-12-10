@@ -126,7 +126,6 @@ export class CeasarService {
     )
   }
 
-  //get Ceasar by account
   findOne<T = GetCeasarDto>(accountQuery: T): Promise<Ceasar>
   findOne<T = string>(ceasarId: T): Promise<Ceasar>
   findOne(id: GetCeasarDto | string) {
@@ -178,6 +177,8 @@ export class CeasarService {
       const ceasarExternalData = await firstValueFrom(
         ceasarExternalData$,
       ).catch((err) => {
+        // return null
+
         throw new Error(err)
       })
       return {

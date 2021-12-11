@@ -11,12 +11,12 @@ const SQLConfig: SqlServerConnectionOptions & {
   username: process.env.SQL_SERVER_USERNAME,
   password: process.env.SQL_SERVER_PASSWORD,
   database: process.env.SQL_SERVER_DATABASE,
-  synchronize: true,
+  synchronize: false,
   options: {
-    trustServerCertificate:
-      process.env.NODE_ENV === 'development' ||
-      process.env.NODE_ENV === 'test' ||
-      false,
+    trustServerCertificate: true,
+    // process.env.NODE_ENV === 'development' ||
+    // process.env.NODE_ENV === 'test' ||
+    // false,
   },
   entities: ['dist/src/**/*.entity{.ts,.js}'],
   migrations: ['dist/src/db/migrations/*.js'],

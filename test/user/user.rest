@@ -4,13 +4,13 @@ POST http://localhost:6006/user
 Content-Type: application/json
 
 {
-   "first_name": "John Doe",
-    "last_name": "Retailer",
+   "first_name": "Janeo Miguel",
+    "last_name": "Tiongson",
     "phone_number": "+639498460475",
     "password": "rakiabodyjm4690",
     "address1": "#16 General Santos Street.,Brgy. Roxas",
     "address2": null,
-    "email": "johndoereatiler@gmail.com"
+    "email": "rakiabodyjm@gmail.com",
     
     # "subdistributor":{
     #     "name": "REALM1000 SUBDISTRIBUTOR ACCOUNT", 
@@ -28,6 +28,9 @@ Content-Type: application/json
     #     "subdistributor": "AF02DF31-DD2B-EC11-B666-00E18CEF5935", 
     #     "dsp": "B675433E-F36B-1410-86C5-00E785D37B7B"
     # }
+    "admin":{
+        "name": "Janeo"
+    }
   
 }
  

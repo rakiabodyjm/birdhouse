@@ -18,13 +18,14 @@ import { InventoryModule } from './inventory/inventory.module'
 import { TransactionModule } from './transaction/transaction.module'
 import SQLConfig from 'root/ormconfig'
 
-config()
-
 @Module({
   imports: [
     CacheModule.register(),
     ConfigModule.forRoot({
-      envFilePath: '.env',
+      envFilePath:
+        process.env.NODE_ENV === 'production'
+          ? './.env.production'
+          : './.env.development',
       isGlobal: true,
     }),
     TypeOrmModule.forRoot(SQLConfig),

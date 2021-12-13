@@ -16,6 +16,7 @@ import { AssetModule } from './asset/asset.module'
 import { InventoryModule } from './inventory/inventory.module'
 import { TransactionModule } from './transaction/transaction.module'
 import SQLConfig from 'root/ormconfig'
+import { CaesarModule } from 'src/caesar/caesar.module'
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import SQLConfig from 'root/ormconfig'
     RetailersModule,
     SubdistributorModule,
     CeasarModule,
+    CaesarModule,
     ExternalCeasarModule,
     InventoryModule,
     AssetModule,

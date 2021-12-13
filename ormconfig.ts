@@ -1,7 +1,13 @@
 import { config } from 'dotenv'
 import { SqlServerConnectionOptions } from 'typeorm/driver/sqlserver/SqlServerConnectionOptions'
 
-config()
+config({
+  path:
+    process.env.NODE_ENV === 'production'
+      ? './.env.production'
+      : './.env.development',
+})
+
 const SQLConfig: SqlServerConnectionOptions & {
   options: { trustServerCertificate: boolean }
 } = {

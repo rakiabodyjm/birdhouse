@@ -1,8 +1,12 @@
 {
   "name": "realm1000-dito-backend",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "version": "1.13.0-alpha",
+  "description": "REALM1000 Telco Project NestJS Backend",
+  "author": {
+    "email": "rakiabodyjm@gmail.com",
+    "name": "Janeo Miguel Tiongson",
+    "url": "https://github.com/rakiabodyjm"
+  },
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -10,7 +14,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
-    "start:dev": "nest start --watch",
+    "start:dev": "cross-env NODE_ENV=development nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",

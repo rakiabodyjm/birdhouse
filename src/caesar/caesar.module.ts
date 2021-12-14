@@ -6,14 +6,18 @@ import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { UserModule } from 'src/user/user.module'
 import { HttpModule } from '@nestjs/axios'
 import { config } from 'dotenv'
-config()
+import { ConfigModule, ConfigService } from '@nestjs/config'
 @Module({
   imports: [
     CacheModule.register(),
     TypeOrmModule.forFeature([Caesar]),
     forwardRef(() => UserModule),
-    HttpModule.register({
-      baseURL: process.env.REST_HOST,
+    HttpModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        baseURL: configService.get('REST_HOST'),
+      }),
+      inject: [ConfigService],
     }),
   ],
   controllers: [CaesarController],

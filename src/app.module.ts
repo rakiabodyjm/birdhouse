@@ -10,13 +10,12 @@ import { AdminModule } from './admin/admin.module'
 import { AuthModule } from './auth/auth.module'
 import { RetailersModule } from './retailers/retailers.module'
 import { SubdistributorModule } from './subdistributor/subdistributor.module'
-import { CeasarModule } from './ceasar/ceasar.module'
-import { ExternalCeasarModule } from './external-ceasar/external-ceasar.module'
+import { CaesarModule } from './caesar/caesar.module'
+import { ExternalCaesarModule } from './external-caesar/external-caesar.module'
 import { AssetModule } from './asset/asset.module'
 import { InventoryModule } from './inventory/inventory.module'
 import { TransactionModule } from './transaction/transaction.module'
 import SQLConfig from 'root/ormconfig'
-import { CaesarModule } from 'src/caesar/caesar.module'
 
 @Module({
   imports: [
@@ -27,6 +26,7 @@ import { CaesarModule } from 'src/caesar/caesar.module'
           ? './.env.production'
           : './.env.development',
       isGlobal: true,
+      cache: true,
     }),
     TypeOrmModule.forRoot(SQLConfig),
     UserModule,
@@ -36,9 +36,8 @@ import { CaesarModule } from 'src/caesar/caesar.module'
     AuthModule,
     RetailersModule,
     SubdistributorModule,
-    CeasarModule,
     CaesarModule,
-    ExternalCeasarModule,
+    ExternalCaesarModule,
     InventoryModule,
     AssetModule,
     TransactionModule,

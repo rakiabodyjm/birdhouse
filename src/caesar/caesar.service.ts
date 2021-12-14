@@ -12,7 +12,7 @@ import { User } from 'src/user/entities/user.entity'
 import { firstValueFrom, map } from 'rxjs'
 import { AxiosResponse } from 'axios'
 import { GetCaesarDto } from 'src/caesar/dto/get-caesar.dto'
-import { ExternalCeasar } from 'src/external-ceasar/entities/external-ceasar.entity'
+import { ExternalCaesar } from 'src/external-caesar/entities/external-caesar.entity'
 
 @Injectable()
 export class CaesarService {
@@ -39,7 +39,7 @@ export class CaesarService {
     account_id: string
     user: User
   }) {
-    const newCaesarUser: Partial<ExternalCeasar> = {
+    const newCaesarUser: Partial<ExternalCaesar> = {
       first_name: user.first_name,
       last_name: user.last_name,
       cp_number: user.phone_number,
@@ -178,13 +178,14 @@ export class CaesarService {
         caesarExternalData$,
       ).catch((err) => {
         // return null
-
         throw new Error(err)
       })
-      return {
+      const caesarWithData = {
         ...localCaesar,
         data: caesarExternalData,
       }
+      console.log('CaesarWithData', caesarWithData)
+      return caesarWithData
     } else {
       return Promise.all(
         localCaesar.map(async (caesar) => {

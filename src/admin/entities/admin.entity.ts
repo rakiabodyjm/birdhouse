@@ -1,4 +1,4 @@
-import { Ceasar } from 'src/ceasar/entities/ceasar.entity'
+import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { User } from 'src/user/entities/user.entity'
 import {
   Column,
@@ -26,6 +26,6 @@ export class Admin {
   })
   user: User
 
-  // @OneToOne(() => Ceasar, (ceasar) => ceasar.admin)
-  ceasar_wallet?: Ceasar
+  // @OneToOne(() => Caesar, (caesar) => caesar.admin)
+  caesar_wallet?: Caesar
 }

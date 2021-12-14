@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { isNotEmptyObject } from 'class-validator'
-import { CeasarService } from 'src/ceasar/ceasar.service'
+import { CaesarService } from 'src/caesar/caesar.service'
 import { MapIdsService } from 'src/map-ids/map-ids.service'
 import { GetAllSubdistributor } from 'src/subdistributor/dto/get-subdistributor.dto'
 import { SearchSubdistributorDto } from 'src/subdistributor/dto/search-subdistributor.dto'
@@ -18,7 +18,7 @@ export class SubdistributorService {
   constructor(
     @InjectRepository(Subdistributor)
     private subdRepository: Repository<Subdistributor>,
-    private ceasarService: CeasarService,
+    private caesarService: CaesarService,
     private mapidService: MapIdsService,
   ) {
     this.relationsToLoad = ['user']
@@ -44,7 +44,7 @@ export class SubdistributorService {
   async findAll(
     params?: GetAllSubdistributor,
   ): Promise<Subdistributor[] | Paginated<Subdistributor>> {
-    // console.log(Object.keys(this.ceasarService))
+    // console.log(Object.keys(this.caesarService))
     if (!isNotEmptyObject(params)) {
       return await this.subdRepository
         .find({
@@ -56,7 +56,7 @@ export class SubdistributorService {
           //     async (subd) =>
           //       ({
           //         ...subd,
-          //         ceasar_wallet: await this.ceasarService
+          //         caesar_wallet: await this.caesarService
           //           .findOne({
           //             subdistributor: subd.id,
           //           })
@@ -64,7 +64,7 @@ export class SubdistributorService {
           //       } as Subdistributor),
           //   ),
           // )
-          return (await this.ceasarService.injectCeasar(
+          return (await this.caesarService.injectCaesar(
             res,
             'subdistributor',
           )) as Subdistributor[]

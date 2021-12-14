@@ -3,7 +3,7 @@ import { InventoryService } from './inventory.service'
 import { InventoryController } from './inventory.controller'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import Inventory from 'src/inventory/entities/inventory.entity'
-import { CeasarModule } from 'src/ceasar/ceasar.module'
+import { CaesarModule } from 'src/caesar/caesar.module'
 import { AssetModule } from 'src/asset/asset.module'
 import { AuthModule } from 'src/auth/auth.module'
 import { UserModule } from 'src/user/user.module'
@@ -12,7 +12,7 @@ import { InventoryLog } from 'src/inventory/entities/inventory-logs.entity'
 @Module({
   imports: [
     TypeOrmModule.forFeature([Inventory, InventoryLog]),
-    CeasarModule,
+    CaesarModule,
     AssetModule,
     AuthModule,
     UserModule,

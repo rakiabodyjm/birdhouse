@@ -19,10 +19,10 @@ export class AcquireInventoryAdmin {
   asset: string
 
   //   @IsNotEmpty({
-  //     message: `Ceasar ID should not be empty`,
+  //     message: `Caesar ID should not be empty`,
   //   })
-  //   @ExistsInDb(Ceasar, 'id', {
+  //   @ExistsInDb(Caesar, 'id', {
   //     message: ``,
   //   })
-  //   ceasar: Ceasar
+  //   caesar: Caesar
 }

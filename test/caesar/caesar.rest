@@ -1,15 +1,15 @@
 ### 
-GET {{$dotenv REST_HOST}}/caesar
+GET http://localhost:6006/caesar
 
 ###
-GET {{$dotenv REST_HOST}}/caesar
+GET http://localhost:6006/caesar
 
 ###
-GET {{$dotenv REST_HOST}}/caesar/BCD6AF67-AB3D-EC11-B669-00E18CEF5938
+GET http://localhost:6006/caesar/BCD6AF67-AB3D-EC11-B669-00E18CEF5938
 ###
-GET {{$dotenv REST_HOST}}/caesar/account?subdistributor=CFB5D438-BC21-EC11-B665-00E18CEF5938
+GET http://localhost:6006/caesar/account?subdistributor=CFB5D438-BC21-EC11-B665-00E18CEF5938
 ###
-POST {{$dotenv REST_HOST}}/caesar
+POST http://localhost:6006/caesar
 Content-Type: application/json
 
 {
@@ -20,6 +20,6 @@ Content-Type: application/json
 }
 
 ###
-DELETE {{$dotenv REST_HOST}}/caesar
+DELETE http://localhost:6006/caesar
 
 

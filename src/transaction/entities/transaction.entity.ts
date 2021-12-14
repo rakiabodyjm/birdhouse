@@ -1,4 +1,4 @@
-import { Ceasar } from 'src/ceasar/entities/ceasar.entity'
+import { Caesar } from 'src/caesar/entities/caesar.entity'
 import {
   Column,
   Entity,
@@ -13,16 +13,16 @@ export class Transaction {
   id: string
 
   @JoinColumn({
-    name: 'buyer_ceasar_id',
+    name: 'buyer_caesar_id',
   })
-  @ManyToOne((type) => Ceasar, (ceasar) => ceasar.transactions)
-  buyer: Ceasar
+  @ManyToOne((type) => Caesar, (caesar) => caesar.transactions)
+  buyer: Caesar
 
   @JoinColumn({
-    name: 'seller_ceasar_id',
+    name: 'seller_caesar_id',
   })
-  @ManyToOne((type) => Ceasar, (ceasar) => ceasar.transactions)
-  seller: Ceasar
+  @ManyToOne((type) => Caesar, (caesar) => caesar.transactions)
+  seller: Caesar
 
   @Column({
     type: 'decimal',

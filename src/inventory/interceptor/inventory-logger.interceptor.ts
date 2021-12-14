@@ -6,14 +6,14 @@ import {
 } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Observable, tap } from 'rxjs'
-import { CeasarService } from 'src/ceasar/ceasar.service'
+import { CaesarService } from 'src/caesar/caesar.service'
 import { InventoryLog } from 'src/inventory/entities/inventory-logs.entity'
 import { Repository } from 'typeorm'
 
 @Injectable()
 export class InventoryLoggerInterceptor implements NestInterceptor {
   constructor(
-    private ceasarService: CeasarService,
+    private caesarService: CaesarService,
     @InjectRepository(InventoryLog)
     inventoryLogsRepository: Repository<InventoryLog>,
   ) {}

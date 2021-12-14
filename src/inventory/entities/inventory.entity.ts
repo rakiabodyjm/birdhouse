@@ -1,5 +1,5 @@
 import Asset from 'src/asset/entities/asset.entity'
-import { Ceasar } from 'src/ceasar/entities/ceasar.entity'
+import { Caesar } from 'src/caesar/entities/caesar.entity'
 import {
   Column,
   Entity,
@@ -23,10 +23,10 @@ export default class Inventory {
   asset: Asset
 
   @JoinColumn({
-    name: 'ceasar_id',
+    name: 'caesar_id',
   })
-  @ManyToOne((type) => Ceasar, (ceasar) => ceasar.inventory)
-  ceasar: Ceasar
+  @ManyToOne((type) => Caesar, (caesar) => caesar.inventory)
+  caesar: Caesar
 
   @Column()
   active: boolean

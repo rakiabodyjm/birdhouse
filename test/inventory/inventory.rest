@@ -17,7 +17,7 @@ GET {{$dotenv REST_HOST}}/asset/
 # {
 #     "quantity": 100, 
 #     "asset": "8A50FDA5-ED42-EC11-B66B-00E18CEF5938", 
-#     "ceasar": "E5CF66BA-1543-EC11-B66B-00E18CEF5938"
+#     "caesar": "E5CF66BA-1543-EC11-B66B-00E18CEF5938"
 # }
 
 ###

@@ -1,4 +1,4 @@
-POST {{$dotenv REST_HOST}}/external-ceasar
+POST http://localhost:6006/external-caesar
 Content-Type: application/json
 
 {
@@ -10,10 +10,10 @@ Content-Type: application/json
 }
 
 ###
-GET {{$dotenv REST_HOST}}/external-ceasar
+GET http://localhost:6006/external-caesar
 
 ###
-DELETE {{$dotenv REST_HOST}}/external-ceasar
+DELETE http://localhost:6006/external-caesar
 
 ###
-GET {{$dotenv REST_HOST}}/external-ceasar/1
+GET http://localhost:6006/external-caesar/1

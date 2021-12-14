@@ -1,6 +1,6 @@
 import { Exclude, Expose, Transform } from 'class-transformer'
 import { Admin } from 'src/admin/entities/admin.entity'
-import { Ceasar } from 'src/ceasar/entities/ceasar.entity'
+import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
 import { Retailer } from 'src/retailers/entities/retailer.entity'
 import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
@@ -121,8 +121,8 @@ export class User {
   })
   subdistributor?: Subdistributor
 
-  // @OneToOne(() => Ceasar, (ceasar) => ceasar.user)
-  ceasar_wallet?: Ceasar
+  // @OneToOne(() => Caesar, (caesar) => caesar.user)
+  caesar_wallet?: Caesar
 
   @BeforeUpdate()
   setUpdatedAt() {

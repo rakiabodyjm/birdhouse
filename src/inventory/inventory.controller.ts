@@ -23,7 +23,7 @@ import { Role } from 'src/auth/decorators/roles.decorator'
 import { Roles } from 'src/types/Roles'
 import { Request } from 'express'
 import { AcquireInventoryAdmin } from 'src/inventory/dto/acquire-inventory-admin.dto'
-import { CeasarService } from 'src/ceasar/ceasar.service'
+import { CaesarService } from 'src/caesar/caesar.service'
 import { User } from 'src/user/entities/user.entity'
 import { createEntityMessage } from 'src/types/EntityMessage'
 import { Paginated } from 'src/types/Paginated'
@@ -37,7 +37,7 @@ import { InventoryLoggerInterceptor } from 'src/inventory/interceptor/inventory-
 export class InventoryController {
   constructor(
     private readonly inventoryService: InventoryService,
-    private readonly ceasarService: CeasarService,
+    private readonly caesarService: CaesarService,
     private readonly assetService: AssetService,
   ) {}
 
@@ -57,14 +57,14 @@ export class InventoryController {
     @Req() request: Request,
   ) {
     const user: Partial<User> = request.user
-    //look for ceasarWallet of the authenticated account admin
-    const ceasarWallet = await this.ceasarService
+    //look for caesarWallet of the authenticated account admin
+    const caesarWallet = await this.caesarService
       .findOne({
         admin: user.admin.id,
       })
       .catch((err) => {
         throw new HttpException(
-          `Admin Account doesn't have Ceasar Wallet`,
+          `Admin Account doesn't have Caesar Wallet`,
           HttpStatus.BAD_REQUEST,
         )
       })
@@ -76,9 +76,9 @@ export class InventoryController {
       })
     // if inventory for that admin already exists
     const adminInventory = await this.inventoryService
-      .findByAssetIdAndCeasarId({
+      .findByAssetIdAndCaesarId({
         asset_id: createInventoryDto.asset,
-        ceasar_id: ceasarWallet.id,
+        caesar_id: caesarWallet.id,
       })
       .catch((err) => {
         throw new BadRequestException(err.message)
@@ -93,7 +93,7 @@ export class InventoryController {
     return this.inventoryService
       .create({
         ...createInventoryDto,
-        ceasar: ceasarWallet,
+        caesar: caesarWallet,
         asset,
       })
       .catch((err) => {

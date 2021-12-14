@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsPositive } from 'class-validator'
 import Asset from 'src/asset/entities/asset.entity'
-import { Ceasar } from 'src/ceasar/entities/ceasar.entity'
+import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
 
 export class CreateInventoryDto {
@@ -18,10 +18,10 @@ export class CreateInventoryDto {
   asset: string
 
   @IsNotEmpty({
-    message: `Ceasar ID should not be empty`,
+    message: `Caesar ID should not be empty`,
   })
-  @ExistsInDb(Ceasar, 'id', {
+  @ExistsInDb(Caesar, 'id', {
     message: ``,
   })
-  ceasar: string
+  caesar: string
 }

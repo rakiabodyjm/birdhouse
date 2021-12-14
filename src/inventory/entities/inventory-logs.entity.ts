@@ -1,5 +1,5 @@
 import { RequestMethod } from '@nestjs/common'
-import { Ceasar } from 'src/ceasar/entities/ceasar.entity'
+import { Caesar } from 'src/caesar/entities/caesar.entity'
 import {
   Column,
   CreateDateColumn,
@@ -21,10 +21,10 @@ export class InventoryLog {
   data: string
 
   @JoinColumn({
-    name: 'ceasar_id',
+    name: 'caesar_id',
   })
-  // @ManyToOne((type) => Ceasar, (ceasar) => ceasar.inventory_logs)
-  // ceasar: Ceasar
+  // @ManyToOne((type) => Caesar, (caesar) => caesar.inventory_logs)
+  // caesar: Caesar
   @Column()
   remarks: string
 

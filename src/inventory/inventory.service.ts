@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { isNotEmptyObject } from 'class-validator'
 import Asset from 'src/asset/entities/asset.entity'
-import { CeasarService } from 'src/ceasar/ceasar.service'
-import { Ceasar } from 'src/ceasar/entities/ceasar.entity'
+import { CaesarService } from 'src/caesar/caesar.service'
+import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { GetAllInventoryDto } from 'src/inventory/dto/get-all-inventory.dto'
 import Inventory from 'src/inventory/entities/inventory.entity'
 import { PaginateOptions } from 'src/types/Paginated'
@@ -16,16 +16,16 @@ export class InventoryService {
   constructor(
     @InjectRepository(Inventory)
     private readonly inventoryRepository: Repository<Inventory>,
-    private readonly ceasarService: CeasarService,
+    private readonly caesarService: CaesarService,
   ) {
-    this.relations = ['ceasar', 'asset']
+    this.relations = ['caesar', 'asset']
   }
   relations: string[]
 
   create(createInventoryDto: {
     quantity: number
     asset: Asset
-    ceasar: Ceasar
+    caesar: Caesar
   }) {
     const newInventory = this.inventoryRepository.create(createInventoryDto)
 
@@ -59,14 +59,14 @@ export class InventoryService {
       }
     }, {})
 
-    let ceasarAccount: Ceasar
+    let caesarAccount: Caesar
 
     try {
       if (isNotEmptyObject(accountQuery)) {
-        ceasarAccount = await this.ceasarService
+        caesarAccount = await this.caesarService
           .findOne(accountQuery)
           .catch((err) => {
-            throw new Error(`Ceasar account doesn't exist for this account`)
+            throw new Error(`Caesar account doesn't exist for this account`)
           })
       }
     } catch (err) {
@@ -77,8 +77,8 @@ export class InventoryService {
       return paginateFind(this.inventoryRepository, paginationParams, {
         relations: this.relations,
         where: {
-          ...(ceasarAccount && {
-            ceasar: ceasarAccount.id,
+          ...(caesarAccount && {
+            caesar: caesarAccount.id,
           }),
         },
       })
@@ -86,8 +86,8 @@ export class InventoryService {
     return this.inventoryRepository.find({
       relations: this.relations,
       where: {
-        ...(ceasarAccount && {
-          ceasar: ceasarAccount.id,
+        ...(caesarAccount && {
+          caesar: caesarAccount.id,
         }),
       },
     })
@@ -95,20 +95,20 @@ export class InventoryService {
     // return `This action returns all inventory`
   }
 
-  findByAssetIdAndCeasarId({
+  findByAssetIdAndCaesarId({
     asset_id,
-    ceasar_id,
+    caesar_id,
   }: {
     asset_id: string
-    ceasar_id: string
+    caesar_id: string
   }) {
     return this.inventoryRepository
       .findOne({
         asset: {
           id: asset_id,
         },
-        ceasar: {
-          id: ceasar_id,
+        caesar: {
+          id: caesar_id,
         },
       })
       .catch((err) => {

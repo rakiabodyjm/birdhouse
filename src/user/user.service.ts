@@ -42,7 +42,7 @@ export class UserService {
     subdistributor: this.subdistributorService,
   }
 
-  relations: ['ceasar']
+  relations: ['caesar']
   async create(createUserDto: CreateUserDto): Promise<User> {
     const userSearch = await this.userRepository.findOne({
       email: createUserDto.email,

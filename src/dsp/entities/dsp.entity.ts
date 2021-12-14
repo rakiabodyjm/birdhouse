@@ -1,4 +1,4 @@
-import { Ceasar } from 'src/ceasar/entities/ceasar.entity'
+import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { MapId } from 'src/map-ids/entities/map-id.entity'
 import { Retailer } from 'src/retailers/entities/retailer.entity'
 import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
@@ -67,5 +67,5 @@ export class Dsp {
   })
   retailer?: Retailer[]
 
-  ceasar_wallet?: Ceasar
+  caesar_wallet?: Caesar
 }

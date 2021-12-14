@@ -25,9 +25,9 @@ const SQLConfig: SqlServerConnectionOptions & {
     // false,
   },
   entities: ['dist/src/**/*.entity{.ts,.js}'],
-  migrations: ['dist/src/db/migrations/*.js'],
+  migrations: ['dist/db/migrations/*.js'],
   cli: {
-    migrationsDir: 'src/db/migrations',
+    migrationsDir: 'db/migrations',
   },
   // logging: true,
 }

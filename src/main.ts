@@ -2,6 +2,8 @@ import { ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { AppModule } from './app.module'
+import * as chalk from 'chalk'
+import cliBoxes from 'cli-boxes'
 
 async function bootstrap() {
   let app = await NestFactory.create(AppModule)
@@ -46,7 +48,44 @@ async function bootstrap() {
   })
   const port = process.env.PORT || 6000
 
-  await app.listen(port)
+  await app.listen(port, () => {
+    const topLeft = `${chalk.blueBright(cliBoxes.double.topLeft)}`
+    const topRight = `${chalk.blueBright(cliBoxes.double.topRight)}`
+    const line = `${chalk
+      .blueBright(cliBoxes.double.top)
+      .repeat(process.stdout.columns - 2)}`
+    const topBorder = `${topLeft}${line}${topRight}`
+    const bottomBorder = `${chalk.blueBright(
+      cliBoxes.double.bottomLeft,
+    )}${line}${chalk.blueBright(cliBoxes.double.bottomRight)}`
+
+    /**
+     * Output
+     */
+
+    console.log(`
+${topBorder}
+
+${chalk.bgRedBright('REALM1000 TELCO PROJECT')}
+
+
+${`${chalk.greenBright('Ready on PORT: ')}${chalk.yellow(port)}`}
+
+${chalk.greenBright('REST_HOST: ') + chalk.yellow(process.env.REST_HOST)}
+${
+  chalk.greenBright('SQL_SERVER_HOST: ') +
+  chalk.yellow(process.env.SQL_SERVER_HOST)
+}
+${
+  chalk.greenBright('SQL_SERVER_DATABASE: ') +
+  chalk.yellow(process.env.SQL_SERVER_DATABASE)
+}
+${chalk.greenBright('NODE_ENV: ') + chalk.yellow(process.env.NODE_ENV)}
+
+
+${bottomBorder}
+`)
+  })
 }
 
 bootstrap()

@@ -1,4 +1,3 @@
-import { Expose } from 'class-transformer'
 import Inventory from 'src/inventory/entities/inventory.entity'
 import { Transaction } from 'src/transaction/entities/transaction.entity'
 import { UserTypesAndUser } from 'src/types/Roles'
@@ -8,7 +7,6 @@ import {
   Entity,
   Index,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
@@ -25,7 +23,9 @@ export class Caesar {
   @Column({})
   account_id: string
 
-  @Column()
+  @Column({
+    default: null,
+  })
   caesar_id: string
 
   @CreateDateColumn({
@@ -40,7 +40,7 @@ export class Caesar {
   })
   updated_at: Date
 
-  @OneToMany((type) => Inventory, (inventory) => inventory.ceasar)
+  @OneToMany((type) => Inventory, (inventory) => inventory.caesar)
   inventory: Inventory[]
 
   @OneToMany((type) => Transaction, (transaction) => transaction.buyer)

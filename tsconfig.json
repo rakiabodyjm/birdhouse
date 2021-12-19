@@ -18,6 +18,7 @@
       "@types/": ["./src/types/*"],
       "root/*": ["./*"]
     },
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "allowJs": true
   }
 }

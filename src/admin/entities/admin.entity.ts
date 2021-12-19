@@ -26,6 +26,6 @@ export class Admin {
   })
   user: User
 
-  // @OneToOne(() => Caesar, (caesar) => caesar.admin)
+  @OneToOne(() => Caesar, (caesar) => caesar.admin)
   caesar_wallet?: Caesar
 }

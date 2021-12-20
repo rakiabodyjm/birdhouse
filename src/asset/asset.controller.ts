@@ -15,8 +15,10 @@ import {
   NotFoundException,
 } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
+import { plainToClass } from 'class-transformer'
 // import { GetAllAssetDto } from 'src/assets/dto/get-all-asset.dto'
 import { GetAllAssetDto } from 'src/asset/dto/get-all-asset.dto'
+import Asset from 'src/asset/entities/asset.entity'
 import { createEntityMessage } from 'src/types/EntityMessage'
 import { AssetService } from './asset.service'
 import { CreateAssetDto } from './dto/create-asset.dto'
@@ -33,6 +35,7 @@ export class AssetController {
 
   @Post()
   create(@Body() createAssetDto: CreateAssetDto) {
+    console.log(createAssetDto)
     return this.assetsService
       .create(createAssetDto)
       .then((res) => createEntityMessage(res, 'Asset Created'))
@@ -69,9 +72,12 @@ export class AssetController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateAssetDto: UpdateAssetDto) {
+    console.log(updateAssetDto)
     return this.assetsService
       .update(id, updateAssetDto)
-      .then((res) => createEntityMessage(res, 'Asset Updated'))
+      .then((res) =>
+        createEntityMessage(plainToClass(Asset, res), 'Asset Updated'),
+      )
       .catch((err) => {
         throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
       })

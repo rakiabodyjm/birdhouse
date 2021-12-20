@@ -16,7 +16,11 @@ export class AssetService {
   ) {}
 
   create(createAssetDto: CreateAssetDto) {
-    const newAsset = this.assetRepository.create(createAssetDto)
+    const newAsset = this.assetRepository.create(
+      createAssetDto as typeof createAssetDto & {
+        approval: string
+      },
+    )
 
     return this.assetRepository.save({ ...newAsset, active: true })
   }
@@ -72,15 +76,17 @@ export class AssetService {
       })
   }
 
-  update(id: string, updateAssetDto: UpdateAssetDto) {
+  async update(id: string, updateAssetDto: UpdateAssetDto): Promise<Asset> {
     return this.assetRepository
       .findOneOrFail(id)
       .then(async (asset) => {
         const updatedAsset = {
           ...asset,
-          ...updateAssetDto,
+          ...(updateAssetDto as UpdateAssetDto & {
+            approval: string
+          }),
         }
-        return this.assetRepository.save(updatedAsset)
+        return await this.assetRepository.save(updatedAsset)
       })
       .catch((err) => {
         throw new Error(err)

@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
-import { IsNotEmpty, Min } from 'class-validator'
+import { IsNotEmpty, IsOptional, Min } from 'class-validator'
 import Asset from 'src/asset/entities/asset.entity'
 import { NoDuplicateInDb } from 'src/pipes/validation/NoDuplicateInDb'
+import { transactionAccountApprovals } from 'src/transaction/entities/transaction.entity'
 
 export class CreateAssetDto {
   @NoDuplicateInDb(Asset, 'code', {
@@ -44,4 +45,17 @@ export class CreateAssetDto {
   @IsNotEmpty()
   @Min(0.01)
   srp_for_user: number
+
+  @ApiProperty({
+    type: 'string[]',
+  })
+  @IsOptional()
+  @Transform(({ value }) => {
+    return Array.isArray(value)
+      ? Array.length > 0
+        ? JSON.stringify(value)
+        : null
+      : value
+  })
+  approval: string[]
 }

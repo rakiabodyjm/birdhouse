@@ -49,8 +49,8 @@ export class AuthController {
           expiresIn:
             process.env.NODE_ENV === 'development'
               ? remember_me
-                ? '15m'
-                : '1m'
+                ? '1h'
+                : '30m'
               : remember_me
               ? '1d'
               : '1h',

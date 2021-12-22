@@ -1,6 +1,9 @@
+import { Exclude, Expose, Transform } from 'class-transformer'
 import Inventory from 'src/inventory/entities/inventory.entity'
 import {
+  BeforeInsert,
   Column,
+  CreateDateColumn,
   DeleteDateColumn,
   Entity,
   Index,
@@ -15,7 +18,9 @@ export default class Asset {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
-  @Column()
+  @Column({
+    unique: true,
+  })
   code: string
 
   @Column()
@@ -57,6 +62,11 @@ export default class Asset {
   @Column()
   active: boolean
 
+  @CreateDateColumn({
+    type: 'datetime',
+  })
+  created_at: Date
+
   @UpdateDateColumn({
     type: 'datetime',
   })
@@ -69,4 +79,15 @@ export default class Asset {
 
   @OneToMany((type) => Inventory, (inventory) => inventory.asset)
   inventory: Inventory[]
+
+  /**
+   * [retailer, dsp, subdistributor ]
+   * [subd]
+   * [retailer]
+   * [dsp, retailer]
+   */
+  @Column({
+    default: null,
+  })
+  approval?: string
 }

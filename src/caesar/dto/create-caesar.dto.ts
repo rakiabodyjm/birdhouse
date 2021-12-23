@@ -14,7 +14,14 @@ const NoWalletId = () =>
     message: `This account already has Wallet`,
   })
 
-export class CreateCaesarDto {
+interface WithAccountTypes {
+  user: any
+  admin: any
+  subdistributor: any
+  retailer: any
+  dsp: any
+}
+export class CreateCaesarDto implements Partial<WithAccountTypes> {
   @ApiProperty()
   @ExistsInDb(User, 'id')
   @IsOptional()

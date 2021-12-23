@@ -12,10 +12,12 @@ import {
   Param,
   NotFoundException,
   InternalServerErrorException,
+  BadRequestException,
 } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { GetAllCaesarDto } from 'src/caesar/dto/get-all-caesar.dto'
 import { GetCaesarDto } from 'src/caesar/dto/get-caesar.dto'
+import { SearchCaesarDto } from 'src/caesar/dto/search-caesar.dto'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { Paginated } from 'src/types/Paginated'
 import { RolesArray, UserTypesAndUser } from 'src/types/Roles'
@@ -49,33 +51,47 @@ export class CaesarController {
     }
     // get account type submitted
     const accountType = <UserTypesAndUser>Object.keys(createCaesarDto)[0]
-
+    if (accountType.length === 0) {
+      throw new BadRequestException(`Must specify account type`)
+    }
     try {
       //get existence of user
       const user = await this.userService.findOneQuery({
         [accountType]: createCaesarDto[accountType],
       })
 
-      return this.caesarService.create({
-        account_type: accountType,
-        account_id: createCaesarDto[accountType],
-        user,
-      })
+      return this.caesarService
+        .create({
+          // account_type: accountType,
+          userAccount: user,
+          // [accountType]: createCaesarDto[accountType],
+          [accountType]: createCaesarDto[accountType],
+        })
+        .catch((err) => {
+          throw new InternalServerErrorException(err.message)
+        })
     } catch (err) {
-      console.error(err)
       throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
     }
   }
 
+  @Get('search')
+  search(@Query() searchCaesarDto: SearchCaesarDto) {
+    return this.caesarService.search(searchCaesarDto).catch((err) => {
+      throw new InternalServerErrorException(err.message)
+    })
+  }
+
   @Get('account')
   findOneQuery(@Query() getCaesarByAccountQuery: GetCaesarDto) {
-    return this.caesarService.findOne(getCaesarByAccountQuery)
+    return this.caesarService.findOne(getCaesarByAccountQuery).catch((err) => {
+      throw new NotFoundException(err.message)
+    })
   }
 
   @Get(':id')
   findOne(@Param('id') paramId: string) {
     return this.caesarService.findOne(paramId).catch((err) => {
-      console.error('Error caught in caesar findOne')
       throw new NotFoundException(err.message)
     })
   }
@@ -84,6 +100,7 @@ export class CaesarController {
   findAll(
     @Query() getAllCaesarDto: GetAllCaesarDto,
   ): Promise<Caesar[] | Paginated<Caesar>> {
+    console.log('triggered')
     return this.caesarService.findAll(getAllCaesarDto).catch((err) => {
       throw new InternalServerErrorException(err)
     })

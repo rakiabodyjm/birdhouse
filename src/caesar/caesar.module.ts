@@ -5,8 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { UserModule } from 'src/user/user.module'
 import { HttpModule } from '@nestjs/axios'
-import { config } from 'dotenv'
 import { ConfigModule, ConfigService } from '@nestjs/config'
+import { CaesarApiService } from 'src/caesar/ceasar-api.service'
+import { CaesarApiController } from 'src/caesar/caesar-api.controller'
 @Module({
   imports: [
     CacheModule.register(),
@@ -19,9 +20,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
       }),
       inject: [ConfigService],
     }),
+    ConfigModule,
   ],
-  controllers: [CaesarController],
-  providers: [CaesarService],
+  controllers: [CaesarController, CaesarApiController],
+  providers: [CaesarService, CaesarApiService],
   exports: [CaesarService],
 })
 export class CaesarModule {}

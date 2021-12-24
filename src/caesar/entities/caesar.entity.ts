@@ -1,32 +1,108 @@
+import { Expose } from 'class-transformer'
+import { Admin } from 'src/admin/entities/admin.entity'
+import { Dsp } from 'src/dsp/entities/dsp.entity'
+import { ExternalCaesar } from 'src/external-caesar/entities/external-caesar.entity'
+import { InventoryLog } from 'src/inventory/entities/inventory-logs.entity'
 import Inventory from 'src/inventory/entities/inventory.entity'
+import { Retailer } from 'src/retailers/entities/retailer.entity'
+import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
+import { PendingTransaction } from 'src/transaction/entities/pending-transaction.entity'
 import { Transaction } from 'src/transaction/entities/transaction.entity'
-import { UserTypesAndUser } from 'src/types/Roles'
+import { Roles, UserTypesAndUser } from 'src/types/Roles'
+import { User } from 'src/user/entities/user.entity'
 import {
   Column,
   CreateDateColumn,
   Entity,
   Index,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
 
+class WithAccountTypes {
+  @JoinColumn({
+    name: 'user_account',
+  })
+  @OneToOne(() => User, (user) => user.caesar_wallet, {
+    nullable: true,
+  })
+  user?: User
+
+  @JoinColumn({
+    name: 'subdistributor_account',
+  })
+  @OneToOne(() => Subdistributor, (subd) => subd.caesar_wallet, {
+    nullable: true,
+  })
+  subdistributor?: Subdistributor
+
+  @JoinColumn({
+    name: 'dsp_account',
+  })
+  @OneToOne(() => Dsp, (dsp) => dsp.caesar_wallet, {
+    nullable: true,
+  })
+  dsp?: Dsp
+
+  @JoinColumn({
+    name: 'retailer_account',
+  })
+  @OneToOne(() => Retailer, (retailer) => retailer.caesar_wallet, {
+    nullable: true,
+  })
+  retailer?: Retailer
+
+  @JoinColumn({
+    name: 'admin_account',
+  })
+  @OneToOne(() => Admin, (admin) => admin.caesar_wallet, {
+    nullable: true,
+  })
+  admin?: Admin
+}
+
 @Entity()
-@Index(['id', 'account_id', 'caesar_id'])
-export class Caesar {
+@Index(['id', 'caesar_id', ...Object.values(Roles), 'user'])
+export class Caesar extends WithAccountTypes {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
   @Column({})
   account_type: UserTypesAndUser
 
-  @Column({})
-  account_id: string
-
   @Column({
     default: null,
   })
   caesar_id: string
+
+  @Expose()
+  description() {
+    if (this.subdistributor) {
+      return this.subdistributor.name
+    }
+    if (this.retailer) {
+      return this.retailer.store_name
+    }
+    if (this.dsp) {
+      return this.dsp.dsp_code
+    }
+    if (this.user) {
+      return `${this.user.first_name} ${this.user.last_name}`
+    }
+    if (this.admin) {
+      return `${this.admin.name}`
+    }
+    return this.id
+  }
+
+  @OneToMany((type) => InventoryLog, (inventoryLog) => inventoryLog.caesar)
+  inventoryLogs: InventoryLog[]
+
+  @OneToMany((type) => Inventory, (inventory) => inventory.caesar, {})
+  inventory: Inventory[]
 
   @CreateDateColumn({
     type: 'datetime',
@@ -40,48 +116,24 @@ export class Caesar {
   })
   updated_at: Date
 
-  @OneToMany((type) => Inventory, (inventory) => inventory.caesar)
-  inventory: Inventory[]
+  @OneToMany(() => Transaction, (transaction) => transaction.buying_account)
+  buy_transactions: Transaction[]
 
-  @OneToMany((type) => Transaction, (transaction) => transaction.buyer)
-  transactions: Transaction[]
-  // @JoinColumn({
-  //   name: 'user_account',
-  // })
-  // @OneToOne(() => User, (user) => user.caesar_wallet, {
-  //   nullable: true,
-  // })
-  // user?: User
+  @OneToMany(() => Transaction, (transaction) => transaction.seller)
+  sell_transactions: Transaction[]
 
-  // @JoinColumn({
-  //   name: 'subdistributor_account',
-  // })
-  // @OneToOne(() => Subdistributor, (subd) => subd.caesar_wallet, {
-  //   nullable: true,
-  // })
-  // subdistributor?: Subdistributor
+  @OneToMany(
+    (type) => PendingTransaction,
+    (pending_transaction) => pending_transaction.caesar_buyer,
+  )
+  pending_transactions_as_buyer: PendingTransaction[]
 
-  // @JoinColumn({
-  //   name: 'dsp_account',
-  // })
-  // @OneToOne(() => Dsp, (dsp) => dsp.caesar_wallet, {
-  //   nullable: true,
-  // })
-  // dsp?: Dsp
+  @OneToMany(
+    (type) => PendingTransaction,
+    (pending_transaction) => pending_transaction.caesar_seller,
+  )
+  pending_transactions_as_seller: PendingTransaction[]
 
-  // @JoinColumn({
-  //   name: 'retailer_account',
-  // })
-  // @OneToOne(() => Retailer, (retailer) => retailer.caesar_wallet, {
-  //   nullable: true,
-  // })
-  // retailer?: Retailer
-
-  // @JoinColumn({
-  //   name: 'admin_account',
-  // })
-  // @OneToOne(() => Admin, (admin) => admin.caesar_wallet, {
-  //   nullable: true,
-  // })
-  // admin?: Admin
+  @Expose()
+  data?: ExternalCaesar
 }

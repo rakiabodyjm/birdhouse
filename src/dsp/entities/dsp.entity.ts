@@ -36,7 +36,6 @@ export class Dsp {
   @ManyToMany(() => MapId, (mapid) => mapid.dsp, {
     cascade: true,
     nullable: true,
-    eager: true,
   })
   @JoinTable({
     name: 'dsp_area_id',
@@ -67,5 +66,14 @@ export class Dsp {
   })
   retailer?: Retailer[]
 
+  @OneToOne(
+    (type) => {
+      return Caesar
+    },
+    (retailer) => retailer.dsp,
+    {
+      eager: true,
+    },
+  )
   caesar_wallet?: Caesar
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { plainToClass } from 'class-transformer'
 import { ExternalCaesar } from 'src/external-caesar/entities/external-caesar.entity'
 import { Repository } from 'typeorm'
 
@@ -39,6 +40,18 @@ export class ExternalCaesarService {
       .catch((err) => {
         throw new Error(err)
       })
+  }
+
+  async topUp({ id, amount }: { id: string; amount: number }) {
+    const caesar = await this.findOne(id).catch((err) => {
+      throw new Error(err.message)
+    })
+    return this.externalCaesarRepo.save(
+      plainToClass(ExternalCaesar, {
+        ...caesar,
+        caesar_coin: caesar.caesar_coin + amount,
+      }),
+    )
   }
 }
 

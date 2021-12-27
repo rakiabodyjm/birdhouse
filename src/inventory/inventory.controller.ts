@@ -1,7 +1,6 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Patch,
   Param,
@@ -10,10 +9,8 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   UseGuards,
-  Req,
-  HttpException,
-  HttpStatus,
   Query,
+  Post,
 } from '@nestjs/common'
 import { InventoryService } from './inventory.service'
 import { UpdateInventoryDto } from './dto/update-inventory.dto'
@@ -21,84 +18,46 @@ import { AuthGuard } from '@nestjs/passport'
 import { RolesGuard } from 'src/auth/guards/roles.guard'
 import { Role } from 'src/auth/decorators/roles.decorator'
 import { Roles } from 'src/types/Roles'
-import { Request } from 'express'
-import { AcquireInventoryAdmin } from 'src/inventory/dto/acquire-inventory-admin.dto'
-import { CaesarService } from 'src/caesar/caesar.service'
-import { User } from 'src/user/entities/user.entity'
 import { createEntityMessage } from 'src/types/EntityMessage'
 import { Paginated } from 'src/types/Paginated'
 import Inventory from 'src/inventory/entities/inventory.entity'
 import { GetAllInventoryDto } from 'src/inventory/dto/get-all-inventory.dto'
-import { AssetService } from 'src/asset/asset.service'
 import { InventoryLoggerInterceptor } from 'src/inventory/interceptor/inventory-logger.interceptor'
+import { CreateInventoryDto } from 'src/inventory/dto/create-inventory.dto'
+import { ApiTags } from '@nestjs/swagger'
+import { AssetService } from 'src/asset/asset.service'
+import { CaesarService } from 'src/caesar/caesar.service'
 
+@ApiTags('Inventory Routes')
 @Controller('inventory')
-@UseInterceptors(ClassSerializerInterceptor, InventoryLoggerInterceptor)
+@UseInterceptors(ClassSerializerInterceptor)
 export class InventoryController {
   constructor(
     private readonly inventoryService: InventoryService,
-    private readonly caesarService: CaesarService,
-    private readonly assetService: AssetService,
+    private assetService: AssetService,
+    private caesarService: CaesarService,
   ) {}
 
-  // @Post()
-  // create(@Body() createInventoryDto: CreateInventoryDto) {
-  //   return this.inventoryService.create(createInventoryDto).catch((err) => {
-  //     throw new BadRequestException(err.message)
-  //   })
-  // }
-
-  /**only admins can acquire */
+  /**
+   * set metadata 'Role' as Admin only for now
+   */
   @Role(Roles.ADMIN)
+  /**
+   * Use JWT Guard and RolesGuard
+   * RolesGuard will use metadata set by @Role Decorator
+   */
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Post('admin-acquire')
-  async createByAdmin(
-    @Body() createInventoryDto: AcquireInventoryAdmin,
-    @Req() request: Request,
-  ) {
-    const user: Partial<User> = request.user
-    //look for caesarWallet of the authenticated account admin
-    const caesarWallet = await this.caesarService
-      .findOne({
-        admin: user.admin.id,
-      })
-      .catch((err) => {
-        throw new HttpException(
-          `Admin Account doesn't have Caesar Wallet`,
-          HttpStatus.BAD_REQUEST,
-        )
-      })
-
-    const asset = await this.assetService
-      .findOne(createInventoryDto.asset)
-      .catch((err) => {
-        throw new BadRequestException(err.message)
-      })
-    // if inventory for that admin already exists
-    const adminInventory = await this.inventoryService
-      .findByAssetIdAndCaesarId({
-        asset_id: createInventoryDto.asset,
-        caesar_id: caesarWallet.id,
-      })
-      .catch((err) => {
-        throw new BadRequestException(err.message)
-      })
-
-    if (adminInventory) {
-      return this.inventoryService.update(adminInventory.id, {
-        quantity: adminInventory.quantity + createInventoryDto.quantity,
-      })
-    }
-
-    return this.inventoryService
-      .create({
-        ...createInventoryDto,
-        caesar: caesarWallet,
-        asset,
-      })
-      .catch((err) => {
-        throw new BadRequestException(err.message)
-      })
+  @Post()
+  @UseInterceptors(InventoryLoggerInterceptor)
+  async create(@Body() createInventoryDto: CreateInventoryDto) {
+    const { quantity, asset: assetId, caesar: caesarId } = createInventoryDto
+    const caesar = await this.caesarService.findOne(caesarId)
+    const asset = await this.assetService.findOne(assetId)
+    return this.inventoryService.create({
+      caesar,
+      asset,
+      quantity,
+    })
   }
 
   @Get('')
@@ -106,7 +65,7 @@ export class InventoryController {
     @Query('page')
     page: GetAllInventoryDto['page'],
     @Query('limit') limit: GetAllInventoryDto['limit'],
-    @Query('disabled') disabled?: GetAllInventoryDto['disabled'],
+    @Query('active') active?: GetAllInventoryDto['active'],
     @Query() inventoryDto?: GetAllInventoryDto,
   ): Promise<Inventory[] | Paginated<Inventory>> {
     const getAllInventoryDto = {
@@ -116,8 +75,8 @@ export class InventoryController {
       ...(limit && {
         limit: Number(limit),
       }),
-      ...(disabled && {
-        disabled,
+      ...(active && {
+        active,
       }),
       ...inventoryDto,
     }
@@ -135,20 +94,30 @@ export class InventoryController {
     })
   }
 
+  /**
+   * set metadata 'Role' as Admin only for now
+   */
   @Role(Roles.ADMIN)
+  /**
+   * Use JWT Guard and RolesGuard
+   * RolesGuard will use metadata set by @Role Decorator
+   */
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Patch(':id')
-  update(
+  @UseInterceptors(InventoryLoggerInterceptor)
+  async update(
     @Param('id') id: string,
     @Body() updateInventoryDto: UpdateInventoryDto,
   ) {
-    return this.inventoryService
+    const updateResult = await this.inventoryService
       .update(id, updateInventoryDto)
-      .then((res) => createEntityMessage(res, `Inventory ${res.asset.name} `))
+      .then((res) => createEntityMessage(res, `Inventory Updated`))
       .catch((err) => {
         console.log(err)
         throw new BadRequestException(err.message)
       })
+
+    return updateResult
   }
 
   @Delete(':id')

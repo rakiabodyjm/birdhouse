@@ -17,11 +17,11 @@ export class CreateInventoryDto {
   })
   asset: string
 
-  @IsNotEmpty({
-    message: `Caesar ID should not be empty`,
-  })
   @ExistsInDb(Caesar, 'id', {
-    message: ``,
+    message: `Account doesn't exist in Caesar`,
+  })
+  @IsNotEmpty({
+    message: `Caesar must not be empty`,
   })
   caesar: string
 }

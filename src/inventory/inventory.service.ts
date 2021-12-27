@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { plainToClass } from 'class-transformer'
 import { isNotEmptyObject } from 'class-validator'
+import { AssetService } from 'src/asset/asset.service'
 import Asset from 'src/asset/entities/asset.entity'
 import { CaesarService } from 'src/caesar/caesar.service'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
@@ -22,12 +24,64 @@ export class InventoryService {
   }
   relations: string[]
 
-  create(createInventoryDto: {
+  /**
+   *
+   * create method already handles duplicate entry for inventoryService
+   */
+  async create({
+    quantity,
+    asset,
+    caesar,
+    unit_price: unitPriceParam,
+  }: {
     quantity: number
     asset: Asset
     caesar: Caesar
+    unit_price?: number
   }) {
-    const newInventory = this.inventoryRepository.create(createInventoryDto)
+    // const caesar = await this.caesarService.findOne(caesarParam)
+
+    // const asset = await this.assetService.findOne(assetParam)
+    /**
+     * if inventory already exists
+     */
+    const duplicateInventory = await this.findByAssetIdAndCaesarId({
+      asset_id: asset.id,
+      caesar_id: caesar.id,
+    }).catch((err) => {
+      console.error(err)
+      throw new Error(err.message)
+    })
+
+    if (duplicateInventory) {
+      return this.update(duplicateInventory.id, {
+        ...duplicateInventory,
+        quantity: duplicateInventory.quantity + quantity,
+      })
+    }
+
+    const {
+      description,
+      name,
+      srp_for_dsp,
+      srp_for_retailer,
+      srp_for_subd,
+      srp_for_user,
+      unit_price,
+    } = asset
+    const newInventory = this.inventoryRepository.create({
+      active: true,
+      asset,
+      caesar,
+      name,
+      description,
+      srp_for_dsp,
+      srp_for_retailer,
+      srp_for_subd,
+      srp_for_user,
+      unit_price: unitPriceParam || unit_price,
+      quantity,
+    })
 
     return this.inventoryRepository.save(newInventory)
   }
@@ -40,6 +94,9 @@ export class InventoryService {
     delete getAllInventoryDto.limit
     delete getAllInventoryDto.page
 
+    /**
+     * Account Only query
+     */
     const accountQuery = [
       'user',
       'admin',
@@ -57,7 +114,7 @@ export class InventoryService {
       } else {
         return null
       }
-    }, {})
+    }, {} as Partial<Record<'user' | 'admin' | 'subdistributor' | 'dsp' | 'retailer', string>>)
 
     let caesarAccount: Caesar
 
@@ -73,28 +130,32 @@ export class InventoryService {
       throw new Error(err.message)
     }
 
+    const whereQuery = {
+      ...(caesarAccount && {
+        caesar: caesarAccount.id,
+      }),
+      ...('active' in getAllInventoryDto && {
+        active: getAllInventoryDto.active,
+      }),
+    }
+
     if (isNotEmptyObject(paginationParams)) {
       return paginateFind(this.inventoryRepository, paginationParams, {
         relations: this.relations,
-        where: {
-          ...(caesarAccount && {
-            caesar: caesarAccount.id,
-          }),
-        },
+        where: whereQuery,
       })
     }
     return this.inventoryRepository.find({
       relations: this.relations,
-      where: {
-        ...(caesarAccount && {
-          caesar: caesarAccount.id,
-        }),
-      },
+      where: whereQuery,
     })
 
     // return `This action returns all inventory`
   }
 
+  /**
+   * Does not throw an exception when nothing found
+   */
   findByAssetIdAndCaesarId({
     asset_id,
     caesar_id,
@@ -127,13 +188,16 @@ export class InventoryService {
     )
   }
 
-  update(id: string, updateInventoryDto: UpdateInventoryDto) {
+  update(id: string, updateInventoryDto: Partial<UpdateInventoryDto>) {
     return this.findOne(id)
-      .then((inventory) => {
-        return this.inventoryRepository.save({
-          ...inventory,
-          ...updateInventoryDto,
-        })
+      .then(async (inventory) => {
+        return plainToClass(
+          Inventory,
+          await this.inventoryRepository.save({
+            ...inventory,
+            ...updateInventoryDto,
+          }),
+        )
       })
       .catch((err) => {
         throw new Error(err.message)

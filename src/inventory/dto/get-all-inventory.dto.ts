@@ -34,7 +34,7 @@ export class GetAllInventoryDto extends PartialType(PaginateOptions) {
     }
   })
   @IsOptional()
-  disabled?: true
+  active?: boolean
 
   @IsOptional()
   @ExistsInDb(User, 'id')

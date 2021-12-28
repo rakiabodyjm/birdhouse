@@ -1,4 +1,3 @@
-import { RequestMethod } from '@nestjs/common'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import {
   Column,
@@ -15,19 +14,25 @@ export class InventoryLog {
   id: string
 
   @Column()
-  method: RequestMethod
+  method: string
 
   @Column()
   data: string
 
-  @JoinColumn({
-    name: 'caesar_id',
-  })
-  // @ManyToOne((type) => Caesar, (caesar) => caesar.inventory_logs)
-  // caesar: Caesar
+  // @Column()
+  // response: string
+
   @Column()
   remarks: string
 
+  @JoinColumn({
+    name: 'caesar_id',
+  })
+  @ManyToOne((type) => Caesar, (caesar) => caesar.inventoryLogs, {
+    eager: true,
+  })
+  caesar: Caesar
+
   @CreateDateColumn()
-  craeted_at: Date
+  created_at: Date
 }

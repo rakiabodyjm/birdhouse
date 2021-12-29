@@ -1,11 +1,9 @@
 import { Injectable } from '@nestjs/common'
 import { resolve } from 'path'
-import * as csv from 'csvtojson'
 import { InjectRepository } from '@nestjs/typeorm'
 import { MapId } from 'src/map-ids/entities/map-id.entity'
-import { getConnection, Like, Repository } from 'typeorm'
+import { Like, Repository } from 'typeorm'
 import { SearchMapDto } from 'src/map-ids/dto/search-map-id.dto'
-import ditoAreaJson from 'root/data/dito-area.json'
 import { readFileSync } from 'fs'
 @Injectable()
 export class MapIdsService {

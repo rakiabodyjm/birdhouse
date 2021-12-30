@@ -79,7 +79,7 @@ export class RetailersService {
       .catch((err) => {
         // console.log(err)
         // return undefined
-        throw err
+        throw new Error(err.message)
       })
     return retailer
 
@@ -133,7 +133,7 @@ export class RetailersService {
     updateRetailerDto: UpdateRetailerDto,
   ): Promise<Retailer> {
     const retailer = await this.findOne(id).catch((err) => {
-      throw err
+      throw new Error(err.message)
     })
 
     Object.keys(updateRetailerDto).forEach((key) => {
@@ -149,7 +149,7 @@ export class RetailersService {
   async remove(id: string): Promise<Retailer> {
     const retailer = await this.findOne(id)
       .catch((err) => {
-        throw err
+        throw new Error(err.message)
       })
       .then(async (res) => {
         await this.retailerRepository.delete(res.id)

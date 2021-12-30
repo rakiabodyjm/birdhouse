@@ -30,19 +30,14 @@ export class Retailer {
   subdistributor: Subdistributor
 
   @Expose()
-  @ManyToOne((type) => Dsp, (dsp) => dsp.retailer, {
-    onDelete: 'SET NULL',
-    // eager: true,
-  })
+  @ManyToOne((type) => Dsp, (dsp) => dsp.retailer, {})
   @JoinColumn({
     name: 'dsp_id',
   })
   dsp?: Dsp
 
   @Expose()
-  @OneToOne((type) => User, (user) => user.retailer, {
-    nullable: false,
-  })
+  @OneToOne((type) => User, (user) => user.retailer, {})
   @JoinColumn({
     name: 'user_id',
   })
@@ -60,6 +55,8 @@ export class Retailer {
   @Column()
   id_number: string
 
-  // @OneToOne(() => Caesar, (caesar) => caesar.retailer)
+  @OneToOne(() => Caesar, (caesar) => caesar.retailer, {
+    eager: true,
+  })
   caesar_wallet?: Caesar
 }

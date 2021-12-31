@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { TransformFnParams } from 'class-transformer'
 import {
   IsNotEmpty,
   IsNumberString,
@@ -80,6 +79,7 @@ export class CreateSubdistributorDto {
   @IsUUID()
   user: User
 
+  @NoDuplicateInDb(Subdistributor, 'name')
   @ApiProperty()
   @IsNotEmpty()
   @MaxLength(26)

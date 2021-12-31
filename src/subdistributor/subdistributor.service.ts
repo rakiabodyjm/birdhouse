@@ -64,10 +64,11 @@ export class SubdistributorService {
           //       } as Subdistributor),
           //   ),
           // )
-          return (await this.caesarService.injectCaesar(
-            res,
-            'subdistributor',
-          )) as Subdistributor[]
+          // return (await this.caesarService.injectCaesar(
+          //   res,
+          //   'subdistributor',
+          // )) as Subdistributor[]
+          return res
         })
     } else {
       return await paginateFind<Subdistributor>(this.subdRepository, params, {

@@ -78,10 +78,8 @@ export class Subdistributor {
   })
   retailer?: Retailer[]
 
-  retailer_total: number
-  dsp_total: number
-  // dsp_total: number
-
-  // @OneToOne((type) => Caesar, (caesar) => caesar.subdistributor)
+  @OneToOne((type) => Caesar, (caesar) => caesar.subdistributor, {
+    eager: true,
+  })
   caesar_wallet?: Caesar
 }

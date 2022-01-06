@@ -15,3 +15,11 @@ export type UserTypes = `${Roles}`
 export const RolesArray = Object.values(Roles)
 export type UserTypesAndUser = `${Roles}` | 'user' | 'admin'
 export type AccountTypes = Subdistributor | Dsp | Retailer | Admin | User
+
+export enum SRPRoles {
+  admin = 'unit_price',
+  subdistributor = 'srp_for_subd',
+  dsp = 'srp_for_retailer',
+  retailer = 'srp_for_retailer',
+  user = 'srp_for_user',
+}

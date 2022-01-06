@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
+import { IsOptional } from 'class-validator'
 
 export type Paginated<T> = {
   data: T[]
@@ -24,11 +25,14 @@ export type Paginated<T> = {
 }
 
 export class PaginateOptions {
+  @IsOptional()
   @ApiProperty()
   @Transform((params) => {
     return Number(params.value)
   })
   page?: number
+
+  @IsOptional()
   @ApiProperty()
   @Transform(({ value }) => Number(value))
   limit?: number

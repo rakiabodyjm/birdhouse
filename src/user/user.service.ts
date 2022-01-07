@@ -42,14 +42,13 @@ export class UserService {
     subdistributor: this.subdistributorService,
   }
 
-  relations: ['caesar']
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const userSearch = await this.userRepository.findOne({
-      email: createUserDto.email,
-    })
-    if (userSearch) {
-      throw new Error('Email already taken')
-    }
+    // const userSearch = await this.userRepository.findOne({
+    //   email: createUserDto.email,
+    // })
+    // if (userSearch) {
+    //   throw new Error('Email already taken')
+    // }
 
     const user = this.userRepository.create(createUserDto)
     await this.userRepository.save(user)

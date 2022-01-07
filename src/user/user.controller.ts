@@ -71,7 +71,9 @@ export class UserController {
   }
 
   @Get()
-  async findAll(@Query() query): Promise<Paginated<User> | User[]> {
+  async findAll(
+    @Query() query: GetAllUserDto,
+  ): Promise<Paginated<User> | User[]> {
     return await this.userService.findAll(plainToClass(GetAllUserDto, query))
   }
 

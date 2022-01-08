@@ -1,4 +1,4 @@
-import { Exclude, Expose, Transform } from 'class-transformer'
+import { Exclude, Expose } from 'class-transformer'
 import { Admin } from 'src/admin/entities/admin.entity'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
@@ -9,10 +9,12 @@ import { SQLDateGenerator } from 'src/utils/SQLDateGenerator'
 import {
   BeforeUpdate,
   Column,
+  CreateDateColumn,
   Entity,
   Index,
   OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm'
 
 @Entity()
@@ -52,18 +54,24 @@ export class User {
   @Exclude()
   password: string
 
-  @Column({
+  // @Column({
+  //   type: 'datetime',
+  //   // default: 'CURRENT_TIMESTAMP',
+  //   default: new SQLDateGenerator().timeNow().getSQLDate(),
+  // })
+  @CreateDateColumn({
     type: 'datetime',
-    // default: 'CURRENT_TIMESTAMP',
-    default: new SQLDateGenerator().timeNow().getSQLDate(),
   })
   created_at: Date
 
-  @Column({
+  // @Column({
+  //   type: 'datetime',
+  //   default: new SQLDateGenerator().timeNow().getSQLDate(),
+  //   // default: 'CURRENT_TIMESTAMP',
+  //   // nullable: false,
+  // })
+  @UpdateDateColumn({
     type: 'datetime',
-    default: new SQLDateGenerator().timeNow().getSQLDate(),
-    // default: 'CURRENT_TIMESTAMP',
-    // nullable: false,
   })
   updated_at: Date | string
 
@@ -121,11 +129,13 @@ export class User {
   })
   subdistributor?: Subdistributor
 
-  // @OneToOne(() => Caesar, (caesar) => caesar.user)
+  @OneToOne(() => Caesar, (caesar) => caesar.user, {
+    eager: true,
+  })
   caesar_wallet?: Caesar
 
-  @BeforeUpdate()
-  setUpdatedAt() {
-    this.updated_at = new SQLDateGenerator().timeNow().getSQLDate()
-  }
+  // @BeforeUpdate()
+  // setUpdatedAt() {
+  //   this.updated_at = new SQLDateGenerator().timeNow().getSQLDate()
+  // }
 }

@@ -55,7 +55,7 @@ export class CreateUserDto {
   @IsNotEmpty({
     message: 'Email cannot be empty',
   })
-  @NoDuplicateInDb(User, null, {
+  @NoDuplicateInDb(User, 'email', {
     message: 'Email Already used',
   })
   email: string

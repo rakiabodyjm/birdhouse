@@ -1,4 +1,4 @@
-GET {{$dotenv REST_HOST}}/user/
+GET http://localhost:6006/user/
 ###
 POST http://localhost:6006/subdistributor
 Content-Type: application/json
@@ -18,12 +18,12 @@ Content-Type: application/json
 GET http://localhost:6006/subdistributor
 
 ###
-GET {{$dotenv HOST}}:{{$dotenv PORT}}/subdistributor/CFB5D438-BC21-EC11-B665-00E18CEF5938
+GET http://localhost:6006/subdistributor/FDC28593-B957-EC11-B670-00E18CEF5938
 ###
 
-DELETE {{$dotenv HOST}}:{{$dotenv PORT}}/subdistributor/8C7245E4-B357-EC11-B670-00E18CEF5938
+DELETE http://localhost:6006/subdistributor/8C7245E4-B357-EC11-B670-00E18CEF5938
 ###
-PATCH {{$dotenv HOST}}:{{$dotenv PORT}}/subdistributor/5360AFB5-4107-EC11-B661-00E18CEF5938
+PATCH http://localhost:6006/subdistributor/5360AFB5-4107-EC11-B661-00E18CEF5938
 Content-Type: application/json
 
 {
@@ -31,11 +31,11 @@ Content-Type: application/json
 }
 ###
 
-DELETE {{$dotenv REST_HOST}}/subdistributor
+DELETE http://localhost:6006/subdistributor
 
 ### PAGINATION
 
-GET {{$dotenv REST_HOST}}/subdistributor?page=0
+GET http://localhost:6006/subdistributor?page=0
 
 ### SEARCH 
-GET {{$dotenv REST_HOST}}/subdistributor/search?searchQuery=Janeo
+GET http://localhost:6006/subdistributor/search?searchQuery=Janeo

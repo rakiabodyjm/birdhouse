@@ -48,7 +48,7 @@ Content-Type: application/json
 ### GET USER BY ID
 GET http://localhost:6006/user/EFA8FEF1-BB21-EC11-B665-00E18CEF5938
 ### UPDATE USER BY ID
-PATCH http://localhost:6006/user/7DFD1A99-3132-EC11-B668-00E18CEF5938
+PATCH http://localhost:6006/user/EFA8FEF1-BB21-EC11-B665-00E18CEF5938
 Content-Type: application/json
 
 {
@@ -88,7 +88,7 @@ DELETE http://localhost:6006/user/AE02DF31-DD2B-EC11-B666-00E18CEF5935
 
 
 ### SEARCH
-GET http://localhost:6006/user/search?find=Astrid
+GET http://localhost:6006/user/search?find=janeo
 
 ###Pagination
 GET http://localhost:6006/user?page=0&limit=3

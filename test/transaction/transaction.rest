@@ -1,1 +1,40 @@
-POST {{$dotenv REST_HOST}}/transaction/purchase/04F59717-2143-EC11-B66B-00E18CEF5938
+
+
+GET http://localhost:6006/transaction?limit=3
+###
+POST http://localhost:6006/transaction/purchase/04F59717-2143-EC11-B66B-00E18CEF5938
+
+###
+POST http://localhost:6006/transaction/purchase/9F5B433E-F36B-1410-86CD-00E785D37B7B/9872433E-F36B-1410-86CC-00E785D37B7B
+Content-Type: application/json
+
+{
+    "quantity": 10
+}
+
+
+### 
+GET http://localhost:6006/transaction/
+
+###
+GET http://localhost:6006/transaction/test-hierarchy
+
+###
+GET http://localhost:6006/pending-transaction?caesar=6120d492-245e-ec11-b672-00e18cef5938
+
+### caesar_dsp 9872433E-F36B-1410-86CC-00E785D37B7B
+###
+POST http://localhost:6006/transaction/test-verify-approval 
+Content-Type: application/json
+
+{
+    "inventory": "9F5B433E-F36B-1410-86CD-00E785D37B7B", 
+    "caesar_buyer": "9872433E-F36B-1410-86CC-00E785D37B7B"
+}
+###
+POST http://localhost:6006/pending-transaction/approve-transaction/20
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBOEZFRjEtQkIyMS1FQzExLUI2NjUtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIiwiZHNwIiwicmV0YWlsZXIiLCJzdWJkaXN0cmlidXRvciJdLCJpYXQiOjE2NDI0MDk3NDUsImV4cCI6MTY0MjQxMzM0NX0.Fajn_NYy07sbBx0JfW912G0ZZtx_98pcc01asS11SNo
+
+{
+    
+}

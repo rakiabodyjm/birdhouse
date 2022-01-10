@@ -1,6 +1,6 @@
 
 ###
-POST {{$dotenv REST_HOST}}/auth/login
+POST http://localhost:6006/auth/login
 Content-Type: application/json
 
 {
@@ -9,50 +9,50 @@ Content-Type: application/json
     "remember_me":true
 }
 ###
-GET {{$dotenv REST_HOST}}/asset/
-###
-# POST {{$dotenv REST_HOST}}/inventory
-# Content-Type: application/json
+GET http://localhost:6006/asset/
+### 
 
-# {
-#     "quantity": 100, 
-#     "asset": "8A50FDA5-ED42-EC11-B66B-00E18CEF5938", 
-#     "caesar": "E5CF66BA-1543-EC11-B66B-00E18CEF5938"
-# }
-
-###
-POST {{$dotenv REST_HOST}}/inventory/admin-acquire
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBOEZFRjEtQkIyMS1FQzExLUI2NjUtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJKYW5lbyBNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIiwiZHNwIiwicmV0YWlsZXIiLCJzdWJkaXN0cmlidXRvciJdLCJpYXQiOjE2Mzg3ODI3MjIsImV4cCI6MTYzODc4MzYyMn0.FSyONHbCD-cHgwdSluYpIVBKLeqZIIvEtfEIRxa6vw0
+## Accepts duplicate entry, 
+## if Duplicate found
+## Inventory is added
+POST http://localhost:6006/inventory/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBOEZFRjEtQkIyMS1FQzExLUI2NjUtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIiwiZHNwIiwic3ViZGlzdHJpYnV0b3IiXSwiaWF0IjoxNjQwNTk5MzY2LCJleHAiOjE2NDA2MDI5NjZ9.fm9ey8IfKwwC-v9vMPBpOGQeWcPiMBnBScuqHzVmuu0
 Content-Type: application/json
 
 {
-    "quantity": 50,
-    "asset" : "7C9E3648-0047-EC11-B66C-00E18CEF5938"
+    "quantity":3,
+    "asset" : "7C9E3648-0047-EC11-B66C-00E18CEF5938", 
+    "caesar": "D8D04784-D65E-EC11-B672-00E18CEF5938"
     
 }
 ###
-GET {{$dotenv REST_HOST}}/inventory
+GET http://localhost:6006/inventory
+
 
 ###
-GET {{$dotenv REST_HOST}}/inventory?page=0&admin=0A03B39E-C121-EC11-B665-00E18CEF5938
+# GET http://localhost:6006/inventory?page=0&admin=E058BBB5-AD57-EC11-B670-00E18CEF5938
+GET http://localhost:6006/inventory?page=0&subdistributor=FDC28593-B957-EC11-B670-00E18CEF5938
+
 
 ###
-GET {{$dotenv REST_HOST}}/inventory/CB021921-2A53-EC11-B66F-00E18CEF5938"
+GET http://localhost:6006/inventory/9F5B433E-F36B-1410-86CD-00E785D37B7B
 ###
 
 
-PATCH {{$dotenv REST_HOST}}/inventory/CB021921-2A53-EC11-B66F-00E18CEF5938"
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBOEZFRjEtQkIyMS1FQzExLUI2NjUtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJKYW5lbyBNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIiwiZHNwIiwicmV0YWlsZXIiLCJzdWJkaXN0cmlidXRvciJdLCJpYXQiOjE2Mzg0MTYyNTcsImV4cCI6MTYzODQxNzE1N30.RN90B6DFYiz07c5G93fUZLQmMkX2Ens6CHf7bsXlUDs
+PATCH http://localhost:6006/inventory/A7CAB5D9-175F-EC11-B672-00E18CEF5938
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBOEZFRjEtQkIyMS1FQzExLUI2NjUtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIiwiZHNwIiwic3ViZGlzdHJpYnV0b3IiXSwiaWF0IjoxNjQwNTk5MzY2LCJleHAiOjE2NDA2MDI5NjZ9.fm9ey8IfKwwC-v9vMPBpOGQeWcPiMBnBScuqHzVmuu0
 Content-Type: application/json
 
 {
-    "quantity": 50
+    "quantity": 1000
+    # "unit_price":0.9
+    # "description": "REALM1000 Issued Regular Load"
+
 }
 
 ###
-DELETE {{$dotenv REST_HOST}}/inventory/
+DELETE http://localhost:6006/inventory/
 
 ### 
 
-DELETE {{$dotenv REST_HOST}}/inventory/9EED7766-BC47-EC11-B66C-00E18CEF5938
-s
+DELETE http://localhost:6006/inventory/91B5EA14-CF66-EC11-B672-00E18CEF5938

@@ -11,11 +11,11 @@ Content-Type: application/json
     "user": "EFA8FEF1-BB21-EC11-B665-00E18CEF5938"
 }
 ###
-PATCH http://localhost:6006/admin/0A03B39E-C121-EC11-B665-00E18CEF5938
+PATCH http://localhost:6006/admin/E058BBB5-AD57-EC11-B670-00E18CEF5938
 Content-Type: application/json
 
 {
-    # "name": "Creator"
+    "name": "Admin Janeo "
     # "user": null
 }
 ###
@@ -25,4 +25,4 @@ DELETE http://localhost:6006/admin/0A03B39E-C121-EC11-B665-00E18CEF5938
 GET http://localhost:6006/admin?page=0&limit=3
 
 ### GET 
-{{$dotenv REST_HOST}}/admin/0A03B39E-C121-EC11-B665-00E18CEF5938
+GET http://localhost:6006/admin/0A03B39E-C121-EC11-B665-00E18CEF5938

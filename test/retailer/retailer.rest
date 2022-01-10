@@ -1,7 +1,7 @@
 
-GET {{$dotenv HOST}}:{{$dotenv PORT}}/retailer
+GET http://localhost:6006/retailer
 ###
-POST {{$dotenv HOST}}:{{$dotenv PORT}}/retailer
+POST http://localhost:6006/retailer
 Content-Type: application/json
 
 {
@@ -14,29 +14,30 @@ Content-Type: application/json
     "dsp": "BCFD02B7-BD24-EC11-B665-00E18CEF5938"
 }
 ###
-PATCH {{$dotenv HOST}}:{{$dotenv PORT}}/retailer/C775433E-F36B-1410-86C5-00E785D37B7B
+PATCH http://localhost:6006/retailer/6FEC2144-D058-EC11-B670-00E18CEF5938
 Content-Type: application/json
 
 {
     # "store_name": "Breanne's Store",
-  "store_name": "John Doe Retailer Store"
+  # "store_name": "John Doe Retailer Store",
+  "dsp": "7D1F2327-DB57-EC11-B670-00E18CEF5938"
 }
 
 ###
-DELETE {{$dotenv HOST}}:{{$dotenv PORT}}/retailer/B9EC3682-EC16-EC11-B664-00E18CEF5938
+DELETE http://localhost:6006/retailer/B9EC3682-EC16-EC11-B664-00E18CEF5938
 
 ### 
-GET {{$dotenv HOST}}:{{$dotenv PORT}}/retailer/6D82910C-C321-EC11-B665-00E18CEF5938
+GET http://localhost:6006/retailer/6D82910C-C321-EC11-B665-00E18CEF5938
 ###PAGINATED
-GET {{$dotenv HOST}}:{{$dotenv PORT}}/retailer?page=0&limit=2&dsp=BCFD02B7-BD24-EC11-B665-00E18CEF5938&countOnly=false
+GET http://localhost:6006/retailer?page=0&limit=2&dsp=BCFD02B7-BD24-EC11-B665-00E18CEF5938&countOnly=false
 
 ### 
-GET {{$dotenv REST_HOST}}/retailer?subdistributor=CFB5D438-BC21-EC11-B665-00E18CEF5938
+GET http://http://localhost:6006/retailer?subdistributor=CFB5D438-BC21-EC11-B665-00E18CEF5938
 ###
-GET {{$dotenv REST_HOST}}/retailer/search?searchQuery=SOLANO&subdistributor=AF02DF31-DD2B-EC11-B666-00E18CEF5935&dsp=bcfd02b7-bd24-ec11-b665-00e18cef5938
+GET http://http://localhost:6006/retailer/search?searchQuery=SOLANO&subdistributor=AF02DF31-DD2B-EC11-B666-00E18CEF5935&dsp=bcfd02b7-bd24-ec11-b665-00e18cef5938
 
 ###
-GET {{$dotenv REST_HOST}}/retailer/search?searchQuery=john&subdistributor=AF02DF31-DD2B-EC11-B666-00E18CEF5935
+GET http://http://localhost:6006/retailer/search?searchQuery=john&subdistributor=AF02DF31-DD2B-EC11-B666-00E18CEF5935
 
 // if subd is given only retailers of one subd should appear
 

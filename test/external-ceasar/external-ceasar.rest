@@ -16,4 +16,14 @@ GET http://localhost:6006/external-caesar
 DELETE http://localhost:6006/external-caesar
 
 ###
-GET http://localhost:6006/external-caesar/1
+GET http://localhost:6006/external-caesar/6
+
+
+###
+
+POST http://localhost:6006/external-caesar/topup/6
+Content-Type: application/json
+
+{
+    "amount": 1000
+}

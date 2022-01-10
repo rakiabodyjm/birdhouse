@@ -13,7 +13,7 @@ Content-Type: application/json
 GET http://localhost:6006/dsp
 
 ### GET DSP WITH ID
-GET http://localhost:6006/dsp/2892E48F-C221-EC11-B665-00E18CEF5938
+GET http://localhost:6006/dsp/02AA10C4-0F58-EC11-B670-00E18CEF5938
 
 ### DELETE ALL DSP ACCONUT
 DELETE http://localhost:6006/dsp/clear
@@ -40,10 +40,10 @@ Content-Type: application/json
 DELETE {{$dotenv HOST}}:{{$dotenv PORT}}/dsp/65D172A9-2C21-EC11-B665-00E18CEF5938
 
 ###
-GET {{$dotenv REST_HOST}}/dsp?subdistributor=CFB5D438-BC21-EC11-B665-00E18CEF5938&limit=1&page=0&countOnly=false
+GET http://localhost:6006/dsp?subdistributor=CFB5D438-BC21-EC11-B665-00E18CEF5938&limit=1&page=0&countOnly=false
 
 ###SEARCH
 
-GET {{$dotenv REST_HOST}}/dsp/search?searchQuery=arj&subdistributor=CFB5D438-BC21-EC11-B665-00E18CEF5938
+GET http://localhost:6006/dsp/search?searchQuery=arj&subdistributor=CFB5D438-BC21-EC11-B665-00E18CEF5938
 ###
-GET {{$dotenv REST_HOST}}/dsp/search?searchQuery=work&subdistributor=AF02DF31-DD2B-EC11-B666-00E18CEF5935
+GET http://localhost:6006/dsp/search?searchQuery=work&subdistributor=AF02DF31-DD2B-EC11-B666-00E18CEF5935

@@ -13,14 +13,18 @@ import {
   NotFoundException,
   InternalServerErrorException,
   BadRequestException,
+  UseGuards,
 } from '@nestjs/common'
+import { AuthGuard } from '@nestjs/passport'
 import { ApiTags } from '@nestjs/swagger'
+import { Role } from 'src/auth/decorators/roles.decorator'
+import { RolesGuard } from 'src/auth/guards/roles.guard'
 import { GetAllCaesarDto } from 'src/caesar/dto/get-all-caesar.dto'
 import { GetCaesarDto } from 'src/caesar/dto/get-caesar.dto'
 import { SearchCaesarDto } from 'src/caesar/dto/search-caesar.dto'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { Paginated } from 'src/types/Paginated'
-import { RolesArray, UserTypesAndUser } from 'src/types/Roles'
+import { Roles, RolesArray, UserTypesAndUser } from 'src/types/Roles'
 import { UserService } from 'src/user/user.service'
 import { CaesarService } from './caesar.service'
 import { CreateCaesarDto } from './dto/create-caesar.dto'
@@ -67,6 +71,7 @@ export class CaesarController {
           // [accountType]: createCaesarDto[accountType],
           [accountType]: createCaesarDto[accountType],
         })
+
         .catch((err) => {
           throw new InternalServerErrorException(err.message)
         })
@@ -109,6 +114,14 @@ export class CaesarController {
   @Delete()
   clear() {
     return this.caesarService.clear()
+  }
+
+  @Role(Roles.ADMIN)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Post('topup')
+  async topup(@Body() body: { caesar: string; amount: number }) {
+    const caesar = await this.caesarService.findOne(body.caesar)
+    return this.caesarService.pay(caesar, body.amount)
   }
 
   // @Get()

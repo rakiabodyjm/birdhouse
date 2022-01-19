@@ -27,7 +27,13 @@ export class CaesarService {
     private caesarApiService: CaesarApiService,
     private configService: ConfigService,
   ) {}
-  relations: UserTypesAndUser[] = []
+  relations: UserTypesAndUser[] = [
+    'admin',
+    'subdistributor',
+    'dsp',
+    'retailer',
+    'user',
+  ]
 
   async create({
     userAccount,
@@ -258,6 +264,7 @@ export class CaesarService {
     if (!caesarAccount?.data) {
       caesarAccount = await this.injectExternalCaesar(caesarAccount)
     }
+
     const topUpResponse = firstValueFrom(
       this.axiosService
         .post(

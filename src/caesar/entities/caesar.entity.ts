@@ -73,9 +73,25 @@ export class Caesar extends WithAccountTypes {
   @Column({})
   account_type: UserTypesAndUser
 
-  @Column({
-    default: null,
-  })
+  @Expose()
+  account_id() {
+    const account_id = [
+      this.subdistributor,
+      this.retailer,
+      this.dsp,
+      this.user,
+      this.admin,
+    ].reduce((acc, ea) => {
+      if (ea && ea.id) {
+        return ea.id
+      } else {
+        return acc
+      }
+    }, this.id)
+    return account_id
+  }
+
+  @Column()
   caesar_id: string
 
   @Expose()
@@ -100,7 +116,6 @@ export class Caesar extends WithAccountTypes {
 
   @OneToMany((type) => InventoryLog, (inventoryLog) => inventoryLog.caesar)
   inventoryLogs: InventoryLog[]
-
   @OneToMany((type) => Inventory, (inventory) => inventory.caesar, {})
   inventory: Inventory[]
 

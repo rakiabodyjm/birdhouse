@@ -27,6 +27,8 @@ import { CreateInventoryDto } from 'src/inventory/dto/create-inventory.dto'
 import { ApiTags } from '@nestjs/swagger'
 import { AssetService } from 'src/asset/asset.service'
 import { CaesarService } from 'src/caesar/caesar.service'
+import { GetCommerceInventoryDto } from 'src/inventory/dto/get-commerce-inventory.dto'
+import { TestFindByAssetAndCaesarDto } from 'src/inventory/dto/test-findby-asset-and-caesar.dto'
 
 @ApiTags('Inventory Routes')
 @Controller('inventory')
@@ -87,6 +89,44 @@ export class InventoryController {
     })
   }
 
+  // @Get('test-findby-asset-and-caesar')
+  // async findByAssetAndCaesarId(
+  //   @Body() bodyParameters: TestFindByAssetAndCaesarDto,
+  // ) {
+  //   const { asset, caesar } = bodyParameters
+  //   // return this.inventoryService.findByAssetIdAndCaesarId({
+  //   //   asset_id: asset,
+  //   //   caesar_id: caesar,
+  //   // })
+  //   return await this.promiseFunction().catch((err) => {
+  //     throw new BadRequestException(err.message)
+  //   })
+  // }
+
+  // async promiseFunction() {
+  //   const inventoryTakeOne = await this.inventoryService
+  //     .findAll({
+  //       page: 0,
+  //       limit: 100,
+  //     })
+  //     .then((response: Paginated<Inventory>) => {
+  //       return response.data
+  //     })
+  //     .catch((err) => {
+  //       console.log(err)
+  //       throw err
+  //     })
+
+  //   return inventoryTakeOne
+  //   // return 'hello'
+  // }
+
+  @Get('commerce')
+  getCommerce(@Query() query: GetCommerceInventoryDto) {
+    const { caesar, page, limit } = query
+    return this.inventoryService.getCommerce(caesar, { page, limit })
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.inventoryService.findOne(id).catch((err) => {
@@ -110,7 +150,12 @@ export class InventoryController {
     @Body() updateInventoryDto: UpdateInventoryDto,
   ) {
     const updateResult = await this.inventoryService
-      .update(id, updateInventoryDto)
+      .update(id, {
+        ...updateInventoryDto,
+        ...(updateInventoryDto.caesar && {
+          caesar: await this.caesarService.findOne(updateInventoryDto.caesar),
+        }),
+      })
       .then((res) => createEntityMessage(res, `Inventory Updated`))
       .catch((err) => {
         console.log(err)

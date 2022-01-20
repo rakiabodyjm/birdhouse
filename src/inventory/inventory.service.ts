@@ -10,7 +10,7 @@ import { GetAllInventoryDto } from 'src/inventory/dto/get-all-inventory.dto'
 import Inventory from 'src/inventory/entities/inventory.entity'
 import { PaginateOptions } from 'src/types/Paginated'
 import paginateFind from 'src/utils/paginate'
-import { Repository } from 'typeorm'
+import { FindManyOptions, IsNull, Not, Repository } from 'typeorm'
 import { UpdateInventoryDto } from './dto/update-inventory.dto'
 
 @Injectable()
@@ -19,6 +19,8 @@ export class InventoryService {
     @InjectRepository(Inventory)
     private readonly inventoryRepository: Repository<Inventory>,
     private readonly caesarService: CaesarService,
+    @InjectRepository(Caesar)
+    private readonly caesarRepository: Repository<Caesar>,
   ) {
     this.relations = ['caesar', 'asset']
   }
@@ -52,6 +54,7 @@ export class InventoryService {
       console.error(err)
       throw new Error(err.message)
     })
+    console.log('duplicateInventory found', duplicateInventory)
 
     if (duplicateInventory) {
       return this.update(duplicateInventory.id, {
@@ -137,6 +140,11 @@ export class InventoryService {
       ...('active' in getAllInventoryDto && {
         active: getAllInventoryDto.active,
       }),
+      ...('asset' in getAllInventoryDto && {
+        asset: {
+          id: getAllInventoryDto.asset,
+        },
+      }),
     }
 
     if (isNotEmptyObject(paginationParams)) {
@@ -188,7 +196,10 @@ export class InventoryService {
     )
   }
 
-  update(id: string, updateInventoryDto: Partial<UpdateInventoryDto>) {
+  async update(id: string, updateInventoryDto: Partial<Inventory>) {
+    // const updateInventoryDto = {
+    //   ...updateInventoryDtoParam,
+    // }
     return this.findOne(id)
       .then(async (inventory) => {
         return plainToClass(
@@ -226,4 +237,111 @@ export class InventoryService {
   // remove(id: number) {
   //   return `This action removes a #${id} inventory`
   // }
+
+  async getCommerce(caesar: Caesar['id'], paginateOptions: PaginateOptions) {
+    const { account_id, account_type } = await this.caesarService.findOne(
+      caesar,
+    )
+
+    const buyerCaesar = await this.caesarRepository.findOneOrFail(caesar, {
+      relations: [
+        'dsp',
+        'dsp.subdistributor',
+        'retailer',
+        'retailer.dsp',
+        'retailer.subdistributor',
+      ],
+    })
+    let query: FindManyOptions<Inventory> = {
+      where: {
+        caesar: {
+          id: Not(buyerCaesar.id),
+        },
+      },
+    }
+    switch (account_type) {
+      case 'retailer': {
+        query = {
+          where: [
+            {
+              caesar: {
+                dsp: buyerCaesar.retailer.dsp,
+              },
+            },
+            {
+              caesar: {
+                subdistributor: buyerCaesar.retailer.subdistributor,
+              },
+            },
+          ],
+        }
+        break
+      }
+      case 'dsp': {
+        query = {
+          where: [
+            /**
+             * include subdistributor of dsp
+             */
+            {
+              caesar: {
+                subdistributor: {
+                  id: buyerCaesar.dsp.subdistributor.id,
+                },
+              },
+            },
+            /**
+             * include admin
+             */
+            // {
+            //   caesar: {
+            //     admin: Not(IsNull()),
+            //   },
+            // },
+          ],
+        }
+
+        // inventory = paginateFind(paginateOptions, )
+        break
+      }
+
+      case 'subdistributor': {
+        query = {
+          where: [
+            {
+              caesar: {
+                admin: Not(IsNull()),
+              },
+            },
+          ],
+        }
+        break
+      }
+    }
+
+    query = {
+      ...query,
+
+      relations: [
+        'caesar',
+        'caesar.subdistributor',
+        'caesar.retailer',
+        'caesar.admin',
+        'caesar.user',
+        'caesar.dsp',
+      ].filter((relation, index, array) => array.indexOf(relation) === index),
+    }
+    if (paginateOptions.limit || paginateOptions.page) {
+      return paginateFind(this.inventoryRepository, paginateOptions, query)
+    }
+    return this.inventoryRepository.find(query)
+    // return buyerCaesar
+  }
+}
+
+const promise = async function (parameter?) {
+  if (!parameter) {
+    throw new Error(`parameter not provided`)
+  }
+  return 'hi'
 }

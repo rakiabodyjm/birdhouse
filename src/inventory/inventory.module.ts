@@ -8,10 +8,11 @@ import { AssetModule } from 'src/asset/asset.module'
 import { AuthModule } from 'src/auth/auth.module'
 import { UserModule } from 'src/user/user.module'
 import { InventoryLog } from 'src/inventory/entities/inventory-logs.entity'
+import { Caesar } from 'src/caesar/entities/caesar.entity'
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Inventory, InventoryLog]),
+    TypeOrmModule.forFeature([Inventory, InventoryLog, Caesar]),
     CaesarModule,
     AssetModule,
     AuthModule,

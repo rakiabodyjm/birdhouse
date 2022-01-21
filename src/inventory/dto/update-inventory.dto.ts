@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsNotEmpty, IsNumber, IsOptional, Min } from 'class-validator'
+import { IsNotEmpty, IsNumber, IsOptional, IsUUID, Min } from 'class-validator'
+import { Caesar } from 'src/caesar/entities/caesar.entity'
+import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
 
 export class UpdateInventoryDto {
   @ApiProperty()
@@ -48,4 +50,14 @@ export class UpdateInventoryDto {
   @IsOptional()
   @Min(0.01)
   srp_for_user: number
+
+  @IsOptional()
+  @IsUUID()
+  @ExistsInDb(Caesar, 'id', {
+    message: `Caesar does not exist`,
+  })
+  @ApiProperty({
+    type: 'string',
+  })
+  caesar?: string
 }

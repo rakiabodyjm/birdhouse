@@ -19,10 +19,10 @@ export class Retailer {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
+  @Expose()
   @JoinColumn({
     name: 'subdistributor_id',
   })
-  @Expose()
   @ManyToOne((type) => Subdistributor, (subd) => subd.retailer, {
     onDelete: 'SET NULL',
     // eager: true,

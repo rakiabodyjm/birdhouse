@@ -96,14 +96,6 @@ export default class Inventory {
   })
   active: boolean
 
-  /**
-   * JSON Data
-   */
-  @Column({
-    nullable: true,
-  })
-  restrictions: string
-
   @CreateDateColumn({
     type: 'datetime',
   })

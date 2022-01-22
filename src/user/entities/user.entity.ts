@@ -77,7 +77,7 @@ export class User {
 
   @Expose()
   roles?() {
-    const roles = []
+    const roles = ['user']
     RolesArray.forEach((ea) => {
       if (this[ea]) {
         roles.push(ea)

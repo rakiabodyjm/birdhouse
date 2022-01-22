@@ -113,7 +113,7 @@ export class Transaction {
 
   @Column({
     default: null,
-    unique: true,
+    // unique: true,
   })
   pending_purchase_id: string
 

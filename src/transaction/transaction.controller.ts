@@ -51,21 +51,25 @@ export class TransactionController {
   }> {
     try {
       const { buyer, inventory_from } = purchaseParams
-      const { quantity } = purchaseBody
+      const { quantity, allow_credit } = purchaseBody
+      console.log('purchaseBody', purchaseBody)
       /**
        * reduce approvals into caesar.id's
        */
-      const approvals: Partial<Record<UserTypesAndUser, Caesar['id']>> =
+      const approvals: Partial<Record<UserTypesAndUser, Caesar['id']>> | false =
         await this.transactionService
           .newVerifyIfApprovalNeeded(inventory_from, buyer)
           .then((res) => {
-            return Object.keys(res).reduce((acc, caesarType) => {
-              return {
-                ...acc,
-                [caesarType as UserTypesAndUser]: (res[caesarType] as Caesar)
-                  .id,
-              }
-            }, {})
+            if (res) {
+              return Object.keys(res).reduce((acc, caesarType) => {
+                return {
+                  ...acc,
+                  [caesarType as UserTypesAndUser]: (res[caesarType] as Caesar)
+                    .id,
+                }
+              }, {})
+            }
+            return false
           })
       if (approvals) {
         const inventory = await this.inventoryService.findOne(inventory_from)
@@ -101,11 +105,8 @@ export class TransactionController {
             buyer,
             inventory_from,
             quantity,
+            allow_credit,
           })
-          .then((res) => ({
-            ...res,
-            transaction_pending: false,
-          }))
           .catch((err) => {
             throw new BadRequestException(err.message)
           }),

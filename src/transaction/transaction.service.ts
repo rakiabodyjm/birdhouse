@@ -1,18 +1,14 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { isNotEmptyObject } from 'class-validator'
-import { clearConfigCache } from 'prettier'
 import { AssetService } from 'src/asset/asset.service'
 import Asset from 'src/asset/entities/asset.entity'
 import { CaesarService } from 'src/caesar/caesar.service'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { DspService } from 'src/dsp/dsp.service'
-import { Dsp } from 'src/dsp/entities/dsp.entity'
 import Inventory from 'src/inventory/entities/inventory.entity'
 import { InventoryService } from 'src/inventory/inventory.service'
-import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
 import { GetAllTransactionDto } from 'src/transaction/dto/get-all-transaction.dto'
-import { PendingTransaction } from 'src/transaction/entities/pending-transaction.entity'
 import {
   Transaction,
   transactionAccountApprovals,
@@ -53,7 +49,7 @@ export class TransactionService {
     inventory,
   }: GetAllTransactionDto): Promise<Paginated<Transaction> | Transaction[]> {
     const whereQuery = [
-      ...(caesar
+      ...(caesar && !buyer && !seller
         ? [
             {
               buyer: caesar,
@@ -63,7 +59,7 @@ export class TransactionService {
             },
           ]
         : []),
-      ...(inventory
+      ...(inventory && !inventory_from && !inventory_to
         ? [
             {
               inventory_from: inventory,
@@ -106,15 +102,17 @@ export class TransactionService {
     inventory_from,
     quantity,
     pending_purchase_id,
+    allow_credit,
   }: {
     buyer: string
     inventory_from: string
     quantity: number
     pending_purchase_id?: string
+    allow_credit?: boolean
   }): Promise<Transaction> {
     try {
       const buyerCaesar = await this.caesarService.findOne(buyer)
-      let inventoryToBeBought = await this.inventoryService.findOne(
+      let inventoryToBeBought: Inventory = await this.inventoryService.findOne(
         inventory_from,
       )
 
@@ -144,10 +142,28 @@ export class TransactionService {
         })
         .then(async (res) => {
           /**
+           * verify that buyer has enough caesar_coins
+           */
+          if (!allow_credit) {
+            await this.caesarService
+              .findOne(buyerCaesar.id)
+              .then((cae) => {
+                if (cae.data.caesar_coin < costPriceBuyer * quantity) {
+                  throw new Error(
+                    `Buyer does not have enough caesar_coins to purchase this item (Required: ${
+                      costPriceBuyer * quantity
+                    }CCoins, Wallet Of Buyer: ${cae.data.caesar_coin} CCoins)`,
+                  )
+                }
+              })
+              .catch((err) => {
+                throw err
+              })
+          }
+          /**
            * make payment to seller after successfully adding to buyer's
            * inventory
            */
-
           const payment1 = await this.caesarService.pay(
             sellerCaesar,
             costPriceBuyer * quantity,
@@ -159,17 +175,36 @@ export class TransactionService {
           console.log('payment made', payment1.peso, ' to ', payment2.peso)
           return res
         })
-        .then((res) => {
+        .then(async (res) => {
           /**
            * change inventory quantity of seller only
            *
            */
-          this.inventoryService
+          inventoryToBeBought = await this.inventoryService
             .update(inventoryToBeBought.id, {
               quantity: inventoryToBeBought.quantity - quantity,
             })
-            .then((res) => {
-              inventoryToBeBought = res
+            .catch(async (err) => {
+              /**
+               * reverse payment
+               */
+              console.log(err)
+
+              await this.caesarService
+                .pay(sellerCaesar, -(costPriceBuyer * quantity))
+                .catch((err) => {
+                  console.log(err)
+                  console.log('Payment Reversal to seller failed to Execute')
+                })
+                .then(() => {
+                  this.caesarService
+                    .pay(buyerCaesar, costPriceBuyer * quantity)
+                    .catch((err) => {
+                      console.log(err)
+                      console.log('Payment Reversal to buyer failed to Execute')
+                    })
+                })
+              throw new Error(`Error Updating Inventory`)
             })
 
           return res
@@ -319,7 +354,7 @@ export class TransactionService {
   async newVerifyIfApprovalNeeded(
     inventoryParam: Inventory['id'] | Inventory,
     caesarBuyerParam: Caesar['id'] | Caesar,
-  ) {
+  ): Promise<Partial<Record<UserTypesAndUser, Caesar>> | false> {
     const inventory =
       typeof inventoryParam === 'string'
         ? await this.inventoryService.findOne(inventoryParam)
@@ -371,11 +406,14 @@ export class TransactionService {
           }
         }),
       )
-      return accountPermissionCaesars
+      const returnObject = isNotEmptyObject(accountPermissionCaesars)
+        ? accountPermissionCaesars
+        : false
+      console.log('returnObject', returnObject)
+      return returnObject
     } else {
+      return false
     }
-
-    return permissions
   }
   private whosePermission(
     accountType: UserTypesAndUser,

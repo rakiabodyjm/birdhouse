@@ -10,41 +10,45 @@ Content-Type: application/json
 }
 ###
 GET http://localhost:6006/asset/
-### 
+### s
+
 
 ## Accepts duplicate entry, 
 ## if Duplicate found
 ## Inventory is added
 POST http://localhost:6006/inventory/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBOEZFRjEtQkIyMS1FQzExLUI2NjUtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIiwiZHNwIiwic3ViZGlzdHJpYnV0b3IiXSwiaWF0IjoxNjQwNTk5MzY2LCJleHAiOjE2NDA2MDI5NjZ9.fm9ey8IfKwwC-v9vMPBpOGQeWcPiMBnBScuqHzVmuu0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBOEZFRjEtQkIyMS1FQzExLUI2NjUtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIiwiZHNwIiwic3ViZGlzdHJpYnV0b3IiXSwiaWF0IjoxNjQzMDEzOTAzLCJleHAiOjE2NDMwMTc1MDN9.cSu0Rh6z9BvFlfVq07PrHm5NkuXvqBEugdFzbG4dLUg
 Content-Type: application/json
 
 {
-    "quantity":3,
-    "asset" : "7C9E3648-0047-EC11-B66C-00E18CEF5938", 
-    "caesar": "D8D04784-D65E-EC11-B672-00E18CEF5938"
+    "quantity":50,
+    "asset": "7C9E3648-0047-EC11-B66C-00E18CEF5938", 
+    "caesar": "AC7E433E-F36B-1410-8206-00BFC2301278"
     
 }
 ###
-GET http://localhost:6006/inventory
+# GET http://localhost:6006/inventory?asset=7C9E3648-0047-EC11-B66C-00E18CEF5938
+
+GET http://localhost:6006/inventory?subdistributor=FDC28593-B957-EC11-B670-00E18CEF5938
 
 
 ###
 # GET http://localhost:6006/inventory?page=0&admin=E058BBB5-AD57-EC11-B670-00E18CEF5938
-GET http://localhost:6006/inventory?page=0&subdistributor=FDC28593-B957-EC11-B670-00E18CEF5938
+GET http://localhost:6006/inventory?page=0&limit=1&admin=E058BBB5-AD57-EC11-B670-00E18CEF5938
 
 
 ###
-GET http://localhost:6006/inventory/9F5B433E-F36B-1410-86CD-00E785D37B7B
+GET http://localhost:6006/inventory/A57E433E-F36B-1410-8206-00BFC2301278
 ###
 
 
-PATCH http://localhost:6006/inventory/A7CAB5D9-175F-EC11-B672-00E18CEF5938
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBOEZFRjEtQkIyMS1FQzExLUI2NjUtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIiwiZHNwIiwic3ViZGlzdHJpYnV0b3IiXSwiaWF0IjoxNjQwNTk5MzY2LCJleHAiOjE2NDA2MDI5NjZ9.fm9ey8IfKwwC-v9vMPBpOGQeWcPiMBnBScuqHzVmuu0
+PATCH http://localhost:6006/inventory/A57E433E-F36B-1410-8206-00BFC2301278
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBOEZFRjEtQkIyMS1FQzExLUI2NjUtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIiwiZHNwIiwic3ViZGlzdHJpYnV0b3IiXSwiaWF0IjoxNjQyODM2ODE3LCJleHAiOjE2NDI4NDA0MTd9.QDApEFBsZEM0bL2clvGJ2AonKs-TH3SdWKpFERIy8Mg
 Content-Type: application/json
 
 {
-    "quantity": 1000
+    # "quantity": 1000
+    "caesar":"AC7E433E-F36B-1410-8206-00BFC2301278" 
     # "unit_price":0.9
     # "description": "REALM1000 Issued Regular Load"
 
@@ -55,4 +59,33 @@ DELETE http://localhost:6006/inventory/
 
 ### 
 
-DELETE http://localhost:6006/inventory/91B5EA14-CF66-EC11-B672-00E18CEF5938
+DELETE http://localhost:6006/inventory/A7CAB5D9-175F-EC11-B672-00E18CEF5938
+
+###
+GET http://localhost:6006/inventory/test-findby-asset-and-caesar
+Content-Type: application/json
+
+{
+    "asset": "7C9E3648-0047-EC11-B66C-00E18CEF5938", 
+    "caesar": "AE7E433E-F36B-1410-8206-00BFC2301278", 
+    "hello": "world"
+}
+
+
+### 
+GET http://localhost:6006/inventory/commerce?caesar=AE7E433E-F36B-1410-8206-00BFC2301278
+
+
+
+### asset -> inventory ( Admin privilege only ) 
+### to Acquire as ordinary acconut: 
+###                       inventory_from, buyer
+### transaction/purchase/inventory_id/caesar_id
+### criteria 1:  sufficient quantity from inventory, 
+### criteria 2:  sufficient caesar coin
+### Response: 
+### transaction | pending_transaction
+
+### case DSP -> inventory ( which requires approval: dsp, subd ) 
+### Response: 
+### pending_transaction

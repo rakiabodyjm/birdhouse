@@ -2,20 +2,21 @@
 GET http://localhost:6006/caesar
 
 ###
-GET http://localhost:6006/caesar
+GET http://localhost:6006/caesar?page=3
 
 ###
-GET http://localhost:6006/caesar/6120D492-245E-EC11-B672-00E18CEF5938
+GET http://localhost:6006/caesar/AA7E433E-F36B-1410-8206-00BFC2301278
 ###
-GET http://localhost:6006/caesar/account?subdistributor=FDC28593-B957-EC11-B670-00E18CEF5938
+GET http://localhost:6006/caesar/account?dsp=7D1F2327-DB57-EC11-B670-00E18CEF5938
 ###
 POST http://localhost:6006/caesar
 Content-Type: application/json
 
 {
-    #"subdistributor": "CFB5D438-BC21-EC11-B665-00E18CEF5938",
+    # "subdistributor": "FDC28593-B957-EC11-B670-00E18CEF5938"
     # "user": "AE02DF31-DD2B-EC11-B666-00E18CEF5935"
-    "admin":"E058BBB5-AD57-EC11-B670-00E18CEF5938"
+    # "admin":"E058BBB5-AD57-EC11-B670-00E18CEF5938"
+    "dsp": "7D1F2327-DB57-EC11-B670-00E18CEF5938"
     
 }
 
@@ -24,6 +25,26 @@ DELETE http://localhost:6006/caesar
 
 
 ###
-GET http://localhost:6006/caesar/search?searchQuery= &page=0
+GET http://localhost:6006/caesar/search?searchQuery=REALM&page=0
 
 ###TEST-PAY
+
+### 
+
+POST HTTP://localhost:6006/auth/login
+Content-Type: application/json
+
+{
+    "email": "rakiabodyjm", 
+    "password": "rakiabodyjm4690", 
+    "remember_me": true
+}
+###
+POST http://localhost:6006/caesar/topup
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBOEZFRjEtQkIyMS1FQzExLUI2NjUtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIiwiZHNwIiwic3ViZGlzdHJpYnV0b3IiXSwiaWF0IjoxNjQzMTAzOTIwLCJleHAiOjE2NDMxMDc1MjB9.W8r1jAodQDoXeYwICvVSzAOX0eQetVAwyRDWnAlu_tA
+
+{
+    "caesar": "AA7E433E-F36B-1410-8206-00BFC2301278",
+    "amount": 100
+}

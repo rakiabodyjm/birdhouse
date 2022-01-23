@@ -21,7 +21,7 @@ GET http://localhost:6006/external-caesar/6
 
 ###
 
-POST http://localhost:6006/external-caesar/topup/6
+POST http://localhost:6006/external-caesar/topup/1
 Content-Type: application/json
 
 {

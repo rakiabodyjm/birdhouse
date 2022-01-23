@@ -5,16 +5,18 @@ GET http://localhost:6006/transaction?limit=3
 POST http://localhost:6006/transaction/purchase/04F59717-2143-EC11-B66B-00E18CEF5938
 
 ###
-POST http://localhost:6006/transaction/purchase/9F5B433E-F36B-1410-86CD-00E785D37B7B/9872433E-F36B-1410-86CC-00E785D37B7B
+POST http://localhost:6006/transaction/purchase/A57E433E-F36B-1410-8206-00BFC2301278/AA7E433E-F36B-1410-8206-00BFC2301278
 Content-Type: application/json
 
 {
-    "quantity": 10
+    "quantity": 50,
+    "allow_credit": true
 }
 
 
 ### 
 GET http://localhost:6006/transaction/
+
 
 ###
 GET http://localhost:6006/transaction/test-hierarchy
@@ -28,8 +30,9 @@ POST http://localhost:6006/transaction/test-verify-approval
 Content-Type: application/json
 
 {
-    "inventory": "9F5B433E-F36B-1410-86CD-00E785D37B7B", 
-    "caesar_buyer": "9872433E-F36B-1410-86CC-00E785D37B7B"
+    "inventory": "A7CAB5D9-175F-EC11-B672-00E18CEF5938", 
+    "caesar_buyer": "6120D492-245E-EC11-B672-00E18CEF5938"
+
 }
 ###
 POST http://localhost:6006/pending-transaction/approve-transaction/20

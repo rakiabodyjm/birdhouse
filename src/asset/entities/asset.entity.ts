@@ -90,4 +90,9 @@ export default class Asset {
     default: null,
   })
   approval?: string
+
+  @Column({
+    default: false,
+  })
+  whole_number_only: boolean
 }

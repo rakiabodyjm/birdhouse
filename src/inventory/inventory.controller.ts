@@ -28,7 +28,6 @@ import { ApiTags } from '@nestjs/swagger'
 import { AssetService } from 'src/asset/asset.service'
 import { CaesarService } from 'src/caesar/caesar.service'
 import { GetCommerceInventoryDto } from 'src/inventory/dto/get-commerce-inventory.dto'
-import { TestFindByAssetAndCaesarDto } from 'src/inventory/dto/test-findby-asset-and-caesar.dto'
 
 @ApiTags('Inventory Routes')
 @Controller('inventory')
@@ -55,11 +54,15 @@ export class InventoryController {
     const { quantity, asset: assetId, caesar: caesarId } = createInventoryDto
     const caesar = await this.caesarService.findOne(caesarId)
     const asset = await this.assetService.findOne(assetId)
-    return this.inventoryService.create({
-      caesar,
-      asset,
-      quantity,
-    })
+    return this.inventoryService
+      .create({
+        caesar,
+        asset,
+        quantity,
+      })
+      .catch((err) => {
+        throw new BadRequestException(err.message)
+      })
   }
 
   @Get('')

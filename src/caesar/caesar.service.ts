@@ -81,25 +81,35 @@ export class CaesarService {
         .find({
           take: 100,
           relations: this.relations,
+          where: {
+            ...(params?.account_type && {
+              account_type: params.account_type,
+            }),
+          },
         })
         .then((res) => {
           return this.injectExternalCaesar(res)
         })
     } else {
-      return await paginateFind<Caesar>(this.caesarRepository, params, {}).then(
-        async (paginatedCaesar) => {
-          const externalCaesarData = await Promise.all(
-            paginatedCaesar.data.map(
-              async (caesar) =>
-                this.injectExternalCaesar(caesar) as Promise<Caesar>,
-            ),
-          )
-          return {
-            ...paginatedCaesar,
-            data: externalCaesarData,
-          }
+      return await paginateFind<Caesar>(this.caesarRepository, params, {
+        where: {
+          ...(params?.account_type && {
+            account_type: params.account_type,
+          }),
         },
-      )
+        relations: this.relations,
+      }).then(async (paginatedCaesar) => {
+        const externalCaesarData = await Promise.all(
+          paginatedCaesar.data.map(
+            async (caesar) =>
+              this.injectExternalCaesar(caesar) as Promise<Caesar>,
+          ),
+        )
+        return {
+          ...paginatedCaesar,
+          data: externalCaesarData,
+        }
+      })
     }
   }
 

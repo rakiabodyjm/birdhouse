@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { plainToClass } from 'class-transformer'
 import { isNotEmptyObject } from 'class-validator'
-import { AssetService } from 'src/asset/asset.service'
 import Asset from 'src/asset/entities/asset.entity'
 import { CaesarService } from 'src/caesar/caesar.service'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
@@ -11,7 +10,6 @@ import Inventory from 'src/inventory/entities/inventory.entity'
 import { PaginateOptions } from 'src/types/Paginated'
 import paginateFind from 'src/utils/paginate'
 import { FindManyOptions, IsNull, Not, Repository } from 'typeorm'
-import { UpdateInventoryDto } from './dto/update-inventory.dto'
 
 @Injectable()
 export class InventoryService {
@@ -72,6 +70,10 @@ export class InventoryService {
       srp_for_user,
       unit_price,
     } = asset
+
+    if (asset.whole_number_only && quantity % 1 > 0) {
+      throw new Error(`This Inventory only accepts whole number quantities`)
+    }
     const newInventory = this.inventoryRepository.create({
       active: true,
       asset,
@@ -202,6 +204,12 @@ export class InventoryService {
     // }
     return this.findOne(id)
       .then(async (inventory) => {
+        if (
+          inventory.asset.whole_number_only &&
+          updateInventoryDto.quantity % 1 > 0
+        ) {
+          throw new Error(`This Inventory only accepts whole number quantities`)
+        }
         return plainToClass(
           Inventory,
           await this.inventoryRepository.save({

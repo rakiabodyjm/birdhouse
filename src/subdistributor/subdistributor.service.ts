@@ -133,18 +133,15 @@ export class SubdistributorService {
 
   async update(id: string, updateSubdistributorDto: UpdateSubdistributorDto) {
     try {
-      const subd: Subdistributor = await this.findOne(id)
-      console.log('dto', updateSubdistributorDto)
+      const subd = await this.findOne(id)
       Object.keys(updateSubdistributorDto).forEach((key) => {
         subd[key] = updateSubdistributorDto[key]
       })
-      await this.subdRepository.update(id, subd)
+      await this.subdRepository.save(subd)
       return subd
     } catch (err) {
       throw new Error(err.message)
     }
-
-    // return `This action updates a #${id} subdistributor`
   }
 
   async remove(id: string) {

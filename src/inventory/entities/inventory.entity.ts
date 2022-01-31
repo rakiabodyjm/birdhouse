@@ -21,7 +21,10 @@ export default class Inventory {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
-  @Column()
+  @Column('decimal', {
+    precision: 18,
+    scale: 4,
+  })
   quantity: number
 
   @JoinColumn({

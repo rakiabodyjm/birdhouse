@@ -79,7 +79,9 @@ export class CreateSubdistributorDto {
   @IsUUID()
   user: User
 
-  @NoDuplicateInDb(Subdistributor, 'name')
+  @NoDuplicateInDb(Subdistributor, 'name', {
+    message: 'Subdisributor name already used',
+  })
   @ApiProperty()
   @IsNotEmpty()
   @MaxLength(26)

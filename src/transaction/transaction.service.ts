@@ -31,12 +31,7 @@ export class TransactionService {
     private pendingTransactionService: PendingTransactionService,
   ) {}
 
-  relations: (keyof Transaction)[] = [
-    'inventory_from',
-    'inventory_to',
-    'buyer',
-    'seller',
-  ]
+  relations = ['inventory_from', 'inventory_to', 'buyer', 'seller']
 
   findAll({
     page,

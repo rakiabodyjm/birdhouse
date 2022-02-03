@@ -25,7 +25,7 @@ Content-Type: application/json
 }
 
 ### UPDATE DSP ACCOUNT
-PATCH http://localhost:6006/dsp/2892E48F-C221-EC11-B665-00E18CEF5938
+PATCH http://localhost:6006/dsp/C0546BF4-D558-EC11-B670-00E18CEF5938
 Content-Type: application/json
 
 {
@@ -33,7 +33,8 @@ Content-Type: application/json
     # "e_bind_number": "9931293332"
     # "user": "45E069F2-CDFA-EB11-B65F-00E18CEF5938",
     # "user": "648C4055-6DFE-EB11-B661-00E18CEF5938"
-    "area_id": ["1", "2"]
+    # "area_id": ["1", "2"]
+    "dsp_code": "ANOTHER DSP"
     # "area_id" : null
 }
 ###

@@ -88,7 +88,7 @@ DELETE http://localhost:6006/user/AE02DF31-DD2B-EC11-B666-00E18CEF5935
 
 
 ### SEARCH
-GET http://localhost:6006/user/search?find=janeo
+GET http://localhost:6006/user/search?find=jake
 
 ###Pagination
 GET http://localhost:6006/user?page=0&limit=3

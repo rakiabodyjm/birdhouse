@@ -23,11 +23,11 @@ GET http://localhost:6006/subdistributor/FDC28593-B957-EC11-B670-00E18CEF5938
 
 DELETE http://localhost:6006/subdistributor/8C7245E4-B357-EC11-B670-00E18CEF5938
 ###
-PATCH http://localhost:6006/subdistributor/5360AFB5-4107-EC11-B661-00E18CEF5938
+PATCH http://localhost:6006/subdistributor/7C4FDAE3-8958-EC11-B670-00E18CEF5938
 Content-Type: application/json
 
 {
-    "area_id": "1"
+    "name": "WONG SUBD"
 }
 ###
 

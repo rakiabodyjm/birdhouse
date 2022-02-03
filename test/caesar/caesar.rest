@@ -25,7 +25,7 @@ DELETE http://localhost:6006/caesar
 
 
 ###
-GET http://localhost:6006/caesar/search?searchQuery=REALM&page=0
+GET http://localhost:6006/caesar/search?searchQuery=jake&page=0
 
 ###TEST-PAY
 
@@ -42,9 +42,11 @@ Content-Type: application/json
 ###
 POST http://localhost:6006/caesar/topup
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBOEZFRjEtQkIyMS1FQzExLUI2NjUtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIiwiZHNwIiwic3ViZGlzdHJpYnV0b3IiXSwiaWF0IjoxNjQzMTAzOTIwLCJleHAiOjE2NDMxMDc1MjB9.W8r1jAodQDoXeYwICvVSzAOX0eQetVAwyRDWnAlu_tA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBOEZFRjEtQkIyMS1FQzExLUI2NjUtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIiwiZHNwIiwic3ViZGlzdHJpYnV0b3IiXSwiaWF0IjoxNjQzMjA4NTI4LCJleHAiOjE2NDMyMTIxMjh9.H-aCZH73_ASgK0spLHFkTHdknO8OSVNRorkfwMNlF4s
 
 {
-    "caesar": "AA7E433E-F36B-1410-8206-00BFC2301278",
+    "caesar": "6120D492-245E-EC11-B672-00E18CEF5938",
     "amount": 100
 }
+###
+GET http://localhost:6006/caesar?account_type=admin

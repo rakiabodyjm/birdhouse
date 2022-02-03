@@ -17,11 +17,11 @@ GET http://localhost:6006/asset/
 ## if Duplicate found
 ## Inventory is added
 POST http://localhost:6006/inventory/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBOEZFRjEtQkIyMS1FQzExLUI2NjUtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIiwiZHNwIiwic3ViZGlzdHJpYnV0b3IiXSwiaWF0IjoxNjQzMDEzOTAzLCJleHAiOjE2NDMwMTc1MDN9.cSu0Rh6z9BvFlfVq07PrHm5NkuXvqBEugdFzbG4dLUg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBOEZFRjEtQkIyMS1FQzExLUI2NjUtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIiwiZHNwIiwic3ViZGlzdHJpYnV0b3IiXSwiaWF0IjoxNjQzMjcxMjg3LCJleHAiOjE2NDMyNzQ4ODd9.MItDIPzHKDnknDSxYxaS1r4vpLpSgUVMPRXnOlBjMQ4
 Content-Type: application/json
 
 {
-    "quantity":50,
+    "quantity":50.5,
     "asset": "7C9E3648-0047-EC11-B66C-00E18CEF5938", 
     "caesar": "AC7E433E-F36B-1410-8206-00BFC2301278"
     
@@ -29,7 +29,7 @@ Content-Type: application/json
 ###
 # GET http://localhost:6006/inventory?asset=7C9E3648-0047-EC11-B66C-00E18CEF5938
 
-GET http://localhost:6006/inventory?subdistributor=FDC28593-B957-EC11-B670-00E18CEF5938
+GET http://localhost:6006/inventory
 
 
 ###

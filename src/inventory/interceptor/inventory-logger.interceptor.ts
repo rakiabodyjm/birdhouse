@@ -8,7 +8,7 @@ import {
 import { Reflector } from '@nestjs/core'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Request } from 'express'
-import { catchError, map, Observable } from 'rxjs'
+import { Observable } from 'rxjs'
 import { ROLES_KEY } from 'src/auth/decorators/roles.decorator'
 import { CaesarService } from 'src/caesar/caesar.service'
 import { InventoryLog } from 'src/inventory/entities/inventory-logs.entity'

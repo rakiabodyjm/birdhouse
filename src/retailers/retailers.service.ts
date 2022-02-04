@@ -140,7 +140,7 @@ export class RetailersService {
       retailer[key] = updateRetailerDto[key]
     })
 
-    await this.retailerRepository.update(id, retailer)
+    await this.retailerRepository.save(retailer)
     return retailer
 
     // return `This action updates a #${id} retailer`

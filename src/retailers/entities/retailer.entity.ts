@@ -24,7 +24,6 @@ export class Retailer {
     name: 'subdistributor_id',
   })
   @ManyToOne((type) => Subdistributor, (subd) => subd.retailer, {
-    onDelete: 'SET NULL',
     // eager: true,
   })
   subdistributor: Subdistributor

@@ -128,6 +128,21 @@ export class TransactionService {
        * Create inventory of buyer
        * and make payment to seller
        */
+      /**
+       * verify that buyer has enough caesar_coins
+       */
+      if (!allow_credit) {
+        await this.caesarService.findOne(buyerCaesar.id).then((cae) => {
+          if (cae.data.caesar_coin < costPriceBuyer * quantity) {
+            throw new Error(
+              `Buyer does not have enough caesar_coins to purchase this item (Required: ${
+                costPriceBuyer * quantity
+              } CCoins, Wallet Of Buyer: ${cae.data.caesar_coin} CCoins)`,
+            )
+          }
+        })
+      }
+
       const newInventory = await this.inventoryService
         .create({
           asset: inventoryToBeBought.asset,
@@ -137,28 +152,10 @@ export class TransactionService {
         })
         .then(async (res) => {
           /**
-           * verify that buyer has enough caesar_coins
-           */
-          if (!allow_credit) {
-            await this.caesarService
-              .findOne(buyerCaesar.id)
-              .then((cae) => {
-                if (cae.data.caesar_coin < costPriceBuyer * quantity) {
-                  throw new Error(
-                    `Buyer does not have enough caesar_coins to purchase this item (Required: ${
-                      costPriceBuyer * quantity
-                    }CCoins, Wallet Of Buyer: ${cae.data.caesar_coin} CCoins)`,
-                  )
-                }
-              })
-              .catch((err) => {
-                throw err
-              })
-          }
-          /**
            * make payment to seller after successfully adding to buyer's
            * inventory
            */
+          console.log('reached payment')
           const payment1 = await this.caesarService.pay(
             sellerCaesar,
             costPriceBuyer * quantity,

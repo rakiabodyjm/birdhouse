@@ -263,7 +263,9 @@ export class CaesarService {
     } else {
       return Promise.all(
         localCaesar.map(async (caesar) => {
-          return { ...(await this.injectExternalCaesar(caesar)) }
+          return plainToClass(Caesar, {
+            ...(await this.injectExternalCaesar(caesar)),
+          })
         }),
       )
     }

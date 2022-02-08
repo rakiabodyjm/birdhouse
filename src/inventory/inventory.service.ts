@@ -39,9 +39,6 @@ export class InventoryService {
     caesar: Caesar
     unit_price?: number
   }) {
-    // const caesar = await this.caesarService.findOne(caesarParam)
-
-    // const asset = await this.assetService.findOne(assetParam)
     /**
      * if inventory already exists
      */
@@ -52,9 +49,10 @@ export class InventoryService {
       console.error(err)
       throw new Error(err.message)
     })
-    console.log('duplicateInventory found', duplicateInventory)
 
     if (duplicateInventory) {
+      console.log('duplicateInventory found', duplicateInventory)
+
       return this.update(duplicateInventory.id, {
         ...duplicateInventory,
         quantity: duplicateInventory.quantity + quantity,
@@ -88,7 +86,9 @@ export class InventoryService {
       quantity,
     })
 
-    return this.inventoryRepository.save(newInventory)
+    return this.inventoryRepository.save(newInventory).catch((err) => {
+      throw new Error(err)
+    })
   }
 
   async findAll(getAllInventoryDto?: GetAllInventoryDto) {

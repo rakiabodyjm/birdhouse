@@ -221,22 +221,6 @@ export class CaesarService {
     return query
   }
 
-  injectCaesar<T extends Record<any, any>>(
-    entities: T[],
-    entity: UserTypesAndUser,
-  ): Promise<T[]> {
-    return Promise.all(
-      entities.map(async (ea) => ({
-        ...ea,
-        caesar_wallet: await this.findOne({
-          [entity]: ea.id,
-        }).catch((err) => {
-          return null
-        }),
-      })),
-    )
-  }
-
   findOne<T = GetCaesarDto>(accountQuery: T): Promise<Caesar>
   findOne<T = string>(caesarId: T): Promise<Caesar>
   findOne(id: GetCaesarDto | string) {

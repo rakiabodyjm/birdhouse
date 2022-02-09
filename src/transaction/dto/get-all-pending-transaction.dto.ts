@@ -1,13 +1,13 @@
 import { PartialType } from '@nestjs/swagger'
 import { IsOptional, IsUUID } from 'class-validator'
-import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
+import { PendingTransaction } from 'src/transaction/entities/pending-transaction.entity'
 import { PaginateOptions } from 'src/types/Paginated'
 
 export default class GetAllPendingTransactionDto extends PartialType(
   PaginateOptions,
 ) {
-  @ExistsInDb(Caesar, 'caesar_buyer', {
+  @ExistsInDb(PendingTransaction, 'caesar_buyer', {
     message: `Caesar has no pending transactions as buyer`,
   })
   @IsOptional()
@@ -15,7 +15,7 @@ export default class GetAllPendingTransactionDto extends PartialType(
   caesar_buyer?: string
 
   @IsOptional()
-  @ExistsInDb(Caesar, 'caesar_seller', {
+  @ExistsInDb(PendingTransaction, 'caesar_seller', {
     message: `Caesar has no pending transactions as seller`,
   })
   @IsUUID()

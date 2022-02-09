@@ -60,6 +60,7 @@ export class TransactionController {
         await this.transactionService
           .newVerifyIfApprovalNeeded(inventory_from, buyer)
           .then((res) => {
+            console.log('approvals', res)
             if (res) {
               return Object.keys(res).reduce((acc, caesarType) => {
                 return {
@@ -73,11 +74,11 @@ export class TransactionController {
           })
       if (approvals) {
         const inventory = await this.inventoryService.findOne(inventory_from)
-
         const caesar_buyer = await this.caesarService.findOne(buyer)
         /**
          * generate unique purchase_id
          */
+        console.log(caesar_buyer)
         const pending_purchase_id = v4()
         return {
           pending_transactions: await Promise.all(

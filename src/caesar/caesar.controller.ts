@@ -81,7 +81,9 @@ export class CaesarController {
   }
 
   @Get('search')
-  search(@Query() searchCaesarDto: SearchCaesarDto) {
+  search(
+    @Query() searchCaesarDto: SearchCaesarDto,
+  ): Promise<Paginated<Caesar>> {
     return this.caesarService.search(searchCaesarDto).catch((err) => {
       throw new InternalServerErrorException(err.message)
     })

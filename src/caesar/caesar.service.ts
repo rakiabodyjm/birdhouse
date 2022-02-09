@@ -76,7 +76,6 @@ export class CaesarService {
   async findAll(
     params?: GetAllCaesarDto,
   ): Promise<Paginated<Caesar> | Caesar[]> {
-    console.log(params)
     if (!isNotEmptyObject(params)) {
       return await this.caesarRepository
         .find({
@@ -88,8 +87,10 @@ export class CaesarService {
             }),
           },
         })
-        .then((res) => {
-          return this.injectExternalCaesar(res)
+        .then(async (res) => {
+          return this.removeNullsFromCaesarArray(
+            await this.injectExternalCaesar(res),
+          )
         })
     } else {
       return await paginateFind<Caesar>(this.caesarRepository, params, {
@@ -108,7 +109,7 @@ export class CaesarService {
         )
         return {
           ...paginatedCaesar,
-          data: externalCaesarData,
+          data: this.removeNullsFromCaesarArray(externalCaesarData),
         }
       })
     }
@@ -120,6 +121,10 @@ export class CaesarService {
         return `Caesar Cleared`
       })
     }
+  }
+
+  private removeNullsFromCaesarArray(params: Caesar[]) {
+    return params.filter((ea) => !!ea).map((ea) => plainToClass(Caesar, ea))
   }
 
   search(searchCaesarDto: SearchCaesarDto) {
@@ -192,9 +197,13 @@ export class CaesarService {
       .skip(page * limit)
       .getManyAndCount()
       .then(async ([res, count]) => {
-        return [await this.injectExternalCaesar(res), count]
+        // const returner = [await this.injectExternalCaesar(res), count]
+        return {
+          caesars: this.removeNullsFromCaesarArray(res),
+          count,
+        }
       })
-      .then(([res, count]) => {
+      .then(({ caesars: res, count }) => {
         return {
           data: res,
           metadata: {
@@ -294,7 +303,9 @@ export class CaesarService {
         ...localCaesar,
         data: caesarExternalData,
       }
-      return plainToClass(Caesar, caesarWithData)
+
+      const returnInject = plainToClass(Caesar, caesarWithData)
+      return returnInject
     } else {
       return Promise.all(
         localCaesar.map(async (caesar) => {

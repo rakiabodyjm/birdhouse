@@ -199,7 +199,9 @@ export class CaesarService {
       .then(async ([res, count]) => {
         // const returner = [await this.injectExternalCaesar(res), count]
         return {
-          caesars: this.removeNullsFromCaesarArray(res),
+          caesars: await this.injectExternalCaesar(
+            this.removeNullsFromCaesarArray(res),
+          ),
           count,
         }
       })

@@ -199,9 +199,11 @@ export class CaesarService {
       .then(async ([res, count]) => {
         // const returner = [await this.injectExternalCaesar(res), count]
         return {
-          caesars: await this.injectExternalCaesar(
-            this.removeNullsFromCaesarArray(res),
-          ),
+          caesars: (
+            await this.injectExternalCaesar(
+              this.removeNullsFromCaesarArray(res),
+            )
+          ).map((ea) => plainToClass(Caesar, ea)),
           count,
         }
       })

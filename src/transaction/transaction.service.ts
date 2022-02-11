@@ -88,6 +88,9 @@ export class TransactionService {
       {
         where: whereQuery,
         relations: this.relations,
+        order: {
+          created_at: 'DESC',
+        },
       },
     )
   }

@@ -1,4 +1,4 @@
-import { Expose } from 'class-transformer'
+import { CaesarService } from 'src/caesar/caesar.service'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import Inventory from 'src/inventory/entities/inventory.entity'
 import { Transaction } from 'src/transaction/entities/transaction.entity'
@@ -7,6 +7,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -14,6 +15,7 @@ import {
 } from 'typeorm'
 
 @Entity()
+@Index(<(keyof PendingTransaction)[]>['id', 'pending_purchase_id'])
 export class PendingTransaction {
   @PrimaryGeneratedColumn('increment')
   id: string

@@ -17,6 +17,7 @@ import { CaesarApiService } from 'src/caesar/ceasar-api.service'
 import { SearchCaesarDto } from 'src/caesar/dto/search-caesar.dto'
 import { plainToClass } from 'class-transformer'
 import { ConfigService } from '@nestjs/config'
+import createQueryBuilderAndIncludeRelations from 'src/utils/queryBuilderWithRelations'
 
 @Injectable()
 export class CaesarService {
@@ -75,7 +76,6 @@ export class CaesarService {
   async findAll(
     params?: GetAllCaesarDto,
   ): Promise<Paginated<Caesar> | Caesar[]> {
-    console.log(params)
     if (!isNotEmptyObject(params)) {
       return await this.caesarRepository
         .find({
@@ -87,8 +87,10 @@ export class CaesarService {
             }),
           },
         })
-        .then((res) => {
-          return this.injectExternalCaesar(res)
+        .then(async (res) => {
+          return this.removeNullsFromCaesarArray(
+            await this.injectExternalCaesar(res),
+          )
         })
     } else {
       return await paginateFind<Caesar>(this.caesarRepository, params, {
@@ -107,7 +109,7 @@ export class CaesarService {
         )
         return {
           ...paginatedCaesar,
-          data: externalCaesarData,
+          data: this.removeNullsFromCaesarArray(externalCaesarData),
         }
       })
     }
@@ -121,72 +123,102 @@ export class CaesarService {
     }
   }
 
+  private removeNullsFromCaesarArray(params: Caesar[]) {
+    return params.filter((ea) => !!ea).map((ea) => plainToClass(Caesar, ea))
+  }
+
   search(searchCaesarDto: SearchCaesarDto) {
     const { searchQuery } = searchCaesarDto
+    const { page = 0, limit = 100 } = searchCaesarDto
     delete searchCaesarDto.searchQuery
     const likeSearchQuery = Like(`%${searchQuery}%`)
     /**
      *
      */
-    return paginateFind(
-      this.caesarRepository,
-      {
-        ...(searchCaesarDto as Omit<SearchCaesarDto, 'searchQuery'>),
-      },
-      {
-        ...(!!searchQuery?.length && {
-          where: [
-            {
-              subdistributor: {
-                name: likeSearchQuery,
-              },
-            },
-            {
-              dsp: {
-                dsp_code: likeSearchQuery,
-              },
-            },
-            {
-              user: {
-                first_name: likeSearchQuery,
-              },
-            },
-            {
-              user: {
-                last_name: likeSearchQuery,
-              },
-            },
-            {
-              admin: {
-                name: likeSearchQuery,
-              },
-            },
-            {
-              retailer: {
-                store_name: likeSearchQuery,
-              },
-            },
-          ],
-        }),
-        relations: this.relations,
-      },
-    )
-  }
+    // return paginateFind(
+    //   this.caesarRepository,
+    //   {
+    //     ...(searchCaesarDto as Omit<SearchCaesarDto, 'searchQuery'>),
+    //   },
+    //   {
+    //     ...(!!searchQuery?.length && {
+    //       where: [
+    //         {
+    //           subdistributor: {
+    //             name: likeSearchQuery,
+    //           },
+    //         },
+    //         {
+    //           dsp: {
+    //             dsp_code: likeSearchQuery,
+    //           },
+    //         },
+    //         {
+    //           user: {
+    //             first_name: likeSearchQuery,
+    //           },
+    //         },
+    //         {
+    //           user: {
+    //             last_name: likeSearchQuery,
+    //           },
+    //         },
+    //         {
+    //           admin: {
+    //             name: likeSearchQuery,
+    //           },
+    //         },
+    //         {
+    //           retailer: {
+    //             store_name: likeSearchQuery,
+    //           },
+    //         },
+    //       ],
+    //     }),
+    //     relations: this.relations,
+    //   },
+    // )
 
-  injectCaesar<T extends Record<any, any>>(
-    entities: T[],
-    entity: UserTypesAndUser,
-  ): Promise<T[]> {
-    return Promise.all(
-      entities.map(async (ea) => ({
-        ...ea,
-        caesar_wallet: await this.findOne({
-          [entity]: ea.id,
-        }).catch((err) => {
-          return null
-        }),
-      })),
-    )
+    const query = createQueryBuilderAndIncludeRelations(this.caesarRepository, {
+      entityName: 'caesar',
+      relations: this.relations,
+    })
+      .where('subdistributor.name like :searchString')
+      .orWhere('dsp.dsp_code like :searchString')
+      .orWhere('user.first_name like :searchString')
+      .orWhere('user.last_name like :searchString')
+      .orWhere('admin.name like :searchString')
+      .orWhere('retailer.store_name like :searchString')
+      .setParameters({
+        searchString: `%${searchQuery}%`,
+      })
+      .orderBy('caesar.created_at', 'DESC')
+      .take(limit)
+      .skip(page * limit)
+      .getManyAndCount()
+      .then(async ([res, count]) => {
+        // const returner = [await this.injectExternalCaesar(res), count]
+        return {
+          caesars: (
+            await this.injectExternalCaesar(
+              this.removeNullsFromCaesarArray(res),
+            )
+          ).map((ea) => plainToClass(Caesar, ea)),
+          count,
+        }
+      })
+      .then(({ caesars: res, count }) => {
+        return {
+          data: res,
+          metadata: {
+            limit,
+            page,
+            total: count,
+            total_page: Math.ceil((count as number) / limit),
+          },
+        } as Paginated<Caesar>
+      })
+    return query
   }
 
   findOne<T = GetCaesarDto>(accountQuery: T): Promise<Caesar>
@@ -259,7 +291,9 @@ export class CaesarService {
         ...localCaesar,
         data: caesarExternalData,
       }
-      return plainToClass(Caesar, caesarWithData)
+
+      const returnInject = plainToClass(Caesar, caesarWithData)
+      return returnInject
     } else {
       return Promise.all(
         localCaesar.map(async (caesar) => {

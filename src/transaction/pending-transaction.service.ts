@@ -1,6 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { plainToClass } from 'class-transformer'
+import { CaesarService } from 'src/caesar/caesar.service'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import Inventory from 'src/inventory/entities/inventory.entity'
 import GetAllPendingTransactionDto from 'src/transaction/dto/get-all-pending-transaction.dto'
@@ -19,6 +20,7 @@ export class PendingTransactionService {
     private transactionService: TransactionService,
     @InjectRepository(Transaction)
     private transactionRepo: Repository<Transaction>,
+    private caesarService: CaesarService,
   ) {}
 
   // private transactionService: TransactionService
@@ -48,6 +50,9 @@ export class PendingTransactionService {
         limit,
       },
       {
+        order: {
+          created_at: 'DESC',
+        },
         // ...(caesar && {
         //   caesar: {
         //     id: caesar,
@@ -73,10 +78,40 @@ export class PendingTransactionService {
           withDeleted: true,
         }),
       },
-    )
+    ).then(async (res) => {
+      return {
+        ...res,
+        data: await this.injectPendingTransactionWithCaesar(res.data),
+      }
+    })
   }
 
-  async create({
+  async injectPendingTransactionWithCaesar<T = PendingTransaction>(
+    pendingTransaction: T,
+  ): Promise<T>
+  async injectPendingTransactionWithCaesar<T = PendingTransaction[]>(
+    pendingTransaction: T[],
+  ): Promise<T>
+  async injectPendingTransactionWithCaesar(pendingTransaction: unknown) {
+    if (!Array.isArray(pendingTransaction)) {
+      const pt = { ...(pendingTransaction as PendingTransaction) }
+      return {
+        ...pt,
+        caesar_buyer: await this.caesarService.findOne(pt.caesar_buyer.id),
+        caesar_seller: await this.caesarService.findOne(pt.caesar_seller.id),
+      } as PendingTransaction
+    } else if (Array.isArray(pendingTransaction)) {
+      return await Promise.all(
+        pendingTransaction.map((ea) =>
+          this.injectPendingTransactionWithCaesar(ea),
+        ),
+      )
+    } else {
+      throw new Error(`Not of accepted type`)
+    }
+  }
+
+  create({
     caesar_buyer,
     caesar_seller,
     inventory,
@@ -101,9 +136,11 @@ export class PendingTransactionService {
   }
 
   async findOne(id: string) {
-    const query = await this.pendingTransactionRepo.findOneOrFail(id, {
-      relations: this.relations,
-    })
+    const query = await this.pendingTransactionRepo
+      .findOneOrFail(id, {
+        relations: this.relations,
+      })
+      .then((res) => this.injectPendingTransactionWithCaesar(res))
     return query
   }
 
@@ -224,6 +261,9 @@ export class PendingTransactionService {
 
   private async getDuplicatePendingTransactions(
     id: PendingTransaction['id'],
+    /**
+     * Ignores passed transaction parameter in return transactions array
+     */
     ignoreCurrent?:
       | true
       | {
@@ -251,5 +291,41 @@ export class PendingTransactionService {
     pendingTransactions: PendingTransaction[],
   ) {
     return !pendingTransactions.some((element) => element.approved === false)
+  }
+
+  async cancelPendingTransaction(id: string) {
+    const pendingTransaction = await this.findOne(id)
+    const duplicates = await this.getDuplicatePendingTransactions(id)
+    if (duplicates?.length > 0) {
+      await Promise.all(
+        duplicates.map(async (ea) => {
+          await this.pendingTransactionRepo.softDelete(ea)
+        }),
+      )
+        .then((res) => {
+          return 'Cancelled ' + res.length + 'Pending Transactions'
+        })
+        .catch((err) => {
+          throw new Error(err)
+        })
+      return `Pending Transaction/s Cancelled`
+    }
+    if (pendingTransaction.approved) {
+      throw new Error(`Pending Transaction is already approved`)
+    }
+
+    await this.pendingTransactionRepo.softDelete(id)
+    return pendingTransaction
+  }
+  async denyPendingTransaction(id: string) {
+    const pendingTransaction = await this.findOne(id)
+
+    if (!pendingTransaction.approved) {
+      throw new Error(`Pending Transaction is already approved`)
+    }
+    return this.pendingTransactionRepo.save({
+      ...pendingTransaction,
+      approved: true,
+    })
   }
 }

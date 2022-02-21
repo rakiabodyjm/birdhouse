@@ -24,12 +24,17 @@ import { GetUserDto } from 'src/user/dto/get-user.dto'
 import { Paginated } from 'src/types/Paginated'
 import { plainToClass } from 'class-transformer'
 import { GetUserDtoQuery } from 'src/user/dto/get-user-query.dto'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
 
 @ApiTags('User Routes')
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    @InjectRepository(User) private userRepository: Repository<User>,
+  ) {}
 
   @Post()
   async create(

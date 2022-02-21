@@ -1,4 +1,3 @@
-import { Caesar } from 'src/caesar/entities/caesar.entity'
 import {
   Column,
   CreateDateColumn,
@@ -7,6 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm'
+import { Caesar } from 'src/caesar/entities/caesar.entity'
 
 @Entity()
 export class InventoryLog {
@@ -25,9 +25,7 @@ export class InventoryLog {
   @JoinColumn({
     name: 'caesar_id',
   })
-  @ManyToOne((type) => Caesar, (caesar) => caesar.inventoryLogs, {
-    eager: true,
-  })
+  @ManyToOne((type) => Caesar, (caesar) => caesar.inventoryLogs)
   caesar: Caesar
 
   @CreateDateColumn()

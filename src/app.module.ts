@@ -15,6 +15,7 @@ import { ExternalCaesarModule } from './external-caesar/external-caesar.module'
 import { AssetModule } from './asset/asset.module'
 import { InventoryModule } from './inventory/inventory.module'
 import { TransactionModule } from './transaction/transaction.module'
+import { InventoryLogModule } from './inventorylog/inventorylog.module'
 import SQLConfig from 'root/ormconfig'
 
 @Module({
@@ -41,6 +42,7 @@ import SQLConfig from 'root/ormconfig'
     InventoryModule,
     AssetModule,
     TransactionModule,
+    InventoryLogModule,
   ],
   controllers: [AppController],
   providers: [AppService],

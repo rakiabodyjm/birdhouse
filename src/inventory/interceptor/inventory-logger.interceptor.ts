@@ -12,6 +12,8 @@ import { catchError, map, Observable, throwError } from 'rxjs'
 import { ROLES_KEY } from 'src/auth/decorators/roles.decorator'
 import { CaesarService } from 'src/caesar/caesar.service'
 import { InventoryLog } from 'src/inventory/entities/inventory-logs.entity'
+import Inventory from 'src/inventory/entities/inventory.entity'
+import { InventoryService } from 'src/inventory/inventory.service'
 import { Roles } from 'src/types/Roles'
 import { Repository } from 'typeorm'
 
@@ -22,6 +24,7 @@ export class InventoryLoggerInterceptor implements NestInterceptor {
     @InjectRepository(InventoryLog)
     private inventoryLogsRepository: Repository<InventoryLog>,
     private reflector: Reflector,
+    private inventoryService: InventoryService, // private inventoryRepository: Repository<Inventory>
   ) {}
   async intercept(
     context: ExecutionContext,
@@ -71,20 +74,31 @@ export class InventoryLoggerInterceptor implements NestInterceptor {
     // console.log('handle2')
     // return next.handle()
     // // .pipe(tap(() => console.log(`After ... ${Date.now() - now}ms`)))
+
     const role = this.reflector.getAllAndOverride<Roles[]>(ROLES_KEY, [
       context.getHandler(),
       context.getClass(),
     ])
+
     const { user } = req
 
     const inventoryLog = this.inventoryLogsRepository.create({
       created_at: new Date(),
-      data: JSON.stringify(req?.body),
+      data:
+        req.method !== 'PATCH'
+          ? JSON.stringify(req?.body)
+          : JSON.stringify({
+              ...objectDiff2(
+                await this.inventoryService.findOne(req.params.id),
+                req.body,
+              ),
+            }),
       method: req.method as keyof typeof RequestMethod,
       caesar: await this.caesarService.findOne({
         [role[0]]: user[`${role[0]}`],
       }),
     })
+
     return next.handle().pipe(
       map(async (data) => {
         inventoryLog.remarks = 'SUCCESS'
@@ -98,4 +112,58 @@ export class InventoryLoggerInterceptor implements NestInterceptor {
       }),
     )
   }
+}
+
+/**
+ * Function to determine difference in object values
+ * object1 type is exactly the same type as object2 type
+ */
+const objectDiff = (oldValue, newValue): Partial<InventoryLog> => {
+  const sort = (obj) =>
+    Object.entries(obj)
+      .sort(([keyA], [keyB]) =>
+        keyA.toLowerCase().localeCompare(keyB.toLowerCase()),
+      )
+      .reduce(
+        (acc, [key, value]) => ({
+          ...acc,
+          [key]: typeof value === 'object' ? sort(value) : value,
+        }),
+        {},
+      )
+
+  const sorted1 = sort(oldValue)
+  const sorted2 = sort(newValue)
+
+  return Object.entries(sorted1).reduce((acc, [key, value]) => {
+    // let equality: boolean
+    if (JSON.stringify(value) !== JSON.stringify(sorted2[key])) {
+      return {
+        ...acc,
+        [key]: sorted2[key],
+      }
+    }
+    return acc
+  }, {})
+
+  // arranged1 = Object.entries(obj1).sort(([keyA, valueA], [keyB, valueB]))
+
+  // const arranged1 = Object.values(obj1).
+}
+
+/**
+ * Function to determine difference in object types
+ * object1 is of Type and object2 is of Partial Type
+ */
+const objectDiff2 = (obj1, obj2) => {
+  return Object.entries(obj2).reduce(
+    (acc, [key, value]) => ({
+      ...acc,
+      ...(obj1[key] !== value && {
+        [`${key}_from`]: obj1[key],
+        [`${key}_to`]: value,
+      }),
+    }),
+    {},
+  )
 }

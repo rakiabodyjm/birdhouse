@@ -14,6 +14,8 @@ export class InventoryLogService {
   ) {}
 
   findAll(params: GetAllInventoryLogDto) {
-    return paginateFind(this.inventoryLogRepo, params, {})
+    return paginateFind(this.inventoryLogRepo, params, {
+      order: { created_at: 'DESC' },
+    })
   }
 }

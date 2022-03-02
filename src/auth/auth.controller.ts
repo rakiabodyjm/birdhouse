@@ -6,16 +6,20 @@ import {
   Param,
   Post,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { AuthGuard } from '@nestjs/passport'
 import { ApiTags } from '@nestjs/swagger'
-import { Request } from 'express'
+import { Request, Response } from 'express'
+import { Public } from 'src/auth/decorators/public.decorator'
+
 import { Role } from 'src/auth/decorators/roles.decorator'
 import { LoginUserDto } from 'src/auth/dto/login.dto'
 import { RolesGuard } from 'src/auth/guards/roles.guard'
 import { Roles } from 'src/types/Roles'
+import { User } from 'src/user/entities/user.entity'
 import { UserService } from 'src/user/user.service'
 import { AuthService } from './auth.service'
 @ApiTags('Authentication Routes')
@@ -27,9 +31,20 @@ export class AuthController {
     private readonly userService: UserService,
   ) {}
 
+  @Public()
   @UseGuards(AuthGuard('local'))
   @Post('login')
-  async login(@Req() req, @Body() loginBody: LoginUserDto) {
+  async login(
+    @Req()
+    req: Request & {
+      user: User
+    },
+    @Body() loginBody: LoginUserDto,
+    @Res({
+      passthrough: true,
+    })
+    res: Response,
+  ) {
     const { email, password, remember_me } = loginBody
     const user = req.user
     // console.log(req.user)
@@ -53,9 +68,36 @@ export class AuthController {
                 : '30m'
               : remember_me
               ? '1d'
-              : '1h',
+              : '4h',
         },
       )
+      /**
+       *
+       * number in hours
+       * @param param
+       * @returns
+       */
+      const getExpiry = (param: number) => {
+        return new Date(Date.now() + 1000 * 60 * (param * 60))
+      }
+      const cookieExpiry =
+        process.env.NODE_ENV === 'development'
+          ? remember_me
+            ? getExpiry(1)
+            : getExpiry(0.5)
+          : remember_me
+          ? getExpiry(24)
+          : getExpiry(4)
+
+      res.cookie('ra', access_token, {
+        httpOnly: true,
+        expires: cookieExpiry,
+        domain: 'localhost.com',
+        sameSite: true,
+        signed: true,
+        // encode: (val) => access_token,
+      })
+
       return {
         message: 'Access Granted',
         access_token,
@@ -86,5 +128,36 @@ export class AuthController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   getOnlyAsAdmin() {
     return 'hello admin'
+  }
+
+  @Post('/logout')
+  logout(
+    @Req() req: Request,
+    @Res({
+      passthrough: true,
+    })
+    res: Response,
+  ) {
+    res.cookie('ra', req.signedCookies.ra, {
+      httpOnly: true,
+      // expires: new Date(Date.now() + 1000 * 60),
+      expires: new Date(Date.now()),
+
+      domain: 'localhost.com',
+      sameSite: true,
+      signed: true,
+      // encode: (val) => access_token,
+    })
+
+    return {
+      message: `Succesfully logged out`,
+    }
+  }
+
+  // @Public()
+  // @UseGuards(SiteAccessGuard)
+  @Get('/is-cookie')
+  cookie(@Req() req: Request) {
+    return 'hi'
   }
 }

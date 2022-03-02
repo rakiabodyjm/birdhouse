@@ -114,7 +114,7 @@ export class User {
     /**
      * "cascade" ensures changes to user entity will affect the other one
      */
-    cascade: true,
+    // cascade: true,
 
     /**
      * "eager" loads relationship so we don't have to specify relationship on find

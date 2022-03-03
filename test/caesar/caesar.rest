@@ -25,7 +25,7 @@ DELETE http://localhost:6006/caesar
 
 
 ###
-GET http://localhost:6006/caesar/search?searchQuery=dsp&page=0
+GET http://localhost:6006/caesar/search?page=0&searchQuery=""
 
 ###TEST-PAY
 

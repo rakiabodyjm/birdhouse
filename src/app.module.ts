@@ -49,6 +49,9 @@ import { SiteAccessGuard } from 'src/guards/site-access.guard'
     TransactionModule,
     JwtModule.registerAsync({
       useFactory: async (configservice: ConfigService) => ({
+        verifyOptions: {
+          ignoreExpiration: false,
+        },
         secret: configservice.get<string>('SECRET_KEY'),
       }),
       inject: [ConfigService],

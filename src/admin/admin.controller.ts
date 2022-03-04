@@ -1,3 +1,4 @@
+import { SearchAdminDto } from './dto/search-admin.dto'
 import {
   Controller,
   Get,
@@ -9,6 +10,7 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   Query,
+  InternalServerErrorException,
 } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { GetAllAdminDto } from 'src/admin/dto/get-all-admin.dto'
@@ -27,6 +29,15 @@ export class AdminController {
   @Post()
   create(@Body() createAdminDto: CreateAdminDto): Promise<Admin> {
     return this.adminService.create(createAdminDto)
+  }
+
+  @Get('search')
+  search(@Query() searchAdminDto: SearchAdminDto) {
+    return this.adminService
+      .search(searchAdminDto['searchQuery'])
+      .catch((err) => {
+        throw new InternalServerErrorException(err.message)
+      })
   }
 
   @Get()

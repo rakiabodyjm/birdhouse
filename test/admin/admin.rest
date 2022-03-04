@@ -26,3 +26,6 @@ GET http://localhost:6006/admin?page=0&limit=3
 
 ### GET 
 GET http://localhost:6006/admin/0A03B39E-C121-EC11-B665-00E18CEF5938
+
+###
+GET http://localhost:6006/admin/search?searchQuery=Admin

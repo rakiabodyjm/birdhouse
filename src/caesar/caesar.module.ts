@@ -13,14 +13,17 @@ import { CaesarApiController } from 'src/caesar/caesar-api.controller'
     CacheModule.register(),
     TypeOrmModule.forFeature([Caesar]),
     forwardRef(() => UserModule),
+    ConfigModule,
     HttpModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
         baseURL: configService.get('REST_HOST'),
+        headers: {
+          'pay-caesar-secret': configService.get('SECRET_KEY'),
+        },
       }),
       inject: [ConfigService],
     }),
-    ConfigModule,
   ],
   controllers: [CaesarController, CaesarApiController],
   providers: [CaesarService, CaesarApiService],

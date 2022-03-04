@@ -67,9 +67,21 @@ import { SiteAccessGuard } from 'src/guards/site-access.guard'
             useClass: JwtAuthGuard,
             // inject: [JwtService],
           },
-          SiteAccessGuard,
+          {
+            provide: 'APP_GUARD',
+            useClass: SiteAccessGuard,
+          },
         ]
-      : []),
+      : [
+          {
+            provide: 'APP_GUARD',
+            useClass: JwtAuthGuard,
+          },
+          {
+            provide: 'APP_GUARD',
+            useClass: SiteAccessGuard,
+          },
+        ]),
 
     AppService,
   ],

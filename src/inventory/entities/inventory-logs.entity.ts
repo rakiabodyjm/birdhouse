@@ -1,4 +1,5 @@
 import { Caesar } from 'src/caesar/entities/caesar.entity'
+import Inventory from 'src/inventory/entities/inventory.entity'
 import {
   Column,
   CreateDateColumn,
@@ -36,4 +37,12 @@ export class InventoryLog {
 
   @CreateDateColumn()
   created_at: Date
+}
+
+export type InventoryLogData = {
+  id: string
+  name: string
+  description: string
+  created: Inventory
+  updated: Partial<Inventory>
 }

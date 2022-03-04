@@ -36,6 +36,7 @@ Content-Type: application/json
  
 ### SHOW ALL USERS
 GET http://localhost:6006/user
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNkUwNjQzM0UtRjM2Qi0xNDEwLTgyMDktMDBCRkMyMzAxMjc4IiwiZW1haWwiOiJqbV9wb2dpMzEwIiwiZmlyc3RfbmFtZSI6IkphbmVvIE1pZ3VlbCIsImxhc3RfbmFtZSI6IlRpb25nc29uIiwicm9sZXMiOlsiZHNwIiwic3ViZGlzdHJpYnV0b3IiXSwiaWF0IjoxNjQ2MjQ5MDY1LCJleHAiOjE2NDYyNTI2NjV9.qzMq4vcjaCrvjeFy13DNbXfmDsuPxjJ8U0USSztM5go
 
 
 ### CLEAR ALL USERS

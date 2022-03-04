@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { InventoryLog } from 'src/inventory/entities/inventory-logs.entity'
+import { InventoryLog } from 'src/inventorylog/entities/inventory-logs.entity'
 import paginateFind from 'src/utils/paginate'
 import { Repository } from 'typeorm'
 // import { CreateInventoryLogDto } from './dto/create-inventorylog.dto'

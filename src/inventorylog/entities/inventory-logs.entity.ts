@@ -30,7 +30,7 @@ export class InventoryLog {
   remarks: string
 
   @JoinColumn({
-    name: 'caesar_id',
+    name: 'caesar_account',
   })
   @ManyToOne((type) => Caesar, (caesar) => caesar.inventoryLogs, {
     eager: true,

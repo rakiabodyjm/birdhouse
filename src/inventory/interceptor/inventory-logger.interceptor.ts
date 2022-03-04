@@ -14,7 +14,7 @@ import { CaesarService } from 'src/caesar/caesar.service'
 import {
   InventoryLog,
   InventoryLogData,
-} from 'src/inventory/entities/inventory-logs.entity'
+} from 'src/inventorylog/entities/inventory-logs.entity'
 import { InventoryService } from 'src/inventory/inventory.service'
 import { Roles } from 'src/types/Roles'
 import { Repository } from 'typeorm'

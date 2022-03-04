@@ -3,27 +3,11 @@ import { NestFactory } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 import { AppModule } from './app.module'
 import * as chalk from 'chalk'
+import * as cookieParser from 'cookie-parser'
 import cliBoxes from 'cli-boxes'
 
 async function bootstrap() {
   let app = await NestFactory.create(AppModule)
-
-  /**
-   * Swagger Configuration
-   */
-  const swaggerConfig = new DocumentBuilder()
-    .setTitle('Realm1000 DITO API')
-    .setDescription('The REALM1000 | DITO Database API Documentation. ')
-    .setVersion('1.0')
-    .build()
-
-  const document = SwaggerModule.createDocument(app, swaggerConfig)
-  SwaggerModule.setup('api', app, document, {
-    swaggerOptions: {
-      tagSorter: 'alpha',
-      operationsSorter: 'alpha',
-    },
-  })
 
   /**
    * Global validation pipe
@@ -34,18 +18,17 @@ async function bootstrap() {
       whitelist: true,
     }),
   )
-  /**
-   * enable cors
-   */
+
   app.enableCors({
-    ...(process.env.NODE_ENV === 'production' && {
-      // credentials: true,
-      origin:
-        process.env.CLIENT_URL.indexOf(';') > -1
-          ? process.env.CLIENT_URL.split(';')
-          : process.env.CLIENT_URL,
-    }),
+    credentials: true,
+    origin:
+      process.env.CLIENT_URL.indexOf(';') > -1
+        ? process.env.CLIENT_URL.split(';')
+        : process.env.CLIENT_URL,
   })
+
+  app.use(cookieParser(process.env.SECRET_KEY || 'Oasis2089$'))
+
   const port = process.env.PORT || 6000
 
   await app.listen(port, () => {
@@ -85,6 +68,23 @@ ${chalk.greenBright('NODE_ENV: ') + chalk.yellow(process.env.NODE_ENV)}
 
 ${bottomBorder}
 `)
+  })
+
+  /**
+   * Swagger Configuration
+   */
+  const swaggerConfig = new DocumentBuilder()
+    .setTitle('Realm1000 DITO API')
+    .setDescription('The REALM1000 | DITO Database API Documentation. ')
+    .setVersion('1.0')
+    .build()
+
+  const document = SwaggerModule.createDocument(app, swaggerConfig)
+  SwaggerModule.setup('api', app, document, {
+    swaggerOptions: {
+      tagSorter: 'alpha',
+      operationsSorter: 'alpha',
+    },
   })
 }
 

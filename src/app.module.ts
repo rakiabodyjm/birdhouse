@@ -1,9 +1,12 @@
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard'
+import { JwtStrategy } from 'src/auth/strategies/jwt.strategy'
+import { JwtModule, JwtService } from '@nestjs/jwt'
 import { CacheModule, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { UserModule } from './user/user.module'
-import { ConfigModule } from '@nestjs/config'
+import { ConfigModule, ConfigService } from '@nestjs/config'
 import { MapIdsModule } from './map-ids/map-ids.module'
 import { DspModule } from './dsp/dsp.module'
 import { AdminModule } from './admin/admin.module'
@@ -16,6 +19,9 @@ import { AssetModule } from './asset/asset.module'
 import { InventoryModule } from './inventory/inventory.module'
 import { TransactionModule } from './transaction/transaction.module'
 import SQLConfig from 'root/ormconfig'
+import { JwtAuthInterceptor } from 'src/interceptors/jwt-auth.interceptor'
+import { AuthGuard } from '@nestjs/passport'
+import { SiteAccessGuard } from 'src/guards/site-access.guard'
 
 @Module({
   imports: [
@@ -41,8 +47,23 @@ import SQLConfig from 'root/ormconfig'
     InventoryModule,
     AssetModule,
     TransactionModule,
+    JwtModule.registerAsync({
+      useFactory: async (configservice: ConfigService) => ({
+        secret: configservice.get<string>('SECRET_KEY'),
+      }),
+      inject: [ConfigService],
+    }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    // AuthGuard('jwt'),
+    {
+      provide: 'APP_GUARD',
+      useClass: JwtAuthGuard,
+      // inject: [JwtService],
+    },
+    SiteAccessGuard,
+    AppService,
+  ],
 })
 export class AppModule {}

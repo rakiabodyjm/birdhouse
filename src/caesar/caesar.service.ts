@@ -272,11 +272,11 @@ export class CaesarService {
           {
             amount,
           },
-          {
-            headers: {
-              'pay-caesar-secret': this.configService.get('SECRET_KEY'),
-            },
-          },
+          // {
+          //   headers: {
+          //     'pay-caesar-secret': this.configService.get('SECRET_KEY'),
+          //   },
+          // },
         )
         .pipe(
           map((response: AxiosResponse) => response.data as ExternalCaesar),

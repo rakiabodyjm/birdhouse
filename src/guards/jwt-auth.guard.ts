@@ -1,3 +1,4 @@
+import { AuthGuard } from '@nestjs/passport'
 import { IS_PUBLIC_KEY } from './../auth/decorators/public.decorator'
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
@@ -7,17 +8,19 @@ import { User } from 'src/user/entities/user.entity'
 import { UserService } from 'src/user/user.service'
 
 @Injectable()
-export class JwtAuthGuard implements CanActivate {
+export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(
     private reflector: Reflector,
     private jwtService: JwtService,
     private userService: UserService,
-  ) {}
+  ) {
+    super()
+  }
   context: ExecutionContext
   exception = ['external-caesar']
   user: User
 
-  canActivate(context: ExecutionContext): boolean {
+  canActivate(context: ExecutionContext) {
     this.context = context
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
@@ -28,15 +31,7 @@ export class JwtAuthGuard implements CanActivate {
       return true
     }
 
-    const token = this.getTokenFromHeader()
-    if (!token) {
-      return false
-    }
-    const user = this.getUserFromToken(token)
-    if (!user) {
-      return false
-    }
-    return true
+    return super.canActivate(context)
   }
 
   /**
@@ -59,8 +54,6 @@ export class JwtAuthGuard implements CanActivate {
     const { url }: Request = this.context.switchToHttp().getRequest()
 
     const isException = this.exception.some((ea) => url.split('/').includes(ea))
-    // console.log('urlSplit', url.split('/'))
-    // console.log(url, 'isException? ', isException)
     return isException
   }
 

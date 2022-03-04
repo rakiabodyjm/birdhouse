@@ -17,27 +17,45 @@ import { JwtService } from '@nestjs/jwt'
 @Injectable()
 export class SiteAccessGuard implements CanActivate {
   constructor(
-    private reflector: Reflector,
     private jwtService: JwtService,
     private userService: UserService,
+    private reflector: Reflector,
   ) {}
-  canActivate(context: ExecutionContext) {
-    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ])
+  context: ExecutionContext
+  exception = ['external-caesar']
+
+  async canActivate(context: ExecutionContext) {
+    this.context = context
     const request: Request = context.switchToHttp().getRequest()
 
-    if (isPublic) {
-      console.log('isPublic, allowing bypass of SiteAccessGuard')
-      return true
-    }
     const user = request.user as User
 
     const cookie = request.signedCookies.ra
     if (!cookie) {
-      console.log('no Cookie found but are we allowing?: ', !!user?.admin)
-      return !!user?.admin
+      // console.log(
+      //   'no Cookie found but are we allowing?: ',
+      //   !!user?.admin || this.isException(),
+      // )
+      return !!user?.admin || this.isException()
     }
+
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ])
+
+    if (isPublic || this.isException()) {
+      return true
+    }
+    const cookieValid = await this.jwtService
+      .verifyAsync(cookie)
+      .catch((err) => false)
+    return !!cookieValid
+  }
+  isException() {
+    const { url }: Request = this.context.switchToHttp().getRequest()
+
+    const isException = this.exception.some((ea) => url.split('/').includes(ea))
+    return isException
   }
 }

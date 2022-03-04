@@ -1,3 +1,4 @@
+import { Public } from './../auth/decorators/public.decorator'
 import {
   Controller,
   Post,
@@ -25,6 +26,8 @@ import { ConfigService } from '@nestjs/config'
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('external-caesar')
 @ApiTags('External Caesar')
+@Public()
+@UseGuards(PayCaesarSecretGuard)
 export class ExternalCaesarController {
   constructor(
     private readonly externalCaesarService: ExternalCaesarService,
@@ -63,7 +66,6 @@ export class ExternalCaesarController {
     })
   }
 
-  @UseGuards(PayCaesarSecretGuard)
   @Post('topup/:id')
   topUp(
     @Param() { id }: TopUpExternalCaesarParamDto,

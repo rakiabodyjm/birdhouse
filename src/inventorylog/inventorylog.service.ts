@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { InventoryLog } from 'src/inventory/entities/inventory-logs.entity'
 import paginateFind from 'src/utils/paginate'
 import { Repository } from 'typeorm'
 // import { CreateInventoryLogDto } from './dto/create-inventorylog.dto'
 import { GetAllInventoryLogDto } from './dto/get-all-inventorylog.dto'
-import { InventoryLog } from './entities/inventorylog.entity'
+// import { InventoryLog } from './entities/inventorylog.entity'
 
 @Injectable()
 export class InventoryLogService {

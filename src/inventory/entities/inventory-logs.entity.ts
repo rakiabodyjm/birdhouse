@@ -9,7 +9,9 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm'
 
-@Entity()
+@Entity({
+  name: 'inventory_logs',
+})
 export class InventoryLog {
   @PrimaryGeneratedColumn('increment')
   id: string

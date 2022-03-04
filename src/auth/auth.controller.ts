@@ -109,14 +109,14 @@ export class AuthController {
     }
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   @Post('protect')
   async jwtRoute() {
     return 'hello world'
   }
 
   @Get('user')
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   async getUser(@Req() req: Request, @Param('id') id: string) {
     return {
       ...req.user,
@@ -125,7 +125,7 @@ export class AuthController {
 
   @Get('role')
   @Role(Roles.ADMIN)
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(RolesGuard)
   getOnlyAsAdmin() {
     return 'hello admin'
   }

@@ -16,7 +16,11 @@ export class InventoryLog {
   @Column()
   method: string
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: 'MAX',
+    nullable: false,
+  })
   data: string
 
   @Column()

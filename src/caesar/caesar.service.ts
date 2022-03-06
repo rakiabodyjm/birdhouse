@@ -88,9 +88,12 @@ export class CaesarService {
           },
         })
         .then(async (res) => {
-          return this.removeNullsFromCaesarArray(
-            await this.injectExternalCaesar(res),
+          const withExternalCaesar = await Promise.all(
+            res.map(async (caesar) => {
+              return await this.injectExternalCaesar(caesar).catch(() => null)
+            }),
           )
+          return this.removeNullsFromCaesarArray(withExternalCaesar)
         })
     } else {
       return await paginateFind<Caesar>(this.caesarRepository, params, {
@@ -102,10 +105,9 @@ export class CaesarService {
         relations: this.relations,
       }).then(async (paginatedCaesar) => {
         const externalCaesarData = await Promise.all(
-          paginatedCaesar.data.map(
-            async (caesar) =>
-              this.injectExternalCaesar(caesar) as Promise<Caesar>,
-          ),
+          paginatedCaesar.data.map(async (caesar) => {
+            return await this.injectExternalCaesar(caesar).catch(() => null)
+          }),
         )
         return {
           ...paginatedCaesar,
@@ -132,52 +134,6 @@ export class CaesarService {
     const { page = 0, limit = 100 } = searchCaesarDto
     delete searchCaesarDto.searchQuery
     const likeSearchQuery = Like(`%${searchQuery}%`)
-    /**
-     *
-     */
-    // return paginateFind(
-    //   this.caesarRepository,
-    //   {
-    //     ...(searchCaesarDto as Omit<SearchCaesarDto, 'searchQuery'>),
-    //   },
-    //   {
-    //     ...(!!searchQuery?.length && {
-    //       where: [
-    //         {
-    //           subdistributor: {
-    //             name: likeSearchQuery,
-    //           },
-    //         },
-    //         {
-    //           dsp: {
-    //             dsp_code: likeSearchQuery,
-    //           },
-    //         },
-    //         {
-    //           user: {
-    //             first_name: likeSearchQuery,
-    //           },
-    //         },
-    //         {
-    //           user: {
-    //             last_name: likeSearchQuery,
-    //           },
-    //         },
-    //         {
-    //           admin: {
-    //             name: likeSearchQuery,
-    //           },
-    //         },
-    //         {
-    //           retailer: {
-    //             store_name: likeSearchQuery,
-    //           },
-    //         },
-    //       ],
-    //     }),
-    //     relations: this.relations,
-    //   },
-    // )
 
     const query = createQueryBuilderAndIncludeRelations(this.caesarRepository, {
       entityName: 'caesar',

@@ -20,8 +20,6 @@ import { InventoryModule } from './inventory/inventory.module'
 import { TransactionModule } from './transaction/transaction.module'
 import { InventoryLogModule } from './inventorylog/inventorylog.module'
 import SQLConfig from 'root/ormconfig'
-import { JwtAuthInterceptor } from 'src/interceptors/jwt-auth.interceptor'
-import { AuthGuard } from '@nestjs/passport'
 import { SiteAccessGuard } from 'src/guards/site-access.guard'
 
 @Module({
@@ -62,12 +60,17 @@ import { SiteAccessGuard } from 'src/guards/site-access.guard'
   controllers: [AppController],
   providers: [
     // AuthGuard('jwt'),
-    {
-      provide: 'APP_GUARD',
-      useClass: JwtAuthGuard,
-      // inject: [JwtService],
-    },
-    SiteAccessGuard,
+    ...(process.env.NODE_ENV === 'production'
+      ? [
+          {
+            provide: 'APP_GUARD',
+            useClass: JwtAuthGuard,
+            // inject: [JwtService],
+          },
+          SiteAccessGuard,
+        ]
+      : []),
+
     AppService,
   ],
 })

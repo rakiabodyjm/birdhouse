@@ -15,7 +15,6 @@ import {
   BadRequestException,
   UseGuards,
 } from '@nestjs/common'
-import { AuthGuard } from '@nestjs/passport'
 import { ApiTags } from '@nestjs/swagger'
 import { Role } from 'src/auth/decorators/roles.decorator'
 import { RolesGuard } from 'src/auth/guards/roles.guard'
@@ -107,7 +106,6 @@ export class CaesarController {
   findAll(
     @Query() getAllCaesarDto: GetAllCaesarDto,
   ): Promise<Caesar[] | Paginated<Caesar>> {
-    console.log('triggered')
     return this.caesarService.findAll(getAllCaesarDto).catch((err) => {
       throw new InternalServerErrorException(err)
     })

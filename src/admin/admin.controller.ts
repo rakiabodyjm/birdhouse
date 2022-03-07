@@ -1,3 +1,5 @@
+import { RolesGuard } from 'src/auth/guards/roles.guard'
+import { AuthGuard } from '@nestjs/passport'
 import { SearchAdminDto } from './dto/search-admin.dto'
 import {
   Controller,
@@ -11,6 +13,7 @@ import {
   ClassSerializerInterceptor,
   Query,
   InternalServerErrorException,
+  UseGuards,
 } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { GetAllAdminDto } from 'src/admin/dto/get-all-admin.dto'
@@ -19,6 +22,8 @@ import { Paginated } from 'src/types/Paginated'
 import { AdminService } from './admin.service'
 import { CreateAdminDto } from './dto/create-admin.dto'
 import { UpdateAdminDto } from './dto/update-admin.dto'
+import { Role } from 'src/auth/decorators/roles.decorator'
+import { Roles } from 'src/types/Roles'
 
 @ApiTags('Admin Routes')
 @Controller('admin')
@@ -27,6 +32,8 @@ export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
   @Post()
+  @Role(Roles.ADMIN)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   create(@Body() createAdminDto: CreateAdminDto): Promise<Admin> {
     return this.adminService.create(createAdminDto)
   }

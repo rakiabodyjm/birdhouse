@@ -119,7 +119,7 @@ export class CaesarController {
   }
 
   @Role(Roles.ADMIN)
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @UseGuards(RolesGuard)
   @Post('topup')
   async topup(@Body() body: { caesar: string; amount: number }) {
     const caesar = await this.caesarService.findOne(body.caesar)

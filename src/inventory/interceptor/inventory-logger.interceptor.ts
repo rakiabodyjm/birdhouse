@@ -11,8 +11,10 @@ import { Request } from 'express'
 import { catchError, map, Observable, throwError } from 'rxjs'
 import { ROLES_KEY } from 'src/auth/decorators/roles.decorator'
 import { CaesarService } from 'src/caesar/caesar.service'
-import { InventoryLog } from 'src/inventory/entities/inventory-logs.entity'
-import Inventory from 'src/inventory/entities/inventory.entity'
+import {
+  InventoryLog,
+  InventoryLogData,
+} from 'src/inventorylog/entities/inventory-logs.entity'
 import { InventoryService } from 'src/inventory/inventory.service'
 import { Roles } from 'src/types/Roles'
 import { Repository } from 'typeorm'
@@ -81,18 +83,31 @@ export class InventoryLoggerInterceptor implements NestInterceptor {
     ])
 
     const { user } = req
-
+    const inventoryFrom = await this.inventoryService.findOne(req.params.id)
+    // const updateValues:
     const inventoryLog = this.inventoryLogsRepository.create({
       created_at: new Date(),
       data:
         req.method !== 'PATCH'
-          ? JSON.stringify(req?.body)
+          ? JSON.stringify({
+              id: inventoryFrom?.id || req.params.id,
+              name: inventoryFrom?.name || '',
+              description: inventoryFrom?.description || '',
+              created: {
+                ...(inventoryFrom && inventoryFrom),
+              },
+            } as InventoryLogData)
           : JSON.stringify({
-              ...objectDiff2(
-                await this.inventoryService.findOne(req.params.id),
-                req.body,
-              ),
-            }),
+              id: inventoryFrom?.id,
+              name: inventoryFrom?.description,
+              description: inventoryFrom?.description,
+              updated: {
+                ...objectDiff2(
+                  await this.inventoryService.findOne(req.params.id),
+                  req.body,
+                ),
+              },
+            } as InventoryLogData),
       method: req.method as keyof typeof RequestMethod,
       caesar: await this.caesarService.findOne({
         [role[0]]: user[`${role[0]}`],

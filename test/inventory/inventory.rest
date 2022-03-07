@@ -32,6 +32,9 @@ Content-Type: application/json
 GET http://localhost:6006/inventory
 
 
+
+
+
 ###
 # GET http://localhost:6006/inventory?page=0&admin=E058BBB5-AD57-EC11-B670-00E18CEF5938
 GET http://localhost:6006/inventory?page=0&limit=1&admin=E058BBB5-AD57-EC11-B670-00E18CEF5938
@@ -76,6 +79,7 @@ Content-Type: application/json
 ### 
 GET http://localhost:6006/inventory/commerce?caesar=AE7E433E-F36B-1410-8206-00BFC2301278
 
+###
 
 
 ### asset -> inventory ( Admin privilege only ) 

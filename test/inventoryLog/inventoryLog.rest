@@ -1,0 +1,1 @@
+http://localhost:6006/inventory-log?page=0&limit=10

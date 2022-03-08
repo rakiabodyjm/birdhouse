@@ -36,17 +36,9 @@ export class SiteAccessGuard implements CanActivate {
       //   'no Cookie found but are we allowing?: ',
       //   !!user?.admin || this.isException(),
       // )
-      return !!user?.admin || this.isException()
+      return !!user?.admin || this.isException() || this.isPublic()
     }
 
-    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ])
-
-    if (isPublic || this.isException()) {
-      return true
-    }
     const cookieValid = await this.jwtService
       .verifyAsync(cookie)
       .catch((err) => false)
@@ -57,5 +49,13 @@ export class SiteAccessGuard implements CanActivate {
 
     const isException = this.exception.some((ea) => url.split('/').includes(ea))
     return isException
+  }
+
+  isPublic() {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      this.context.getHandler(),
+      this.context.getClass(),
+    ])
+    return isPublic
   }
 }

@@ -56,6 +56,7 @@ export class Subdistributor {
   })
   @OneToOne((type) => User, (user) => user.subdistributor, {
     nullable: false,
+    onDelete: 'CASCADE',
   })
   user: User
 

@@ -36,7 +36,10 @@ export class Retailer {
   dsp?: Dsp
 
   @Expose()
-  @OneToOne((type) => User, (user) => user.retailer, {})
+  @OneToOne((type) => User, (user) => user.retailer, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({
     name: 'user_id',
   })

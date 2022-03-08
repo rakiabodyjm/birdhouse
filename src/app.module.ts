@@ -59,11 +59,9 @@ import { SiteAccessGuard } from 'src/guards/site-access.guard'
   ],
   controllers: [AppController],
   providers: [
-    // AuthGuard('jwt'),
     {
       provide: 'APP_GUARD',
       useClass: JwtAuthGuard,
-      // inject: [JwtService],
     },
     {
       provide: 'APP_GUARD',

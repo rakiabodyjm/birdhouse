@@ -92,10 +92,9 @@ export class AuthController {
       res.cookie('ra', access_token, {
         httpOnly: true,
         expires: cookieExpiry,
-        domain: 'localhost.com',
         sameSite: true,
         signed: true,
-        // encode: (val) => access_token,
+        domain: req.headers.host,
       })
 
       return {
@@ -140,13 +139,10 @@ export class AuthController {
   ) {
     res.cookie('ra', req.signedCookies.ra, {
       httpOnly: true,
-      // expires: new Date(Date.now() + 1000 * 60),
       expires: new Date(Date.now()),
-
-      domain: 'localhost.com',
       sameSite: true,
       signed: true,
-      // encode: (val) => access_token,
+      domain: req.headers.host,
     })
 
     return {

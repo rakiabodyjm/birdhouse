@@ -1,6 +1,5 @@
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard'
-import { JwtStrategy } from 'src/auth/strategies/jwt.strategy'
-import { JwtModule, JwtService } from '@nestjs/jwt'
+import { JwtModule } from '@nestjs/jwt'
 import { CacheModule, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { AppController } from './app.controller'

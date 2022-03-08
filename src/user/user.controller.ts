@@ -26,6 +26,7 @@ import { plainToClass } from 'class-transformer'
 import { GetUserDtoQuery } from 'src/user/dto/get-user-query.dto'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
+import { Public } from 'src/auth/decorators/public.decorator'
 
 @ApiTags('User Routes')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -36,6 +37,7 @@ export class UserController {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
+  @Public()
   @Post()
   async create(
     @Body(new UserTransformer())

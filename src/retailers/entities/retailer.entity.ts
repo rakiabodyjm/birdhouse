@@ -39,6 +39,7 @@ export class Retailer {
   @OneToOne((type) => User, (user) => user.retailer, {
     nullable: false,
     onDelete: 'CASCADE',
+    createForeignKeyConstraints: false,
   })
   @JoinColumn({
     name: 'user_id',

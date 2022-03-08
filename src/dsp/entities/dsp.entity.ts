@@ -28,6 +28,7 @@ export class Dsp {
   @OneToOne(() => User, (user) => user.dsp, {
     nullable: false,
     onDelete: 'CASCADE',
+    createForeignKeyConstraints: false,
   })
   @JoinColumn({
     name: 'user_id',

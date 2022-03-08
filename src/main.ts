@@ -7,27 +7,26 @@ import * as cookieParser from 'cookie-parser'
 import cliBoxes from 'cli-boxes'
 
 async function bootstrap() {
-  let app = await NestFactory.create(AppModule)
+  const app = await NestFactory.create(AppModule)
 
   /**
    * Global validation pipe
    */
-  app = app.useGlobalPipes(
-    new ValidationPipe({
-      transform: true,
-      whitelist: true,
-    }),
-  )
-
-  app.enableCors({
-    credentials: true,
-    origin:
-      process.env.CLIENT_URL.indexOf(';') > -1
-        ? process.env.CLIENT_URL.split(';')
-        : process.env.CLIENT_URL,
-  })
-
-  app.use(cookieParser(process.env.SECRET_KEY || 'Oasis2089$'))
+  app
+    .useGlobalPipes(
+      new ValidationPipe({
+        transform: true,
+        whitelist: true,
+      }),
+    )
+    .use(cookieParser(process.env.SECRET_KEY || 'Oasis2089$'))
+    .enableCors({
+      credentials: true,
+      origin:
+        process.env.CLIENT_URL.indexOf(';') > -1
+          ? process.env.CLIENT_URL.split(';')
+          : process.env.CLIENT_URL,
+    })
 
   const port = process.env.PORT || 6000
 

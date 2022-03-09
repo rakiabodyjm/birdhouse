@@ -3,7 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Paginated } from 'src/types/Paginated'
 import { GetAllUserDto } from 'src/user/dto/get-all-user.dto'
 import { User } from 'src/user/entities/user.entity'
-import { Roles, RolesArray, UserTypes } from 'src/types/Roles'
+import {
+  AccountTypes,
+  Roles,
+  UserTypes,
+  UserTypesAndUser,
+} from 'src/types/Roles'
 import paginateFind from 'src/utils/paginate'
 import { Like, Repository } from 'typeorm'
 import { CreateUserDto } from './dto/create-user.dto'
@@ -103,42 +108,72 @@ export class UserService {
     }
   }
 
-  async findOneQuery(params: GetUserDtoQuery) {
-    const accountTypeKeys = <Array<keyof GetUserDtoQuery & string>>(
-      Object.keys(params)
-    )
+  // async findOneQuery(params: GetUserDtoQuery) {
+  //   const accountTypeKeys = <Array<keyof GetUserDtoQuery & string>>(
+  //     Object.keys(params)
+  //   )
 
-    if (accountTypeKeys.length === 0) {
+  //   if (accountTypeKeys.length === 0) {
+  //     throw new Error(
+  //       'Must have one of the following queries: ' +
+  //         'user, ' +
+  //         RolesArray.join(', '),
+  //     )
+  //   }
+
+  //   if (accountTypeKeys.length > 1) {
+  //     throw new Error('Must only have one query from: ' + RolesArray)
+  //   }
+  //   const accountType = accountTypeKeys[0]
+
+  //   try {
+  //     if (accountType !== 'user') {
+  //       const account = await this.accountRetrieve[accountType].findOne(
+  //         params[accountType],
+  //       )
+  //       if (!account.user) {
+  //         throw new Error(`Account has no User`)
+  //       }
+  //       return this.findOne(account.user.id)
+  //     } else {
+  //       return this.findOne(params[accountType])
+  //     }
+  //   } catch (err) {
+  //     console.error(err)
+  //     throw new Error(err)
+  //   }
+  // }
+
+  async findOneQuery(params: GetUserDtoQuery): Promise<User> {
+    const accountKeys: UserTypesAndUser[] = [
+      'subdistributor',
+      'admin',
+      'retailer',
+      'dsp',
+    ]
+    if (Object.keys(params).length === 0) {
       throw new Error(
-        'Must have one of the following queries: ' +
-          'user, ' +
-          RolesArray.join(', '),
+        `Must have one of the following queries: ${Object.keys(
+          GetUserDtoQuery,
+        )}`,
       )
     }
-
-    if (accountTypeKeys.length > 1) {
-      throw new Error('Must only have one query from: ' + RolesArray)
-    }
-    const accountType = accountTypeKeys[0]
-
-    try {
-      if (accountType !== 'user') {
-        const account = await this.accountRetrieve[accountType].findOne(
-          params[accountType],
-        )
-        if (!account.user) {
-          throw new Error(`Account has no User`)
-        }
-        return this.findOne(account.user.id)
-      } else {
-        return this.findOne(params[accountType])
+    let account: User
+    accountKeys.forEach(async (accountType) => {
+      if (params[accountType]) {
+        account =
+          accountType !== 'user'
+            ? await this.accountRetrieve[accountType]
+                .findOne(params[accountType])
+                .then((res: Exclude<AccountTypes, User>) =>
+                  this.findOne(res.user.id),
+                )
+            : await this.findOne(params[accountType])
       }
-    } catch (err) {
-      console.error(err)
-      throw new Error(err)
-    }
-  }
+    })
 
+    return account
+  }
   async update(
     id: string,
     updateUserDto: UpdateUserDto | Partial<UpdateUserDto>,

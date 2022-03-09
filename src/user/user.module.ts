@@ -7,6 +7,7 @@ import { SubdistributorModule } from 'src/subdistributor/subdistributor.module'
 import { RetailersModule } from 'src/retailers/retailers.module'
 import { DspModule } from 'src/dsp/dsp.module'
 import { AdminModule } from 'src/admin/admin.module'
+import { JwtModule } from '@nestjs/jwt'
 
 export const accountModules = [
   RetailersModule,
@@ -19,6 +20,12 @@ export const accountModules = [
     CacheModule.register(),
     TypeOrmModule.forFeature([User]),
     ...accountModules.map((module) => forwardRef(() => module)),
+    JwtModule.register({
+      secret: process.env.SECRET_KEY || `Oasis2089$`,
+      signOptions: {
+        expiresIn: '5m',
+      },
+    }),
   ],
   controllers: [UserController],
   providers: [UserService],

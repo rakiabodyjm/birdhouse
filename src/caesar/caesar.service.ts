@@ -195,7 +195,6 @@ export class CaesarService {
           return plainToClass(Caesar, withExternalCaesar)
         })
         .catch((err) => {
-          // console.error(err)
           throw new Error(err.message)
         })
       return caesar
@@ -267,17 +266,9 @@ export class CaesarService {
 
     const topUpResponse = firstValueFrom(
       this.axiosService
-        .post(
-          '/external-caesar/topup/' + caesarAccount.data.wallet_id,
-          {
-            amount,
-          },
-          // {
-          //   headers: {
-          //     'pay-caesar-secret': this.configService.get('SECRET_KEY'),
-          //   },
-          // },
-        )
+        .post('/external-caesar/topup/' + caesarAccount.data.wallet_id, {
+          amount,
+        })
         .pipe(
           map((response: AxiosResponse) => response.data as ExternalCaesar),
         ),

@@ -18,7 +18,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
   context: ExecutionContext
   exception = ['external-caesar']
-  user: User
 
   canActivate(context: ExecutionContext) {
     this.context = context

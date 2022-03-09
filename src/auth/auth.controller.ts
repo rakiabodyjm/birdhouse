@@ -45,13 +45,17 @@ export class AuthController {
     })
     res: Response,
   ) {
-    const { email, password, remember_me } = loginBody
+    const { email, remember_me } = loginBody
     const user = req.user
     // console.log(req.user)
     try {
-      // const user = await this.authService.validateUser(email, password)
       const userRole = await this.userService.getRole(user.id)
-      const access_token = this.jwtService.sign(
+
+      const jwtTokenObject = userRole.reduce(
+        (acc, ea) => ({
+          ...acc,
+          [`${ea}_id`]: user[ea].id,
+        }),
         {
           user_id: user.id,
           email: email,
@@ -59,18 +63,19 @@ export class AuthController {
           last_name: user.last_name,
           roles: userRole,
         },
-        {
-          // expiresIn: remember_me ? '1d' : '1h',
-          expiresIn:
-            process.env.NODE_ENV === 'development'
-              ? remember_me
-                ? '1h'
-                : '30m'
-              : remember_me
-              ? '1d'
-              : '4h',
-        },
       )
+
+      const access_token = this.jwtService.sign(jwtTokenObject, {
+        // expiresIn: remember_me ? '1d' : '1h',
+        expiresIn:
+          process.env.NODE_ENV === 'development'
+            ? remember_me
+              ? '1h'
+              : '30m'
+            : remember_me
+            ? '1d'
+            : '4h',
+      })
       /**
        *
        * number in hours

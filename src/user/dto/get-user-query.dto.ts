@@ -42,4 +42,8 @@ export class GetUserDtoQuery {
   })
   @IsOptional()
   admin?: string
+
+  @ApiProperty()
+  @IsOptional()
+  jwtOnly?: true
 }

@@ -28,6 +28,8 @@ class WithAccountTypes {
   })
   @OneToOne(() => User, (user) => user.caesar_wallet, {
     nullable: true,
+    createForeignKeyConstraints: false,
+    onDelete: 'SET NULL',
   })
   user?: User
 

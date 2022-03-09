@@ -17,7 +17,7 @@ const SQLConfig: SqlServerConnectionOptions & {
   username: process.env.SQL_SERVER_USERNAME,
   password: process.env.SQL_SERVER_PASSWORD,
   database: process.env.SQL_SERVER_DATABASE,
-  synchronize: false,
+  synchronize: process.env.NODE_ENV === 'development',
   options: {
     trustServerCertificate: true,
   },

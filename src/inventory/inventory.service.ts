@@ -46,8 +46,8 @@ export class InventoryService {
       asset_id: asset.id,
       caesar_id: caesar.id,
     }).catch((err) => {
-      console.error(err)
-      throw new Error(err.message)
+      console.log('duplicateInventoryFonud ', err)
+      return null
     })
 
     if (duplicateInventory) {

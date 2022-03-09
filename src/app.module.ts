@@ -58,14 +58,18 @@ import { SiteAccessGuard } from 'src/guards/site-access.guard'
   ],
   controllers: [AppController],
   providers: [
-    {
-      provide: 'APP_GUARD',
-      useClass: JwtAuthGuard,
-    },
-    {
-      provide: 'APP_GUARD',
-      useClass: SiteAccessGuard,
-    },
+    ...(process.env.NODE_ENV === 'development'
+      ? []
+      : [
+          {
+            provide: 'APP_GUARD',
+            useClass: JwtAuthGuard,
+          },
+          {
+            provide: 'APP_GUARD',
+            useClass: SiteAccessGuard,
+          },
+        ]),
 
     AppService,
   ],

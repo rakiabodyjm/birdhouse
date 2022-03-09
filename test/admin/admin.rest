@@ -3,7 +3,7 @@
 GET http://localhost:6006/admin
 
 ### CREATE NEW ADMIN
-POST http://localhost:6006/admin
+POST https://api.caesarcoin.ph/admin
 Content-Type: application/json
 
 {

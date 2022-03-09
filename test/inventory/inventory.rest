@@ -21,9 +21,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBO
 Content-Type: application/json
 
 {
-    "quantity":50.5,
-    "asset": "7C9E3648-0047-EC11-B66C-00E18CEF5938", 
-    "caesar": "AC7E433E-F36B-1410-8206-00BFC2301278"
+    "quantity":1000,
+    "asset": "284F9239-219E-EC11-A22A-0003FFC754C5", 
+    "caesar": "BDC96457-AA9E-EC11-A22A-0003FFC754C5"
     
 }
 ###

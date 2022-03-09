@@ -83,7 +83,9 @@ export class InventoryLoggerInterceptor implements NestInterceptor {
     ])
 
     const { user } = req
-    const inventoryFrom = await this.inventoryService.findOne(req.params.id)
+    const inventoryFrom = await this.inventoryService
+      .findOne(req.params.id)
+      .catch((err) => null)
     // const updateValues:
     const inventoryLog = this.inventoryLogsRepository.create({
       created_at: new Date(),
@@ -103,7 +105,9 @@ export class InventoryLoggerInterceptor implements NestInterceptor {
               description: inventoryFrom?.description,
               updated: {
                 ...objectDiff2(
-                  await this.inventoryService.findOne(req.params.id),
+                  await this.inventoryService
+                    .findOne(req.params.id)
+                    .catch((err) => null),
                   req.body,
                 ),
               },

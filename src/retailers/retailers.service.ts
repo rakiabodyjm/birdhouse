@@ -97,6 +97,7 @@ export class RetailersService {
       .createQueryBuilder('retailer')
       .leftJoinAndSelect('retailer.subdistributor', 'subdistributor')
       .leftJoinAndSelect('retailer.dsp', 'dsp ')
+      .leftJoinAndSelect('retailer.user', 'user')
       .andWhere(
         subdistributor ? `retailer.subdistributor = :subdistributor` : `1=1`,
         {

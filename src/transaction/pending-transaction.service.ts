@@ -177,7 +177,9 @@ export class PendingTransactionService {
       } else {
         pending_transaction = pendingTransaction
       }
-
+      if (pending_transaction.approved) {
+        throw new Error(`Pending Transaction is already approved`)
+      }
       /**
        * mark current pending transaction as complete
        */
@@ -296,6 +298,9 @@ export class PendingTransactionService {
   async cancelPendingTransaction(id: string) {
     const pendingTransaction = await this.findOne(id)
     const duplicates = await this.getDuplicatePendingTransactions(id)
+    if (pendingTransaction.approved) {
+      throw new Error(`Pending Transaction is already approved`)
+    }
     if (duplicates?.length > 0) {
       await Promise.all(
         duplicates.map(async (ea) => {

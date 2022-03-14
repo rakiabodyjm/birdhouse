@@ -1,0 +1,10 @@
+PATCH http://localhost:6006/external-caesar-config/2
+Content-Type: application/json
+
+{  
+    "peso_rate": "1",
+    "dollar_rate": "50"
+}
+
+###
+GET http://localhost:6006/sexternal-caesar-config/

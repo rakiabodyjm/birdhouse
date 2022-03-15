@@ -6,7 +6,6 @@ import SearchRetailerDto from 'src/retailers/dto/search-retailer.dto'
 import { Retailer } from 'src/retailers/entities/retailer.entity'
 import { Paginated } from 'src/types/Paginated'
 import paginateFind from 'src/utils/paginate'
-import createQueryBuilderAndIncludeRelations from 'src/utils/queryBuilderWithRelations'
 import { Repository } from 'typeorm'
 import { CreateRetailerDto } from './dto/create-retailer.dto'
 import { UpdateRetailerDto } from './dto/update-retailer.dto'
@@ -17,10 +16,10 @@ export class RetailersService {
     @InjectRepository(Retailer)
     private retailerRepository: Repository<Retailer>,
   ) {
-    this.relationsToLoad = ['dsp', 'subdistributor', 'user']
+    // this.relationsToLoad = ['dsp', 'subdistributor', 'user']
   }
 
-  relationsToLoad: string[]
+  relationsToLoad: string[] = ['dsp', 'subdistributor', 'user']
 
   async create(createRetailerDto: CreateRetailerDto): Promise<Retailer> {
     const newRetailer = this.retailerRepository.create(createRetailerDto)
@@ -35,7 +34,7 @@ export class RetailersService {
     params?: GetAllRetailerDto,
   ): Promise<Paginated<Retailer> | Retailer[] | number> {
     if (!isNotEmptyObject(params)) {
-      return await this.retailerRepository.find({
+      return this.retailerRepository.find({
         // relations: ['user', 'subdistributor', 'dsp'],
         relations: this.relationsToLoad,
       })

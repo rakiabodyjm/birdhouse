@@ -27,9 +27,9 @@ Content-Type: application/json
 DELETE http://localhost:6006/retailer/B9EC3682-EC16-EC11-B664-00E18CEF5938
 
 ### 
-GET http://localhost:6006/retailer/6D82910C-C321-EC11-B665-00E18CEF5938
+GET http://localhost:6006/retailer/40B139E9-1FA1-EC11-A22A-501AC5192008
 ###PAGINATED
-GET http://localhost:6006/retailer?page=0&limit=2&dsp=BCFD02B7-BD24-EC11-B665-00E18CEF5938&countOnly=false
+GET http://localhost:6006/retailer?page=0&limit=2&dsp=326C42B9-1FA1-EC11-A22A-501AC5192008&countOnly=true
 
 ### 
 GET http://http://localhost:6006/retailer?subdistributor=CFB5D438-BC21-EC11-B665-00E18CEF5938

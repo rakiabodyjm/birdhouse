@@ -10,7 +10,6 @@ export class PayCaesarSecretGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request: Request = context.switchToHttp().getRequest()
-
     return (
       this.configService.get('SECRET_KEY') ===
       request.headers['pay-caesar-secret']

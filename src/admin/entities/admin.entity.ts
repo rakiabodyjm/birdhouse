@@ -10,7 +10,7 @@ import {
 } from 'typeorm'
 
 @Entity()
-@Index(['id'])
+// @Index(['id'])
 export class Admin {
   @PrimaryGeneratedColumn('uuid')
   id: string

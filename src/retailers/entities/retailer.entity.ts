@@ -14,7 +14,8 @@ import {
 } from 'typeorm'
 
 @Entity()
-@Index(['id', 'store_name', 'e_bind_number', 'id_number'])
+// @Index(['id', 'store_name', 'e_bind_number', 'id_number'])
+@Index(['store_name', 'e_bind_number', 'id_number'])
 export class Retailer {
   @PrimaryGeneratedColumn('uuid')
   id: string
@@ -23,15 +24,14 @@ export class Retailer {
   @JoinColumn({
     name: 'subdistributor_id',
   })
-  @ManyToOne((type) => Subdistributor, (subd) => subd.retailer, {
-    // eager: true,
-  })
+  @ManyToOne((type) => Subdistributor, (subd) => subd.retailer)
   subdistributor: Subdistributor
 
   @Expose()
   @ManyToOne((type) => Dsp, (dsp) => dsp.retailer, {})
   @JoinColumn({
     name: 'dsp_id',
+    referencedColumnName: 'id',
   })
   dsp?: Dsp
 

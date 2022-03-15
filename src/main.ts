@@ -63,6 +63,7 @@ ${
   chalk.yellow(process.env.SQL_SERVER_DATABASE)
 }
 ${chalk.greenBright('NODE_ENV: ') + chalk.yellow(process.env.NODE_ENV)}
+${chalk.greenBright('NODE_VERSION: ') + chalk.yellow(process.version)}
 
 
 ${bottomBorder}

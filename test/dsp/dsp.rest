@@ -41,10 +41,10 @@ Content-Type: application/json
 DELETE {{$dotenv HOST}}:{{$dotenv PORT}}/dsp/65D172A9-2C21-EC11-B665-00E18CEF5938
 
 ###
-GET http://localhost:6006/dsp?subdistributor=FDC28593-B957-EC11-B670-00E18CEF5938&limit=1&page=0&countOnly=false
+GET http://localhost:6006/dsp?subdistributor=B2BF795F-B19E-EC11-A22A-0003FFC754C5&limit=1&page=0&countOnly=true
 
 ###SEARCH
 
-GET http://localhost:6006/dsp/search?searchQuery=arj&subdistributor=FDC28593-B957-EC11-B670-00E18CEF5938
+GET http://localhost:6006/dsp/search?searchQuery=Janeo
 ###
 GET http://localhost:6006/dsp/search?searchQuery=work&subdistributor=AF02DF31-DD2B-EC11-B666-00E18CEF5935

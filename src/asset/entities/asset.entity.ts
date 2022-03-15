@@ -13,7 +13,8 @@ import {
 } from 'typeorm'
 
 @Entity()
-@Index(['id', 'code', 'description', 'active'])
+// @Index(['id', 'code', 'description', 'active'])
+@Index(['code', 'description', 'active'])
 export default class Asset {
   @PrimaryGeneratedColumn('uuid')
   id: string

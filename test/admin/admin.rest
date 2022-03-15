@@ -8,7 +8,7 @@ Content-Type: application/json
 
 {
     "name": "Janeo",
-    "user": "EFA8FEF1-BB21-EC11-B665-00E18CEF5938"
+    "user": "B9D8E0EA-29A1-EC11-A22A-14CB6534284D"
 }
 ###
 PATCH http://localhost:6006/admin/E058BBB5-AD57-EC11-B670-00E18CEF5938

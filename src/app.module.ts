@@ -20,6 +20,7 @@ import { TransactionModule } from './transaction/transaction.module'
 import { InventoryLogModule } from './inventorylog/inventorylog.module'
 import SQLConfig from 'root/ormconfig'
 import { SiteAccessGuard } from 'src/guards/site-access.guard'
+import { AuthGuard } from '@nestjs/passport'
 
 @Module({
   imports: [
@@ -59,7 +60,12 @@ import { SiteAccessGuard } from 'src/guards/site-access.guard'
   controllers: [AppController],
   providers: [
     ...(process.env.NODE_ENV === 'development'
-      ? []
+      ? [
+          {
+            provide: 'APP_GUARD',
+            useValue: AuthGuard('jwt'),
+          },
+        ]
       : [
           {
             provide: 'APP_GUARD',

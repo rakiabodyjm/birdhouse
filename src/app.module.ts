@@ -20,19 +20,29 @@ import { TransactionModule } from './transaction/transaction.module'
 import { InventoryLogModule } from './inventorylog/inventorylog.module'
 import SQLConfig from 'root/ormconfig'
 import { SiteAccessGuard } from 'src/guards/site-access.guard'
-
+import fs from 'fs'
 @Module({
   imports: [
     CacheModule.register(),
     ConfigModule.forRoot({
       envFilePath:
         process.env.NODE_ENV === 'production'
-          ? './.env.production'
-          : './.env.development',
+          ? ['.env.production.local', '.env.production']
+          : ['.env.development.local', '.env.development'],
+      // envFilePath: fs.existsSync
+      //   ? './.env.local'
+      //   : process.env.NODE_ENV === 'production'
+      //   ? './.env.production'
+      //   : './.env.development',
       isGlobal: true,
       cache: true,
     }),
-    TypeOrmModule.forRoot(SQLConfig),
+    TypeOrmModule.forRootAsync({
+      useFactory: async (configService) => {
+        return SQLConfig(configService)
+      },
+      inject: [ConfigService],
+    }),
     UserModule,
     MapIdsModule,
     DspModule,

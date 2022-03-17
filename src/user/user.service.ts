@@ -159,19 +159,27 @@ export class UserService {
       )
     }
     let account: User
-    accountKeys.forEach(async (accountType) => {
-      if (params[accountType]) {
-        account =
-          accountType !== 'user'
-            ? await this.accountRetrieve[accountType]
-                .findOne(params[accountType])
-                .then((res: Exclude<AccountTypes, User>) =>
-                  this.findOne(res.user.id),
-                )
-            : await this.findOne(params[accountType])
-      }
-    })
-
+    await Promise.all(
+      accountKeys.map(async (accountType) => {
+        if (params[accountType]) {
+          account =
+            accountType !== 'user'
+              ? await this.accountRetrieve[accountType]
+                  .findOne(params[accountType])
+                  .then((res: Exclude<AccountTypes, User>) =>
+                    this.findOne(res.user.id),
+                  )
+                  .then((res) => {
+                    console.log('accountretrieve', res)
+                    return res
+                  })
+              : await this.findOne(params[accountType])
+        }
+      }),
+    )
+    if (!account) {
+      throw new Error('UserService.findOneQuery error account not found')
+    }
     return account
   }
   async update(

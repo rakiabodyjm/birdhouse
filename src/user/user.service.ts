@@ -150,6 +150,7 @@ export class UserService {
       'admin',
       'retailer',
       'dsp',
+      'user',
     ]
     if (Object.keys(params).length === 0) {
       throw new Error(

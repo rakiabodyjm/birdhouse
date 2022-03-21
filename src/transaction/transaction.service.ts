@@ -158,16 +158,16 @@ export class TransactionService {
            * make payment to seller after successfully adding to buyer's
            * inventory
            */
-          console.log('reached payment')
-          const payment1 = await this.caesarService.pay(
-            sellerCaesar,
-            costPriceBuyer * quantity,
-          )
-          const payment2 = await this.caesarService.pay(
-            buyerCaesar,
-            -(costPriceBuyer * quantity),
-          )
-          console.log('payment made', payment1.peso, ' to ', payment2.peso)
+          // console.log('reached payment')
+          // const payment1 = await this.caesarService.pay(
+          //   sellerCaesar,
+          //   costPriceBuyer * quantity,
+          // )
+          // const payment2 = await this.caesarService.pay(
+          //   buyerCaesar,
+          //   -(costPriceBuyer * quantity),
+          // )
+          // console.log('payment made', payment1.peso, ' to ', payment2.peso)
           return res
         })
         .then(async (res) => {

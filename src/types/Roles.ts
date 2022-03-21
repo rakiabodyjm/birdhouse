@@ -16,6 +16,28 @@ export const RolesArray = Object.values(Roles)
 export type UserTypesAndUser = `${Roles}` | 'user' | 'admin'
 export type AccountTypes = Subdistributor | Dsp | Retailer | Admin | User
 
+// export enum CaesarRolesMapping {
+//   User = 'user',
+//   Retailer = 'retailer',
+//   'Sub-Distributor' = 'subdistributor',
+//   DSP = 'dsp',
+// }
+export enum CaesarRolesToTelco {
+  Admin = 'admin',
+  User = 'user',
+  Retailer = 'retailer',
+  'Sub-Distributor' = 'subdistributor',
+  DSP = 'dsp',
+}
+export enum TelcoRolesMappingToCaesar {
+  user = 'User',
+  retailer = 'Retailer',
+  subdistributor = 'Sub-Distributor',
+  dsp = 'DSP',
+  admin = 'Master Distributor',
+  // admin = 'Telco Admin',
+}
+
 export enum SRPRoles {
   admin = 'unit_price',
   subdistributor = 'srp_for_subd',

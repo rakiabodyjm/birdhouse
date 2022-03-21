@@ -1,5 +1,6 @@
 import { Expose } from 'class-transformer'
-import { UserTypes, UserTypesAndUser } from 'src/types/Roles'
+import { CreateWalletDto } from 'src/caesar/caesar-api.controller'
+import { UserTypesAndUser } from 'src/types/Roles'
 import {
   Column,
   CreateDateColumn,
@@ -42,31 +43,34 @@ export class ExternalCaesar {
   //   precision: 18,
   //   scale: 2,
   // })
-  @Expose()
-  dollar(): number {
-    const conversion = this.caesar_coin / Number(dollarExchangeRate)
-    return Number(conversion.toFixed(2))
-  }
+  // @Expose()
+  // dollar(): number {
+  //   const conversion = this.caesar_coin / Number(dollarExchangeRate)
+  //   return Number(conversion.toFixed(2))
+  // }
 
   // @Column('decimal', {
   //   nullable: true,
   //   precision: 18,
   //   scale: 2,
   // })
-  @Expose()
-  peso(): number {
-    const conversion = this.caesar_coin * Number(pesoExchangeRate)
-    return Number(conversion.toFixed(2))
-  }
+  // @Expose()
+  // peso(): number {
+  //   const conversion = this.caesar_coin * Number(pesoExchangeRate)
+  //   return Number(conversion.toFixed(2))
+  // }
 
-  @UpdateDateColumn({
-    type: 'datetime',
-  })
-  updated_at: Date
+  peso: number
+  dollar: number
 
-  @CreateDateColumn({
-    type: 'datetime',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  created_at: Date
+  // @UpdateDateColumn({
+  //   type: 'datetime',
+  // })
+  // updated_at: Date
+
+  // @CreateDateColumn({
+  //   type: 'datetime',
+  //   default: () => 'CURRENT_TIMESTAMP',
+  // })
+  // created_at: Date
 }

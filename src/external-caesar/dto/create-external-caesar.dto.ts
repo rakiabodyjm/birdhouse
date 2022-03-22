@@ -14,6 +14,9 @@ export class CreateExternalCaesarDto {
   @IsEmail()
   email: string
 
+  @IsNotEmpty()
+  password: string
+
   @IsIn([...RolesArray, 'user'])
   role: UserTypesAndUser
 }

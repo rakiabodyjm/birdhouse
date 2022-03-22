@@ -46,6 +46,8 @@ export class CaesarController {
         HttpStatus.BAD_REQUEST,
       )
     }
+    const password = createCaesarDto.password
+    delete createCaesarDto.password
     if (Object.keys(createCaesarDto).length > 1) {
       throw new HttpException(
         `Only one account type at a time, ${RolesArray.join(', ')}`,
@@ -69,9 +71,10 @@ export class CaesarController {
           userAccount: user,
           // [accountType]: createCaesarDto[accountType],
           [accountType]: createCaesarDto[accountType],
+          password,
         })
-
         .catch((err) => {
+          // console.log('errmessage', err)
           throw new InternalServerErrorException(err.message)
         })
     } catch (err) {

@@ -64,7 +64,9 @@ class WithAccountTypes {
   admin?: Admin
 }
 
-@Entity()
+@Entity({
+  name: 'caesar_local',
+})
 @Index(['id', 'caesar_id', ...Object.values(Roles), 'user'])
 export class Caesar extends WithAccountTypes {
   @PrimaryGeneratedColumn('uuid')

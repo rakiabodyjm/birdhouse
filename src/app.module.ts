@@ -20,7 +20,8 @@ import { TransactionModule } from './transaction/transaction.module'
 import { InventoryLogModule } from './inventorylog/inventorylog.module'
 import SQLConfig from 'root/ormconfig'
 import { SiteAccessGuard } from 'src/guards/site-access.guard'
-import fs from 'fs'
+import { ActualCaesarModule } from './actual-caesar/actual-caesar.module'
+
 @Module({
   imports: [
     CacheModule.register(),
@@ -65,17 +66,27 @@ import fs from 'fs'
       }),
       inject: [ConfigService],
     }),
+    ActualCaesarModule,
   ],
   controllers: [AppController],
   providers: [
-    {
-      provide: 'APP_GUARD',
-      useClass: JwtAuthGuard,
-    },
-    {
-      provide: 'APP_GUARD',
-      useClass: SiteAccessGuard,
-    },
+    ...(process.env.NODE_ENV === 'development'
+      ? [
+          // {
+          //   provide: 'APP_GUARD',
+          //   useClass: JwtAuthGuard,
+          // },
+        ]
+      : [
+          {
+            provide: 'APP_GUARD',
+            useClass: JwtAuthGuard,
+          },
+          {
+            provide: 'APP_GUARD',
+            useClass: SiteAccessGuard,
+          },
+        ]),
 
     AppService,
   ],

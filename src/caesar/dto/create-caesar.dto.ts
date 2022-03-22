@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsOptional, IsUUID } from 'class-validator'
+import { IsNotEmpty, IsOptional, IsUUID } from 'class-validator'
 import { Admin } from 'src/admin/entities/admin.entity'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
@@ -55,4 +55,7 @@ export class CreateCaesarDto implements Partial<WithAccountTypes> {
   @IsOptional()
   @ApiProperty()
   caesar_id: string
+
+  @IsNotEmpty()
+  password: string
 }

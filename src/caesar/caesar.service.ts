@@ -41,7 +41,9 @@ export class CaesarService {
     ...account
   }: {
     userAccount: User
-  } & Partial<Record<UserTypesAndUser, AccountTypes>>) {
+  } & Partial<Record<UserTypesAndUser, AccountTypes>> & {
+      password: string
+    }) {
     const account_type = Object.keys(account)[0] as UserTypesAndUser
 
     /**
@@ -53,6 +55,7 @@ export class CaesarService {
       cp_number: userAccount.phone_number,
       email: userAccount.email,
       role: account_type,
+      password: userAccount.password,
     }
     const caesar_id$ = this.axiosService
       .post('/external-caesar', newCaesarUser)

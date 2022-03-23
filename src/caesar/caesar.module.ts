@@ -8,6 +8,7 @@ import { HttpModule } from '@nestjs/axios'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { CaesarApiService } from 'src/caesar/ceasar-api.service'
 import { CaesarApiController } from 'src/caesar/caesar-api.controller'
+import { ActualCaesarModule } from 'src/actual-caesar/actual-caesar.module'
 @Module({
   imports: [
     CacheModule.register(),
@@ -24,6 +25,7 @@ import { CaesarApiController } from 'src/caesar/caesar-api.controller'
       }),
       inject: [ConfigService],
     }),
+    ActualCaesarModule,
   ],
   controllers: [CaesarController, CaesarApiController],
   providers: [CaesarService, CaesarApiService],

@@ -1,0 +1,47 @@
+GET http://20.20.0.59/caesar_api/?api_key=cs_b7c524cd0882fb32333af561faf8519d&url=telco.com&email_address="email_address@email.com&action=createWallet&lastname=DelaCruz&firstname=Juan&middlename=Middlename&contact_no=+639123456789&password=password&user_type=User&country=PH
+
+GET http://20.20.0.59/caesar_api/?api_key=cs_b7c524cd0882fb32333af561faf8519d&url=telco.com&action=createWallet&lastname=Dela+Cruz&firstname=Juan&middlename=''&contact_no=%2B639123456789&email_address=rakiabodyjm%40gmail.com&password=password&user_type=User&country=PH
+###
+POST http://localhost:6006/actual-caesar/create-wallet
+Content-Type: application/json
+
+{
+    "lastname": "Dela Cruz", 
+    "firstname": "Juan", 
+    "middlename": " ",
+    "contact_no": "+639123456789", 
+    "email_address": "juandelacruz@gmail.com",
+    "password": "password", 
+    "user_type": "User",
+    "country": "PH"
+}
+
+
+###
+###walletId = CCeTJPMzdkdDVqWjRJSHovY1ArTWg2Zz09
+
+GET http://localhost:6006/actual-caesar/user-info/CCeTJPMzdkdDVqWjRJSHovY1ArTWg2Zz09
+
+###
+
+DELETE http://localhost:6006/actual-caesar/reset-data
+
+
+
+# caesar-coin.com/caesar_api/?api_key=value&url=value&action=createWallet&lastname=value&firstname=value&middlename=value&contact_no=value&email_address=value&password=value&user_type=User&country=PH
+
+### 
+POST http://localhost:6006/actual-caesar/pay
+Content-Type: application/json
+
+{
+    "customerId": "CCaW5UWmdMQVBuc29DUEQ3NU9iOEVCdz09", 
+    "merchantId": "CCRkNCUUNNMDFFaC9HVldiKy91WkJWQT09", 
+    "amount": 10,
+    "currency": "PHP",
+    "postBackUrl": "http://localhost:2006"
+}
+
+
+###
+http://20.20.0.59/caesar_api/?api_key=value&url=value&action=getWalletName&wallet_id=value

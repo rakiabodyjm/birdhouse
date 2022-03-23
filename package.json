@@ -7,6 +7,18 @@
     "name": "Janeo Miguel Tiongson",
     "url": "https://github.com/rakiabodyjm"
   },
+   "contributors": [
+    {
+      "name": "Jerome C. Gapasin",
+      "email": "gapasinjerome99@gmail.com",
+      "url": "https://github.com/bluerose29"
+    },
+    {
+      "name": "Reynard Visperas",
+      "email": "visperas30@gmail.com",
+      "url": "https://github.com/RCVisperas"
+    }
+  ],
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

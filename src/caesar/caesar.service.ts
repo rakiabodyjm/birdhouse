@@ -4,7 +4,11 @@ import { isNotEmptyObject } from 'class-validator'
 import { GetAllCaesarDto } from 'src/caesar/dto/get-all-caesar.dto'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { Paginated } from 'src/types/Paginated'
-import { AccountTypes, UserTypesAndUser } from 'src/types/Roles'
+import {
+  AccountTypes,
+  TelcoRolesMappingToCaesar,
+  UserTypesAndUser,
+} from 'src/types/Roles'
 import paginateFind from 'src/utils/paginate'
 import { Like, Repository } from 'typeorm'
 import { HttpService } from '@nestjs/axios'
@@ -13,11 +17,11 @@ import { firstValueFrom, map } from 'rxjs'
 import { AxiosResponse } from 'axios'
 import { GetCaesarDto } from 'src/caesar/dto/get-caesar.dto'
 import { ExternalCaesar } from 'src/external-caesar/entities/external-caesar.entity'
-import { CaesarApiService } from 'src/caesar/ceasar-api.service'
 import { SearchCaesarDto } from 'src/caesar/dto/search-caesar.dto'
 import { plainToClass } from 'class-transformer'
 import { ConfigService } from '@nestjs/config'
 import createQueryBuilderAndIncludeRelations from 'src/utils/queryBuilderWithRelations'
+import { ActualCaesarService } from 'src/actual-caesar/actual-caesar.service'
 
 @Injectable()
 export class CaesarService {
@@ -25,8 +29,8 @@ export class CaesarService {
     @InjectRepository(Caesar)
     private readonly caesarRepository: Repository<Caesar>,
     private axiosService: HttpService,
-    private caesarApiService: CaesarApiService,
     private configService: ConfigService,
+    private caesarApiService: ActualCaesarService,
   ) {}
   relations: UserTypesAndUser[] = [
     'admin',
@@ -38,10 +42,13 @@ export class CaesarService {
 
   async create({
     userAccount,
+
     ...account
   }: {
     userAccount: User
-  } & Partial<Record<UserTypesAndUser, AccountTypes>>) {
+  } & Partial<Record<UserTypesAndUser, AccountTypes>> & {
+      password: string
+    }) {
     const account_type = Object.keys(account)[0] as UserTypesAndUser
 
     /**
@@ -54,10 +61,22 @@ export class CaesarService {
       email: userAccount.email,
       role: account_type,
     }
-    const caesar_id$ = this.axiosService
-      .post('/external-caesar', newCaesarUser)
-      .pipe(map((response) => response.data as string))
-    const caesar_id = await firstValueFrom(caesar_id$)
+    const { data } = await this.caesarApiService.createWallet({
+      // ...newCaesarUser,
+      firstname: newCaesarUser.first_name,
+      lastname: newCaesarUser.last_name,
+      middlename: 'NA',
+      password: userAccount.password,
+      contact_no: newCaesarUser.cp_number,
+      country: 'PH',
+      email_address: `${newCaesarUser.email}/${newCaesarUser.role}`,
+      user_type: TelcoRolesMappingToCaesar[account_type],
+    })
+    const { walletId: caesar_id } = data
+    // const caesar_id$ = this.axiosService
+    //   .post('/external-caesar', newCaesarUser)
+    //   .pipe(map((response) => response.data as string))
+    // const caesar_id = await firstValueFrom(caesar_id$)
 
     /**
      * Create local record of Caesar into dito_db
@@ -229,22 +248,49 @@ export class CaesarService {
 
   injectExternalCaesar<T>(localCaesar: T): Promise<T>
   injectExternalCaesar<T>(localCaesar: T[]): Promise<T[]>
-  async injectExternalCaesar(localCaesar): Promise<Caesar | Caesar[]> {
+  async injectExternalCaesar(
+    localCaesar: Caesar | Caesar[],
+  ): Promise<Caesar | Caesar[]> {
     if (!Array.isArray(localCaesar)) {
-      //TODO handle error
-      const caesarExternalData$ = this.axiosService
-        .get('/external-caesar/' + localCaesar.caesar_id)
-        .pipe(map((response: AxiosResponse) => response.data))
+      // const conversionRates =
+      // //TODO handle error
+      // const caesarExternalData$ = this.axiosService
+      //   .get('/external-caesar/' + localCaesar.caesar_id)
+      //   .pipe(map((response: AxiosResponse) => response.data))
 
-      const caesarExternalData = await firstValueFrom(
-        caesarExternalData$,
-      ).catch((err) => {
-        // return null
-        throw new Error(err)
-      })
+      // const caesarExternalData = await firstValueFrom(
+      //   caesarExternalData$,
+      // ).catch((err) => {
+      //   // return null
+      //   throw new Error(err)
+      // })
+
+      const { data: externalCaesarUser } =
+        await this.caesarApiService.getUserInfo(localCaesar.caesar_id)
+
+      const { data: externalCaesarData } =
+        await this.caesarApiService.getWalletBalance(localCaesar.caesar_id)
+      const { data: externalCaesarExchange } =
+        await this.caesarApiService.getEquivalent(localCaesar.caesar_id)
+
+      const dataContainer: ExternalCaesar = {
+        email: externalCaesarUser.emailAddress,
+        first_name: externalCaesarUser.firstName,
+        last_name: externalCaesarUser.lastName,
+        cp_number: externalCaesarUser.contactNo,
+        caesar_coin: Number(externalCaesarData.balance),
+        dollar: externalCaesarExchange.usdEquivalent,
+        peso: externalCaesarExchange.phpEquivalent,
+        role: localCaesar.account_type,
+        // updated_at: new Date(Date.now()),
+        // created_at: new Date(Date.now()),
+        wallet_id: localCaesar.caesar_id,
+      }
+      const caesarData = plainToClass(ExternalCaesar, dataContainer)
+      // console.log(caesarData)
       const caesarWithData = {
         ...localCaesar,
-        data: caesarExternalData,
+        data: caesarData,
       }
 
       const returnInject = plainToClass(Caesar, caesarWithData)
@@ -252,7 +298,7 @@ export class CaesarService {
     } else {
       return Promise.all(
         localCaesar.map(async (caesar) => {
-          return { ...(await this.injectExternalCaesar(caesar)) }
+          return await this.injectExternalCaesar(caesar)
         }),
       )
     }

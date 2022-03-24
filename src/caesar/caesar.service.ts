@@ -274,7 +274,7 @@ export class CaesarService {
       const { data: externalCaesarExchange } =
         await this.caesarApiService.getEquivalent(localCaesar.caesar_id)
 
-      const dataContainer: ExternalCaesar = {
+      const dataContainer: Omit<ExternalCaesar, 'password'> = {
         email: externalCaesarUser.emailAddress,
         first_name: externalCaesarUser.firstName,
         last_name: externalCaesarUser.lastName,

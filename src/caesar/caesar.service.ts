@@ -60,6 +60,7 @@ export class CaesarService {
       cp_number: userAccount.phone_number,
       email: userAccount.email,
       role: account_type,
+      password: userAccount.password,
     }
     const { data } = await this.caesarApiService.createWallet({
       // ...newCaesarUser,

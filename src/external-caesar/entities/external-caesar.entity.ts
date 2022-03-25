@@ -38,6 +38,9 @@ export class ExternalCaesar {
   })
   caesar_coin: number
 
+  @Column()
+  password: string
+
   // @Column('decimal', {
   //   nullable: true,
   //   precision: 18,

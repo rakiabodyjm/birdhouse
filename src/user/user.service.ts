@@ -171,7 +171,6 @@ export class UserService {
                     this.findOne(res.user.id),
                   )
                   .then((res) => {
-                    console.log('accountretrieve', res)
                     return res
                   })
               : await this.findOne(params[accountType])

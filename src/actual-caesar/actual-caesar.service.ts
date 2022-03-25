@@ -1,13 +1,17 @@
 import { HttpService } from '@nestjs/axios'
-import { Injectable } from '@nestjs/common'
+import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common'
+import { Cache } from 'cache-manager'
 import { firstValueFrom, map } from 'rxjs'
 import { CreateActualWalletDto } from 'src/actual-caesar/dto/create-actual-wallet.dto'
 
 @Injectable()
 export class ActualCaesarService {
-  constructor(private httpService: HttpService) {}
-  private api_key = 'cs_b7c524cd0882fb32333af561faf8519d'
-  private url = 'telco.com'
+  constructor(
+    private httpService: HttpService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+  ) {}
+  // private api_key = 'cs_b7c524cd0882fb32333af561faf8519d'
+  // private url = 'telco.com'
 
   //localhost/caesar_api/?api_key=cs_4b3cdcc1d7c13d833005ae8ff5735e66&url=http://localhost/sample_api/&action=createWallet&lastname=ENIERGA&firstname=RENZ&middlename=BARLAAN&contact_no=+639153805944&email_address=pen.srm.helpdesk@gmail.com&password=12345&user_type=User&country=PH
   async createWallet({
@@ -107,6 +111,18 @@ export class ActualCaesarService {
       country: 'PH' | 'USD'
     }
   }> {
+    // const cache = await this.cacheManager.get<{
+    //   lastName: string
+    //   firstName: string
+    //   middleName: string
+    //   address?: string
+    //   contactNo: string
+    //   emailAddress: string
+    //   country: 'PH' | 'USD'
+    // }>(`getUserInfo-${walletId}`)
+    // if (cache) {
+    //   return { data: { ...cache } }
+    // }
     return await firstValueFrom(
       this.httpService
         .get('/', {
@@ -115,7 +131,15 @@ export class ActualCaesarService {
             wallet_id: walletId,
           },
         })
-        .pipe(map((res) => res.data)),
+        .pipe(
+          map(async (res) => {
+            // await this.cacheManager.set(
+            //   `getUserInfo-${walletId}`,
+            //   res.data.data,
+            // )
+            return res.data
+          }),
+        ),
     )
   }
 
@@ -143,12 +167,31 @@ export class ActualCaesarService {
     )
   }
 
-  async getEquivalent(walletId: string): Promise<{
+  async getEquivalent(
+    walletId: string,
+    options?: {
+      disableCache?: boolean
+    },
+  ): Promise<{
     data: {
       phpEquivalent: number
       usdEquivalent: number
     }
   }> {
+    if (!options?.disableCache) {
+      const cachedGetEquivalent = await this.cacheManager.get<{
+        phpEquivalent: number
+        usdEquivalent: number
+      }>('getEquivalent')
+      if (cachedGetEquivalent) {
+        return {
+          data: {
+            ...cachedGetEquivalent,
+          },
+        }
+      }
+    }
+
     return await firstValueFrom(
       this.httpService
         .get('/', {
@@ -157,7 +200,16 @@ export class ActualCaesarService {
             wallet_id: walletId,
           },
         })
-        .pipe(map((res) => res.data)),
+        .pipe(
+          map(async (res) => {
+            // console.log(
+            //   'cachemanager setting cache for actualCaesar getEquivalent',
+            //   res.data.data,
+            // )
+            await this.cacheManager.set('getEquivalent', res.data.data)
+            return res.data
+          }),
+        ),
     )
   }
 
@@ -232,6 +284,89 @@ export class ActualCaesarService {
         .get('/', {
           params: {
             action: 'resetData',
+          },
+        })
+        .pipe(map((res) => res.data)),
+    )
+  }
+
+  async getAllInfo(
+    wallet_id: string,
+    options?: {
+      disableCache?: boolean
+    },
+  ): Promise<{
+    data: {
+      user_id: string
+      lastname: string
+      firstname: string
+      middlename: string
+      contact_no: string
+      email_address: string
+      country: 'PH' | 'US'
+      wallet_id: string
+      wallet_name: string
+      balance: number
+    }
+  }> {
+    if (!options?.disableCache) {
+      const cache = await this.cacheManager.get<{
+        user_id: string
+        lastname: string
+        firstname: string
+        middlename: string
+        contact_no: string
+        email_address: string
+        country: 'PH' | 'US'
+        wallet_id: string
+        wallet_name: string
+        balance: number
+      }>(`getAllInfo-${wallet_id}`)
+      if (cache) {
+        return { data: { ...cache } }
+      }
+    }
+
+    return await firstValueFrom(
+      this.httpService
+        .get('/', {
+          params: {
+            action: 'getAllInfo',
+            wallet_id,
+          },
+        })
+        .pipe(
+          map(async (res) => {
+            await this.cacheManager.set(
+              `getAllInfo-${wallet_id}`,
+              res.data.data,
+            )
+            return res.data
+          }),
+        ),
+    )
+  }
+
+  async sendCcoin(
+    wallet_from: string,
+    wallet_to: string,
+    amount: number,
+    message = '',
+  ): Promise<{
+    data: {
+      error: string
+      errorDesc: string
+    }
+  }> {
+    return await firstValueFrom(
+      this.httpService
+        .get('/', {
+          params: {
+            action: 'sendCcoin',
+            sender: wallet_from,
+            recipient: wallet_to,
+            amount: amount,
+            message,
           },
         })
         .pipe(map((res) => res.data)),

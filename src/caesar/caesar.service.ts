@@ -10,11 +10,9 @@ import {
   UserTypesAndUser,
 } from 'src/types/Roles'
 import paginateFind from 'src/utils/paginate'
-import { Like, Repository } from 'typeorm'
+import { Repository } from 'typeorm'
 import { HttpService } from '@nestjs/axios'
 import { User } from 'src/user/entities/user.entity'
-import { firstValueFrom, map } from 'rxjs'
-import { AxiosResponse } from 'axios'
 import { GetCaesarDto } from 'src/caesar/dto/get-caesar.dto'
 import { ExternalCaesar } from 'src/external-caesar/entities/external-caesar.entity'
 import { SearchCaesarDto } from 'src/caesar/dto/search-caesar.dto'
@@ -153,7 +151,6 @@ export class CaesarService {
     const { searchQuery } = searchCaesarDto
     const { page = 0, limit = 100 } = searchCaesarDto
     delete searchCaesarDto.searchQuery
-    const likeSearchQuery = Like(`%${searchQuery}%`)
 
     const query = createQueryBuilderAndIncludeRelations(this.caesarRepository, {
       entityName: 'caesar',
@@ -266,19 +263,19 @@ export class CaesarService {
       //   throw new Error(err)
       // })
 
-      const { data: externalCaesarUser } =
-        await this.caesarApiService.getUserInfo(localCaesar.caesar_id)
+      // const { data: externalCaesarUser } =
+      //   await this.caesarApiService.getUserInfo(localCaesar.caesar_id)
 
       const { data: externalCaesarData } =
-        await this.caesarApiService.getWalletBalance(localCaesar.caesar_id)
+        await this.caesarApiService.getAllInfo(localCaesar.caesar_id)
       const { data: externalCaesarExchange } =
         await this.caesarApiService.getEquivalent(localCaesar.caesar_id)
 
       const dataContainer: Omit<ExternalCaesar, 'password'> = {
-        email: externalCaesarUser.emailAddress,
-        first_name: externalCaesarUser.firstName,
-        last_name: externalCaesarUser.lastName,
-        cp_number: externalCaesarUser.contactNo,
+        email: externalCaesarData.email_address,
+        first_name: externalCaesarData.firstname,
+        last_name: externalCaesarData.lastname,
+        cp_number: externalCaesarData.contact_no,
         caesar_coin: Number(externalCaesarData.balance),
         dollar: externalCaesarExchange.usdEquivalent,
         peso: externalCaesarExchange.phpEquivalent,
@@ -306,22 +303,21 @@ export class CaesarService {
   }
 
   async pay(caesar: Caesar, amount: number) {
-    let caesarAccount = await this.findOne(caesar.id)
-    if (!caesarAccount?.data) {
-      caesarAccount = await this.injectExternalCaesar(caesarAccount)
-    }
-
-    const topUpResponse = firstValueFrom(
-      this.axiosService
-        .post('/external-caesar/topup/' + caesarAccount.data.wallet_id, {
-          amount,
-        })
-        .pipe(
-          map((response: AxiosResponse) => response.data as ExternalCaesar),
-        ),
-    ).catch((err) => {
-      throw new Error(err.message)
-    })
-    return topUpResponse
+    // let caesarAccount = await this.findOne(caesar.id)
+    // if (!caesarAccount?.data) {
+    //   caesarAccount = await this.injectExternalCaesar(caesarAccount)
+    // }
+    // const topUpResponse = firstValueFrom(
+    //   this.axiosService
+    //     .post('/external-caesar/topup/' + caesarAccount.data.wallet_id, {
+    //       amount,
+    //     })
+    //     .pipe(
+    //       map((response: AxiosResponse) => response.data as ExternalCaesar),
+    //     ),
+    // ).catch((err) => {
+    //   throw new Error(err.message)
+    // })
+    // return topUpResponse
   }
 }

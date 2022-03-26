@@ -20,7 +20,6 @@ import { TransactionModule } from './transaction/transaction.module'
 import { InventoryLogModule } from './inventorylog/inventorylog.module'
 import SQLConfig from 'root/ormconfig'
 import { SiteAccessGuard } from 'src/guards/site-access.guard'
-import { ActualCaesarModule } from './actual-caesar/actual-caesar.module'
 
 @Module({
   imports: [
@@ -66,7 +65,6 @@ import { ActualCaesarModule } from './actual-caesar/actual-caesar.module'
       }),
       inject: [ConfigService],
     }),
-    ActualCaesarModule,
   ],
   controllers: [AppController],
   providers: [

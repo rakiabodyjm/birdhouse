@@ -1,5 +1,5 @@
-import { Expose } from 'class-transformer'
-import { UserTypes, UserTypesAndUser } from 'src/types/Roles'
+import { Exclude, Expose } from 'class-transformer'
+import { UserTypesAndUser } from 'src/types/Roles'
 import {
   Column,
   CreateDateColumn,
@@ -38,6 +38,7 @@ export class ExternalCaesar {
   caesar_coin: number
 
   @Column()
+  @Exclude()
   password: string
 
   // @Column('decimal', {

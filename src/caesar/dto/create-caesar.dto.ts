@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsNotEmpty, IsOptional, IsUUID } from 'class-validator'
+import { IsNotEmpty, IsOptional, IsUUID, MinLength } from 'class-validator'
 import { Admin } from 'src/admin/entities/admin.entity'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
@@ -56,6 +56,10 @@ export class CreateCaesarDto implements Partial<WithAccountTypes> {
   @ApiProperty()
   caesar_id: string
 
-  @IsNotEmpty()
+  @ApiProperty()
+  @IsOptional()
+  @MinLength(4, {
+    message: 'Password must be at least 4 characters',
+  })
   password: string
 }

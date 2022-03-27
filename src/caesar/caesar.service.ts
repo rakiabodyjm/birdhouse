@@ -6,35 +6,27 @@ import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { Paginated } from 'src/types/Paginated'
 import { AccountTypes, UserTypesAndUser } from 'src/types/Roles'
 import paginateFind from 'src/utils/paginate'
-import { Like, Repository } from 'typeorm'
+import { Repository } from 'typeorm'
 import { HttpService } from '@nestjs/axios'
 import { User } from 'src/user/entities/user.entity'
 import { firstValueFrom, map } from 'rxjs'
-import { AxiosResponse } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 import { GetCaesarDto } from 'src/caesar/dto/get-caesar.dto'
 import { ExternalCaesar } from 'src/external-caesar/entities/external-caesar.entity'
-import { CaesarApiService } from 'src/caesar/ceasar-api.service'
 import { SearchCaesarDto } from 'src/caesar/dto/search-caesar.dto'
 import { plainToClass } from 'class-transformer'
-import { ConfigService } from '@nestjs/config'
 import createQueryBuilderAndIncludeRelations from 'src/utils/queryBuilderWithRelations'
+import { UpdateCaesarDto } from 'src/caesar/dto/update-caesar.dto'
+// import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 export class CaesarService {
   constructor(
     @InjectRepository(Caesar)
     private readonly caesarRepository: Repository<Caesar>,
-    private axiosService: HttpService,
-    private caesarApiService: CaesarApiService,
-    private configService: ConfigService,
+    private axiosService: HttpService, // private caesarApiService: CaesarApiService, // private configService: ConfigService,
   ) {}
-  relations: UserTypesAndUser[] = [
-    'admin',
-    'subdistributor',
-    'dsp',
-    'retailer',
-    'user',
-  ]
+  relations = ['admin', 'subdistributor', 'dsp', 'retailer', 'user']
 
   async create({
     userAccount,
@@ -60,7 +52,11 @@ export class CaesarService {
     const caesar_id$ = this.axiosService
       .post('/external-caesar', newCaesarUser)
       .pipe(map((response) => response.data as string))
-    const caesar_id = await firstValueFrom(caesar_id$)
+    const caesar_id = await firstValueFrom(caesar_id$).catch(
+      (err: AxiosError) => {
+        throw new Error(err.response.data.message)
+      },
+    )
 
     /**
      * Create local record of Caesar into dito_db
@@ -136,7 +132,6 @@ export class CaesarService {
     const { searchQuery } = searchCaesarDto
     const { page = 0, limit = 100 } = searchCaesarDto
     delete searchCaesarDto.searchQuery
-    const likeSearchQuery = Like(`%${searchQuery}%`)
 
     const query = createQueryBuilderAndIncludeRelations(this.caesarRepository, {
       entityName: 'caesar',
@@ -279,5 +274,36 @@ export class CaesarService {
       throw new Error(err.message)
     })
     return topUpResponse
+  }
+
+  // update(id: string, updateCaesar: UpdateCaesarDto) {
+  //   console.log(updateCaesar)
+  //   return this.findOne(id).then(async (res) => {
+  //     console.log(res)
+  //     if (updateCaesar.banks) {
+  //       updateCaesar.banks = [
+  //         ...(await Promise.all(
+  //           updateCaesar.banks.map((ea) =>
+  //             this.bankService.findOne(ea).catch((err) => {
+  //               throw new Error(`Bank doesn't exist ${ea}`)
+  //             }),
+  //           ),
+  //         )),
+  //       ]
+  //     }
+  //     return this.caesarRepository.save({
+  //       ...res,
+  //       ...updateCaesar,
+  //     })
+  //   })
+  // }
+
+  async update(id: string, updateCaesarDto: UpdateCaesarDto) {
+    const caesar = await this.findOne(id)
+    return this.caesarRepository.save({
+      ...caesar,
+      // ...(updateCaesarDto?.operator && { operator: updateCaesarDto.operator }),
+      // ...(updateCaesarDto as Partial<Caesar>),
+    })
   }
 }

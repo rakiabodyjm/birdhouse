@@ -14,6 +14,7 @@ import {
   InternalServerErrorException,
   BadRequestException,
   UseGuards,
+  Patch,
 } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { Role } from 'src/auth/decorators/roles.decorator'
@@ -21,6 +22,7 @@ import { RolesGuard } from 'src/auth/guards/roles.guard'
 import { GetAllCaesarDto } from 'src/caesar/dto/get-all-caesar.dto'
 import { GetCaesarDto } from 'src/caesar/dto/get-caesar.dto'
 import { SearchCaesarDto } from 'src/caesar/dto/search-caesar.dto'
+import { UpdateCaesarDto } from 'src/caesar/dto/update-caesar.dto'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { Paginated } from 'src/types/Paginated'
 import { Roles, RolesArray, UserTypesAndUser } from 'src/types/Roles'
@@ -46,6 +48,7 @@ export class CaesarController {
         HttpStatus.BAD_REQUEST,
       )
     }
+
     const password = createCaesarDto.password
     delete createCaesarDto.password
     if (Object.keys(createCaesarDto).length > 1) {
@@ -146,4 +149,10 @@ export class CaesarController {
   // remove(@Param('id') id: string) {
   //   return this.caesarService.remove(+id)
   // }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateCaesarDto: UpdateCaesarDto) {
+    console.log(updateCaesarDto)
+    return this.caesarService.update(id, updateCaesarDto)
+  }
 }

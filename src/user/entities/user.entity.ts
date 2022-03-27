@@ -134,8 +134,13 @@ export class User {
   })
   caesar_wallet?: Caesar
 
-  // @BeforeUpdate()
-  // setUpdatedAt() {
-  //   this.updated_at = new SQLDateGenerator().timeNow().getSQLDate()
-  // }
+  @BeforeUpdate()
+  setUpdatedAt() {
+    this.updated_at = new SQLDateGenerator().timeNow().getSQLDate()
+  }
+
+  @Column({
+    default: null,
+  })
+  custom_roles: string
 }

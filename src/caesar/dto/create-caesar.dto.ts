@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { Transform } from 'class-transformer'
 import { IsNotEmpty, IsOptional, IsUUID, MinLength } from 'class-validator'
 import { Admin } from 'src/admin/entities/admin.entity'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
@@ -8,6 +9,7 @@ import { NoDuplicateInDb } from 'src/pipes/validation/NoDuplicateInDb'
 import { Retailer } from 'src/retailers/entities/retailer.entity'
 import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
 import { User } from 'src/user/entities/user.entity'
+import { Bcrypt } from 'src/utils/Bcrypt'
 
 const NoWalletId = () =>
   NoDuplicateInDb(Caesar, 'account_id', {
@@ -57,9 +59,11 @@ export class CreateCaesarDto implements Partial<WithAccountTypes> {
   caesar_id: string
 
   @ApiProperty()
-  @IsOptional()
   @MinLength(4, {
     message: 'Password must be at least 4 characters',
+  })
+  @Transform(({ value }) => {
+    return Bcrypt().generatePassword(value)
   })
   password: string
 }

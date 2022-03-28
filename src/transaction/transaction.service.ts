@@ -158,6 +158,7 @@ export class TransactionService {
            * make payment to seller after successfully adding to buyer's
            * inventory
            */
+
           // console.log('reached payment')
           // const payment1 = await this.caesarService.pay(
           //   sellerCaesar,

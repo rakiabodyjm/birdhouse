@@ -21,6 +21,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
+import { CaesarBank } from 'src/cash-transfer/entities/caesar-bank.entity'
+import { CashTransfer } from 'src/cash-transfer/entities/cash-transfer.entity'
 
 class WithAccountTypes {
   @JoinColumn({
@@ -153,4 +155,18 @@ export class Caesar extends WithAccountTypes {
 
   @Expose()
   data?: ExternalCaesar
+
+  @OneToMany((type) => CaesarBank, (caesarBank) => caesarBank.caesar)
+  bank_accounts: CaesarBank[]
+
+  @OneToMany((type) => CashTransfer, (cashTransfer) => cashTransfer.from)
+  cash_transfer_from: CashTransfer[]
+
+  @OneToMany((type) => CashTransfer, (cashTransfer) => cashTransfer.to)
+  cash_transfer_to: CashTransfer[]
+
+  @Column({
+    nullable: true,
+  })
+  operator: null | true
 }

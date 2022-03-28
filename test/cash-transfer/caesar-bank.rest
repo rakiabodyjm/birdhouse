@@ -1,0 +1,6 @@
+GET http://localhost:6006/cash-transfer/caesar-bank/
+
+
+### WALLET CREDENTIALS
+###
+

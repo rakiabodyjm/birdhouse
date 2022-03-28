@@ -7,6 +7,7 @@ import {
   Param,
   Post,
 } from '@nestjs/common'
+import { SendCCoinDto } from 'src/actual-caesar/dto/send-ccoin.dto'
 import { Public } from 'src/auth/decorators/public.decorator'
 import { ActualCaesarService } from './actual-caesar.service'
 import { CreateActualWalletDto } from './dto/create-actual-wallet.dto'
@@ -50,5 +51,12 @@ export class ActualCaesarController {
   @Post('pay')
   getPaymentUi(@Body() bodyParams: PayActualWalletDto) {
     return this.actualCaesarService.getPaymentUi(bodyParams)
+  }
+
+  @Post('send-ccoin')
+  sendCcoin(@Body() sendCCoinDto: SendCCoinDto) {
+    return this.actualCaesarService.sendCcoin({
+      ...sendCCoinDto,
+    })
   }
 }

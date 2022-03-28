@@ -1,0 +1,10 @@
+GET http://localhost:6006/cash-transfer/transfer-type
+
+###
+
+POST http://localhost:6006/cash-transfer/transfer-type
+Content-Type: application/json
+
+{
+    "name": "PENALTY"
+}

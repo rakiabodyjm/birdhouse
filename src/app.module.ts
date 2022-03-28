@@ -21,7 +21,8 @@ import { InventoryLogModule } from './inventorylog/inventorylog.module'
 import SQLConfig from 'root/ormconfig'
 import { SiteAccessGuard } from 'src/guards/site-access.guard'
 import { ActualCaesarModule } from './actual-caesar/actual-caesar.module'
-
+// import { WealthModule } from './wealth/wealth.module'
+import { CashTransferModule } from './cash-transfer/cash-transfer.module'
 @Module({
   imports: [
     CacheModule.register(),
@@ -67,6 +68,7 @@ import { ActualCaesarModule } from './actual-caesar/actual-caesar.module'
       inject: [ConfigService],
     }),
     ActualCaesarModule,
+    CashTransferModule,
   ],
   controllers: [AppController],
   providers: [

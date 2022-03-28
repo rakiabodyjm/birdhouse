@@ -1,0 +1,7 @@
+POST http://localhost:6006/cash-transfer/
+Content-Type: application/json
+
+{
+    "transfer_type": 1, 
+    "caesar_from"
+}

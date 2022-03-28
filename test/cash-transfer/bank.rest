@@ -1,0 +1,20 @@
+GET http://localhost:6006/cash-transfer/bank/
+
+### 
+POST http://localhost:6006/cash-transfer/bank
+Content-Type: application/json
+
+{
+    "name": "GCash", 
+    "description": "Globe Fintech"
+}
+
+###
+PATCH http://localhost:6006/cash-transfer/bank/1
+Content-Type: application/json
+
+{
+    "name": "BDO Unibank", 
+    "description": "BANCO DE ORO"
+}
+

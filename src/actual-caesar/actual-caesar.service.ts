@@ -3,6 +3,7 @@ import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common'
 import { Cache } from 'cache-manager'
 import { firstValueFrom, map } from 'rxjs'
 import { CreateActualWalletDto } from 'src/actual-caesar/dto/create-actual-wallet.dto'
+import { CaesarService } from 'src/caesar/caesar.service'
 
 @Injectable()
 export class ActualCaesarService {
@@ -347,24 +348,47 @@ export class ActualCaesarService {
     )
   }
 
-  async sendCcoin(
-    wallet_from: string,
-    wallet_to: string,
-    amount: number,
+  async sendCcoin({
+    caesar_from,
+    caesar_to,
+    amount,
     message = '',
-  ): Promise<{
+  }: {
+    /**
+     * actualcaesar id
+     */
+    caesar_from: string
+    /**
+     * actualcaesar id
+     */
+    caesar_to: string
+    amount: number
+    message: string
+  }): // options?: {
+  //   /**
+  //    * option to use actual caesar wallet ID
+  //    * false for using internal caesar id
+  //    */
+  //   useActual?: true
+  // },
+  Promise<{
     data: {
       error: string
       errorDesc: string
     }
   }> {
+    // if (!options?.useActual) {
+    //   caesar_from = (await this.caesarService.findOne(caesar_from)).id
+
+    //   caesar_to = (await this.caesarService.findOne(caesar_to)).id
+    // }
     return await firstValueFrom(
       this.httpService
         .get('/', {
           params: {
             action: 'sendCcoin',
-            sender: wallet_from,
-            recipient: wallet_to,
+            sender: caesar_from,
+            recipient: caesar_to,
             amount: amount,
             message,
           },

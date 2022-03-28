@@ -11,32 +11,25 @@ import {
 } from 'src/types/Roles'
 import paginateFind from 'src/utils/paginate'
 import { Repository } from 'typeorm'
-import { HttpService } from '@nestjs/axios'
 import { User } from 'src/user/entities/user.entity'
 import { GetCaesarDto } from 'src/caesar/dto/get-caesar.dto'
 import { ExternalCaesar } from 'src/external-caesar/entities/external-caesar.entity'
 import { SearchCaesarDto } from 'src/caesar/dto/search-caesar.dto'
 import { plainToClass } from 'class-transformer'
-import { ConfigService } from '@nestjs/config'
 import createQueryBuilderAndIncludeRelations from 'src/utils/queryBuilderWithRelations'
 import { ActualCaesarService } from 'src/actual-caesar/actual-caesar.service'
+import { UpdateCaesarDto } from 'src/caesar/dto/update-caesar.dto'
 
 @Injectable()
 export class CaesarService {
   constructor(
     @InjectRepository(Caesar)
     private readonly caesarRepository: Repository<Caesar>,
-    private axiosService: HttpService,
-    private configService: ConfigService,
+    // private axiosService: HttpService,
+    // private configService: ConfigService,
     private caesarApiService: ActualCaesarService,
   ) {}
-  relations: UserTypesAndUser[] = [
-    'admin',
-    'subdistributor',
-    'dsp',
-    'retailer',
-    'user',
-  ]
+  relations = ['admin', 'subdistributor', 'dsp', 'retailer', 'user']
 
   async create({
     userAccount,
@@ -319,5 +312,36 @@ export class CaesarService {
     //   throw new Error(err.message)
     // })
     // return topUpResponse
+  }
+
+  // update(id: string, updateCaesar: UpdateCaesarDto) {
+  //   console.log(updateCaesar)
+  //   return this.findOne(id).then(async (res) => {
+  //     console.log(res)
+  //     if (updateCaesar.banks) {
+  //       updateCaesar.banks = [
+  //         ...(await Promise.all(
+  //           updateCaesar.banks.map((ea) =>
+  //             this.bankService.findOne(ea).catch((err) => {
+  //               throw new Error(`Bank doesn't exist ${ea}`)
+  //             }),
+  //           ),
+  //         )),
+  //       ]
+  //     }
+  //     return this.caesarRepository.save({
+  //       ...res,
+  //       ...updateCaesar,
+  //     })
+  //   })
+  // }
+
+  async update(id: string, updateCaesarDto: UpdateCaesarDto) {
+    const caesar = await this.findOne(id)
+    return this.caesarRepository.save({
+      ...caesar,
+      ...(updateCaesarDto?.operator && { operator: updateCaesarDto.operator }),
+      // ...(updateCaesarDto as Partial<Caesar>),
+    })
   }
 }

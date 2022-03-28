@@ -1,4 +1,4 @@
-import { Expose } from 'class-transformer'
+import { Exclude, Expose } from 'class-transformer'
 import { CreateWalletDto } from 'src/caesar/caesar-api.controller'
 import { UserTypesAndUser } from 'src/types/Roles'
 import {
@@ -38,7 +38,11 @@ export class ExternalCaesar {
   })
   caesar_coin: number
 
-  @Column()
+  @Exclude()
+  @Column({
+    default: null,
+    nullable: true,
+  })
   password: string
 
   // @Column('decimal', {

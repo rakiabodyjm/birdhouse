@@ -50,3 +50,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBO
 }
 ###
 GET http://localhost:6006/caesar?account_type=admin
+
+###
+### ADMIN JANEO CAESAR 3F29433E-F36B-1410-8211-00BFC2301278
+PATCH http://localhost:6006/caesar/3F29433E-F36B-1410-8211-00BFC2301278
+Content-Type: application/json
+
+{
+    "operator": true
+}

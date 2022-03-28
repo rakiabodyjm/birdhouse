@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm'
 
@@ -12,6 +13,7 @@ const dollarExchangeRate = process.env.USD_EXCHANGE_RATE || 49
 const pesoExchangeRate = process.env.PESO_EXCHANGE_RATE || 1
 
 @Entity()
+@Unique(['email', 'role'])
 export class ExternalCaesar {
   @PrimaryGeneratedColumn('increment')
   wallet_id: string

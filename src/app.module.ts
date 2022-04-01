@@ -1,6 +1,6 @@
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard'
 import { JwtModule } from '@nestjs/jwt'
-import { CacheModule, Module } from '@nestjs/common'
+import { CacheInterceptor, CacheModule, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
@@ -20,10 +20,13 @@ import { TransactionModule } from './transaction/transaction.module'
 import { InventoryLogModule } from './inventorylog/inventorylog.module'
 import SQLConfig from 'root/ormconfig'
 import { SiteAccessGuard } from 'src/guards/site-access.guard'
-
+import { CashTransferModule } from './cash-transfer/cash-transfer.module'
 @Module({
   imports: [
-    CacheModule.register(),
+    CacheModule.register({
+      isGlobal: true,
+      ttl: 15,
+    }),
     ConfigModule.forRoot({
       envFilePath:
         process.env.NODE_ENV === 'production'
@@ -65,11 +68,17 @@ import { SiteAccessGuard } from 'src/guards/site-access.guard'
       }),
       inject: [ConfigService],
     }),
+    CashTransferModule,
   ],
   controllers: [AppController],
   providers: [
     ...(process.env.NODE_ENV === 'development'
-      ? []
+      ? [
+          {
+            provide: 'APP_GUARD',
+            useClass: JwtAuthGuard,
+          },
+        ]
       : [
           {
             provide: 'APP_GUARD',
@@ -82,6 +91,10 @@ import { SiteAccessGuard } from 'src/guards/site-access.guard'
         ]),
 
     AppService,
+    // {
+    //   provide: 'APP_INTERCEPTOR',
+    //   useClass: CacheInterceptor,
+    // },
   ],
 })
 export class AppModule {}

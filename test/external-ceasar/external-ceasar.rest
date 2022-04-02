@@ -11,6 +11,7 @@ Content-Type: application/json
 
 ###
 GET http://localhost:6006/external-caesar
+pay-caesar-secret: Oasis2089$
 
 ###
 DELETE http://localhost:6006/external-caesar

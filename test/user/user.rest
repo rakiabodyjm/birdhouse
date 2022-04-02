@@ -1,3 +1,14 @@
+###
+
+POST http://localhost:6006/auth/login
+Content-Type: application/json
+
+{
+    "email": "rakiabodyjm",
+    "password": "rakiabodyjm4690",
+    "remember_me": true
+}
+
 
 ### CREATE USER
 POST http://localhost:6006/user
@@ -36,7 +47,6 @@ Content-Type: application/json
  
 ### SHOW ALL USERS
 GET http://localhost:6006/user
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNkUwNjQzM0UtRjM2Qi0xNDEwLTgyMDktMDBCRkMyMzAxMjc4IiwiZW1haWwiOiJqbV9wb2dpMzEwIiwiZmlyc3RfbmFtZSI6IkphbmVvIE1pZ3VlbCIsImxhc3RfbmFtZSI6IlRpb25nc29uIiwicm9sZXMiOlsiZHNwIiwic3ViZGlzdHJpYnV0b3IiXSwiaWF0IjoxNjQ2MjQ5MDY1LCJleHAiOjE2NDYyNTI2NjV9.qzMq4vcjaCrvjeFy13DNbXfmDsuPxjJ8U0USSztM5go
 
 
 ### CLEAR ALL USERS
@@ -83,13 +93,8 @@ DELETE http://localhost:6006/user/AE02DF31-DD2B-EC11-B666-00E18CEF5935
 
 
 
-
-
-
-
-
 ### SEARCH
-GET http://localhost:6006/user/search?find=jake
+GET http://localhost:6006/user/search?find=Nico
 
 ###Pagination
 GET http://localhost:6006/user?page=0&limit=3

@@ -1,8 +1,7 @@
 ### 
 GET http://localhost:6006/caesar
 
-###
-GET http://localhost:6006/caesar?page=0&limit=3
+###aGET http://localhost:6006/caesar?page=0&limit=3
 
 ###
 GET http://localhost:6006/caesar/AA7E433E-F36B-1410-8206-00BFC2301278
@@ -15,8 +14,9 @@ Content-Type: application/json
 {
     # "subdistributor": "FDC28593-B957-EC11-B670-00E18CEF5938"
     # "user": "AE02DF31-DD2B-EC11-B666-00E18CEF5935"
-    "admin":"E058BBB5-AD57-EC11-B670-00E18CEF5938"
-    # "dsp": "7D1F2327-DB57-EC11-B670-00E18CEF5938"
+    "admin":"E5B9433E-F36B-1410-8214-00BFC2301278",
+    # "dsp": "7D1F2327-DB57-EC11-B670-00E18CEF5938", 
+    "password": "password"
     
 }
 
@@ -25,7 +25,7 @@ DELETE http://localhost:6006/caesar
 
 
 ###
-GET http://localhost:6006/caesar/search?limit="1"&searchQuery=""
+GET http://localhost:6006/caesar/search?searchQuery=&limit=1
 
 ###TEST-PAY
 
@@ -50,3 +50,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBO
 }
 ###
 GET http://localhost:6006/caesar?account_type=admin
+
+###
+### ADMIN JANEO CAESAR 3F29433E-F36B-1410-8211-00BFC2301278
+PATCH http://localhost:6006/caesar/3F29433E-F36B-1410-8211-00BFC2301278
+Content-Type: application/json
+
+{
+    "operator": true
+}

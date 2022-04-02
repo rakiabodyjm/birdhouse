@@ -1,0 +1,26 @@
+GET http://localhost:6006/cash-transfer/bank/
+
+### 
+POST http://localhost:6006/cash-transfer/bank
+Content-Type: application/json
+
+{
+    "name": "PayMaya", 
+    "description": "Paymaya bla bla"
+}
+
+###
+PATCH http://localhost:6006/cash-transfer/bank/14
+Content-Type: application/json
+
+{
+    "name": "PayMaya", 
+    "description": "PayMaya"
+}
+
+
+### 
+DELETE http://localhost:6006/cash-transfer/bank/14
+
+### INIT
+POST http://localhost:6006/cash-transfer/bank/init

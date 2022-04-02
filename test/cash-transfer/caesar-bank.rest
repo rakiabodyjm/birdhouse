@@ -1,0 +1,14 @@
+GET http://localhost:6006/cash-transfer/caesar-bank/
+
+
+### WALLET CREDENTIALS
+
+
+###
+DELETE http://localhost:6006/cash-transfer/caesar-bank/7
+### 
+DELETE http://localhost:6006/cash-transfer/caesar-bank/4
+
+###Initialize
+
+POST http://localhost:6006/cash-transfer/caesar-bank/init

@@ -10,10 +10,8 @@ import { CashTransfer } from 'src/cash-transfer/entities/cash-transfer.entity'
 import { TransferType } from 'src/cash-transfer/entities/transfer-type.entity'
 import { CaesarBankService } from 'src/cash-transfer/services/caesar-bank.service'
 import { TransferTypeService } from 'src/cash-transfer/services/transfer-type.service'
-import { createEntityMessage } from 'src/types/EntityMessage'
 import paginateFind from 'src/utils/paginate'
 import { LessThan, MoreThan, Repository } from 'typeorm'
-import { CashTransferWithDraw } from '../entities/cash-transfer.entity'
 // import { CreateCashTransferDto } from './dto/cash-transfer/create-cash-transfer.dto'
 // import { UpdateCashTransferDto } from './dto/update-cash-transfer.dto'
 
@@ -28,7 +26,7 @@ export class CashTransferService {
   ) {}
 
   async create(createCashTransferDto: CreateCashTransferDto) {
-    const { amount, from, to, caesar_bank, transfer_type, message } =
+    const { amount, from, to, caesar_bank, transfer_type, description } =
       createCashTransferDto
     /**
      * check if balance is sufficient
@@ -64,6 +62,7 @@ export class CashTransferService {
       // caesar_bank: caesarBank,
       from: caesarFrom,
       to: caesarTo,
+      description,
     })
 
     return this.cashTransferRepository.save(newTransfer)

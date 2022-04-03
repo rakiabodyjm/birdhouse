@@ -6,7 +6,7 @@ import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { Paginated } from 'src/types/Paginated'
 import { AccountTypes, UserTypesAndUser } from 'src/types/Roles'
 import paginateFind from 'src/utils/paginate'
-import { Repository } from 'typeorm'
+import { Like, Repository } from 'typeorm'
 import { HttpService } from '@nestjs/axios'
 import { User } from 'src/user/entities/user.entity'
 import { firstValueFrom, map } from 'rxjs'
@@ -175,6 +175,57 @@ export class CaesarService {
     return query
   }
 
+  searchV2(params: SearchCaesarDto) {
+    const likeQuery = params?.searchQuery
+      ? Like(`%${params.searchQuery}%`)
+      : undefined
+    return paginateFind(
+      this.caesarRepository,
+      {
+        ...params,
+      },
+      {
+        relations: [...this.relations],
+        ...(likeQuery && {
+          order: {
+            created_at: 'DESC',
+          },
+          where: [
+            {
+              admin: {
+                name: likeQuery,
+              },
+            },
+            {
+              subdistributor: {
+                name: likeQuery,
+              },
+            },
+            {
+              dsp: {
+                dsp_code: likeQuery,
+              },
+            },
+            {
+              user: {
+                first_name: likeQuery,
+              },
+            },
+            {
+              user: {
+                last_name: likeQuery,
+              },
+            },
+            {
+              retailer: {
+                store_name: likeQuery,
+              },
+            },
+          ],
+        }),
+      },
+    )
+  }
   findOne<T = GetCaesarDto>(accountQuery: T): Promise<Caesar>
   findOne<T = string>(caesarId: T): Promise<Caesar>
   findOne(id: GetCaesarDto | string) {

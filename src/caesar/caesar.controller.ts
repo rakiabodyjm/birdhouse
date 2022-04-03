@@ -94,6 +94,11 @@ export class CaesarController {
     })
   }
 
+  @Get('search-v2')
+  searchV2(@Query() searchCaesarDto: SearchCaesarDto) {
+    return this.caesarService.searchV2(searchCaesarDto)
+  }
+
   @Get('account')
   findOneQuery(@Query() getCaesarByAccountQuery: GetCaesarDto) {
     return this.caesarService.findOne(getCaesarByAccountQuery).catch((err) => {

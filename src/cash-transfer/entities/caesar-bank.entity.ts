@@ -8,6 +8,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm'
 
 @Entity()
@@ -31,6 +32,7 @@ export class CaesarBank {
 
   @Column({
     type: 'text',
+    nullable: false,
     // nullable: true,
   })
   description: string

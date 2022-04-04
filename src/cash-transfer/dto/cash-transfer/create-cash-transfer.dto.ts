@@ -32,7 +32,7 @@ export class CreateCashTransferDto {
   to: any
 
   @IsOptional()
-  message: string
+  description: string
 
   @IsEnum(CashTransferAs)
   @IsOptional()

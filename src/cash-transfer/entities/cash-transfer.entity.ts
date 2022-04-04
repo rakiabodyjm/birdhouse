@@ -17,9 +17,9 @@ export enum CashTransferAs {
   TRANSFER = 'TRANSFER',
   WITHDRAW = 'WITHDRAW',
   LOAN = 'LOAN',
-  LOAN_PAYMENT = 'LOAN PAYMENT',
+  'LOAN PAYMENT' = 'LOAN PAYMENT',
   INTEREST = 'INTEREST',
-  BANK_FEES = 'BANK FEES',
+  'BANK FEES' = 'BANK FEES',
 }
 
 export class CashTransferWithDraw {
@@ -86,4 +86,11 @@ export class CashTransfer extends IntersectionType(
     type: 'datetime',
   })
   deleted_at: Date
+
+  @Column({
+    type: 'text',
+  })
+  description: string
+
+  // @ManyToOne(()=> Caesar, caesar => caesar.loans)
 }

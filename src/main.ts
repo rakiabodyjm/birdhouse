@@ -63,6 +63,17 @@ ${
   chalk.yellow(process.env.SQL_SERVER_DATABASE)
 }
 ${chalk.greenBright('NODE_ENV: ') + chalk.yellow(process.env.NODE_ENV)}
+${
+  chalk.greenBright('ALLOWED HOSTS: ') +
+  chalk.yellow(process.env.CLIENT_URL).split(';')
+}
+
+${
+  chalk.greenBright('TIME STARTED: ') +
+  chalk.yellow(new Date().toLocaleString()) +
+  ' - ' +
+  chalk.yellow(new Date().getTime())
+}
 
 
 ${bottomBorder}

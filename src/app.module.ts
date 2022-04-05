@@ -1,6 +1,6 @@
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard'
 import { JwtModule } from '@nestjs/jwt'
-import { CacheInterceptor, CacheModule, Module } from '@nestjs/common'
+import { CacheModule, Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
@@ -32,20 +32,11 @@ import { CashTransferModule } from './cash-transfer/cash-transfer.module'
         process.env.NODE_ENV === 'production'
           ? ['.env.production.local', '.env.production']
           : ['.env.development.local', '.env.development'],
-      // envFilePath: fs.existsSync
-      //   ? './.env.local'
-      //   : process.env.NODE_ENV === 'production'
-      //   ? './.env.production'
-      //   : './.env.development',
       isGlobal: true,
       cache: true,
     }),
-    TypeOrmModule.forRootAsync({
-      useFactory: async (configService) => {
-        return SQLConfig(configService)
-      },
-      inject: [ConfigService],
-    }),
+
+    TypeOrmModule.forRoot(SQLConfig),
     UserModule,
     MapIdsModule,
     DspModule,

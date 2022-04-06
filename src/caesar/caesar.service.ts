@@ -26,7 +26,14 @@ export class CaesarService {
     private readonly caesarRepository: Repository<Caesar>,
     private axiosService: HttpService, // private caesarApiService: CaesarApiService, // private configService: ConfigService,
   ) {}
-  relations = ['admin', 'subdistributor', 'dsp', 'retailer', 'user']
+  relations = [
+    'admin',
+    'subdistributor',
+    'dsp',
+    'retailer',
+    'user',
+    'bank_accounts',
+  ]
 
   async create({
     userAccount,
@@ -232,7 +239,8 @@ export class CaesarService {
     if (typeof id === 'string') {
       const caesar = this.caesarRepository
         .findOneOrFail(id, {
-          relations: ['admin', 'dsp', 'retailer', 'subdistributor', 'user'],
+          // relations: ['admin', 'dsp', 'retailer', 'subdistributor', 'user'],
+          relations: this.relations,
         })
         .then(async (res) => {
           const withExternalCaesar = await this.injectExternalCaesar(res).catch(
@@ -355,6 +363,19 @@ export class CaesarService {
       ...caesar,
       // ...(updateCaesarDto?.operator && { operator: updateCaesarDto.operator }),
       // ...(updateCaesarDto as Partial<Caesar>),
+    })
+  }
+
+  async payCashTransferBalance(caesar: Caesar | Caesar['id'], amount: number) {
+    let currentCaesar: Caesar
+    if (typeof caesar === 'string') {
+      currentCaesar = await this.findOne(caesar)
+    } else {
+      currentCaesar = caesar
+    }
+    return this.caesarRepository.save({
+      ...currentCaesar,
+      cash_transfer_balance: currentCaesar.cash_transfer_balance + amount,
     })
   }
 }

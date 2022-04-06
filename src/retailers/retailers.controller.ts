@@ -21,7 +21,9 @@ import { createEntityMessage } from 'src/types/EntityMessage'
 import { ApiTags } from '@nestjs/swagger'
 import { GetAllRetailerDto } from 'src/retailers/dto/get-all-retailer.dto'
 import SearchRetailerDto from 'src/retailers/dto/search-retailer.dto'
-
+import * as csvToJson from 'csvtojson'
+import * as path from 'path'
+import * as fs from 'fs'
 @Controller('retailer')
 @ApiTags('Retailer Routes')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -49,13 +51,6 @@ export class RetailersController {
     return this.retailersService.search(query, searchQueryDto)
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.retailersService.findOne(id).catch((err) => {
-      throw new HttpException(err.message, HttpStatus.NOT_FOUND)
-    })
-  }
-
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -72,5 +67,65 @@ export class RetailersController {
       throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
     })
     return createEntityMessage(retailer, 'Entity Retailer Deleted')
+  }
+
+  @Get('csv-retailer')
+  async getRetailer() {
+    const filePath = path.resolve(
+      process.cwd(),
+      './data/DITO-RETAILER-ACCOUNTS.csv',
+    )
+    let dsps = []
+    let dspCounts = {}
+    const retailers = await csvToJson()
+      .fromFile(filePath)
+      .then(
+        (
+          res: {
+            date: string
+            dsp_name: string
+            customer_name: string
+            first_name: string
+            last_name: string
+            address: string
+            number: string
+          }[],
+        ) => {
+          const filtered = []
+          const retailerFiltered = res.filter((ea) => {
+            if (!!ea.number && !!(ea.number.length > 0)) {
+              return true
+            }
+            filtered.push(ea)
+            return false
+          })
+          retailerFiltered.map((ea) => {
+            if (!dsps.includes(ea.dsp_name)) {
+              dsps = [...dsps, ea.dsp_name]
+              dspCounts = {
+                ...dspCounts,
+                [ea.dsp_name]: 0,
+              }
+            }
+            dspCounts[ea.dsp_name] = dspCounts[ea.dsp_name] + 1
+          })
+          console.log('filtered', filtered)
+          return retailerFiltered
+        },
+      )
+      .then((res) => {
+        console.log(dsps)
+        console.log(dspCounts)
+        console.log(res.length)
+        return res
+      })
+    return retailers
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.retailersService.findOne(id).catch((err) => {
+      throw new HttpException(err.message, HttpStatus.NOT_FOUND)
+    })
   }
 }

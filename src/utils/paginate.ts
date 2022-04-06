@@ -5,6 +5,7 @@ export default async function paginateFind<T>(
   repository: Repository<T>,
   options: PaginateOptions,
   findOptions?: FindManyOptions<T>,
+  mutateData?: (param: T[]) => T[] | Promise<T[]>,
 ): Promise<Paginated<T>> {
   const page = options?.page || 0
   const limit = options?.limit || 100
@@ -17,14 +18,8 @@ export default async function paginateFind<T>(
 
   const total_page = Math.ceil(total / limit)
 
-  // const data = await repository.find({
-  //   ...findOptions,
-  //   take: limit,
-  //   skip: page * limit,
-  // })
-
   return {
-    data,
+    data: await (mutateData ? mutateData(data) : data),
     metadata: {
       limit,
       page,

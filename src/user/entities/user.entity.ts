@@ -16,9 +16,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
-
-@Entity()
 @Index(['first_name', 'last_name', 'phone_number', 'email', 'username'])
+@Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string
@@ -83,6 +82,12 @@ export class User {
         roles.push(ea)
       }
     })
+
+    if (this.custom_roles) {
+      ;(JSON.parse(this.custom_roles) as string[]).forEach((ea) => {
+        roles.push(ea)
+      })
+    }
 
     return roles
   }

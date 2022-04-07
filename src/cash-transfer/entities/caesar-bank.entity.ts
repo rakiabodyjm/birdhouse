@@ -3,27 +3,34 @@ import { Bank } from 'src/cash-transfer/entities/bank.entity'
 import { CashTransfer } from 'src/cash-transfer/entities/cash-transfer.entity'
 import {
   Column,
+  CreateDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   Unique,
+  UpdateDateColumn,
 } from 'typeorm'
 
+@Unique(['description'])
+@Index(['description'])
 @Entity()
 export class CaesarBank {
-  @PrimaryGeneratedColumn('increment')
-  id: number
+  @PrimaryGeneratedColumn('uuid')
+  id: string
 
-  @JoinColumn({})
+  @JoinColumn({
+    name: 'ceasar_id',
+  })
   @ManyToOne((type) => Caesar, (caesar) => caesar.bank_accounts, {
     nullable: true,
     eager: true,
   })
   caesar: Caesar | null
 
-  @JoinColumn()
+  @JoinColumn({})
   @ManyToOne((type) => Bank, (bank) => bank.caesar_bank, {
     nullable: true,
     eager: true,
@@ -31,9 +38,7 @@ export class CaesarBank {
   bank: Bank | null
 
   @Column({
-    type: 'text',
     nullable: false,
-    // nullable: true,
   })
   description: string
 
@@ -53,4 +58,14 @@ export class CaesarBank {
     default: 0,
   })
   balance: number
+
+  @CreateDateColumn({
+    type: 'datetime',
+  })
+  created_at: Date
+
+  @UpdateDateColumn({
+    type: 'datetime',
+  })
+  updated_at: Date
 }

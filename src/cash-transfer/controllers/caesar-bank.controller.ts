@@ -31,17 +31,17 @@ export class CaesarBankController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: number, udpateCaesarBank: UpdateCaesarBankDto) {
+  update(@Param('id') id: string, udpateCaesarBank: UpdateCaesarBankDto) {
     this.caesarBankService.update(id, udpateCaesarBank)
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
+  findOne(@Param('id') id: string) {
     return this.caesarBankService.findOne(id)
   }
 
   @Delete(':id')
-  deleteOne(@Param('id') id: number) {
+  deleteOne(@Param('id') id: string) {
     return this.caesarBankService.deleteOne(id)
   }
 
@@ -50,12 +50,12 @@ export class CaesarBankController {
     return this.caesarBankService.deleteAll()
   }
 
-  @Post('init')
-  init() {
-    if (process.env.NODE_ENV === 'development') {
-      return this.caesarBankService.init()
-    }
+  // @Post('init')
+  // init() {
+  //   if (process.env.NODE_ENV === 'development') {
+  //     return this.caesarBankService.init()
+  //   }
 
-    throw new BadRequestException(`Illegal Operation`)
-  }
+  //   throw new BadRequestException(`Illegal Operation`)
+  // }
 }

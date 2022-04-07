@@ -83,7 +83,7 @@ export class UserService {
     try {
       const userCache: User = await this.cacheManager.get(id)
 
-      if (userCache) {
+      if (userCache && !isCached) {
         if (isCached === true) {
           return userCache
         } else {
@@ -283,5 +283,36 @@ export class UserService {
     })
 
     return roles
+  }
+
+  async addCustomRole(userId: User['id'], customRoleString: string) {
+    return this.findOne(userId).then((user) => {
+      if (user.custom_roles) {
+        user.custom_roles = JSON.stringify(
+          [
+            ...(JSON.parse(user.custom_roles) as string[]),
+            customRoleString,
+          ].filter((ea, index, array) => array.indexOf(ea) === index),
+        )
+      } else {
+        user.custom_roles = JSON.stringify([customRoleString])
+      }
+
+      return this.userRepository.save(user)
+    })
+  }
+
+  removeCustomRole(userId: User['id'], customRole: string) {
+    return this.findOne(userId).then((user) => {
+      if (!user.custom_roles) {
+        throw new Error(`User doesn't have a custom role`)
+      }
+      let roles = JSON.parse(user.custom_roles) as string[]
+      roles = roles.filter((ea) => ea !== customRole)
+
+      user.custom_roles = roles.length > 0 ? JSON.stringify(roles) : null
+      return this.userRepository.save(user)
+      // this.userRepository.save(roles.length > 0 ?  : )
+    })
   }
 }

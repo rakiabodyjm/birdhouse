@@ -15,9 +15,9 @@ export class TransferType {
   })
   description?: string
 
-  @OneToMany(
-    (type) => CashTransfer,
-    (cashtransfer) => cashtransfer.transfer_type,
-  )
-  cash_transfer: CashTransfer[]
+  // @OneToMany(
+  //   (type) => CashTransfer,
+  //   (cashtransfer) => cashtransfer.transfer_type,
+  // )
+  // cash_transfer: CashTransfer[]
 }

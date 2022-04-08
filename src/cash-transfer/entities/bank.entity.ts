@@ -17,17 +17,4 @@ export class Bank {
 
   @OneToMany((type) => CaesarBank, (caesarBank) => caesarBank.bank)
   caesar_bank: CaesarBank[]
-  // @JoinTable({
-  //   name: 'caesar_banks',
-  //   joinColumn: {
-  //     name: `bank_id`,
-  //     referencedColumnName: `id`,
-  //   },
-  //   inverseJoinColumn: {
-  //     name: `caesar_id`,
-  //     referencedColumnName: `id`,
-  //   },
-  // })
-  // @ManyToMany((type) => Caesar, (caesar) => caesar.bank_accounts)
-  // caesars: Caesar[]
 }

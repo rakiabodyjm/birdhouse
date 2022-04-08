@@ -8,7 +8,7 @@ import { UpdateCaesarBankDto } from 'src/cash-transfer/dto/caesar-bank/update-ca
 import { CaesarBank } from 'src/cash-transfer/entities/caesar-bank.entity'
 import { BankService } from 'src/cash-transfer/services/bank.service'
 import paginateFind from 'src/utils/paginate'
-import { Like, Repository } from 'typeorm'
+import { FindOneOptions, Like, Repository } from 'typeorm'
 
 @Injectable()
 export class CaesarBankService {
@@ -19,7 +19,39 @@ export class CaesarBankService {
     private caesarService: CaesarService,
   ) {}
 
+  relations = [
+    'caesar',
+    'caesar.subdistributor',
+    'caesar.admin',
+    'caesar.user',
+    'caesar.dsp',
+    'caesar.retailer',
+    'bank',
+  ]
+
   findAll(getAllCaesarDto: GetAllCaesarBankDto) {
+    const { caesar, bank, search } = getAllCaesarDto
+    const searchQuery = search ? Like(`%${search}%`) : undefined
+    const commonQuery = {
+      ...(caesar && {
+        caesar: caesar,
+      }),
+      ...(bank && {
+        bank: bank,
+      }),
+    }
+
+    const finalQuery: FindOneOptions<CaesarBank>['where'] = searchQuery
+      ? [
+          {
+            description: searchQuery,
+            ...commonQuery,
+          },
+        ]
+      : commonQuery
+
+    console.log(finalQuery)
+
     return paginateFind(
       this.caesarBankRepo,
       {
@@ -27,23 +59,13 @@ export class CaesarBankService {
         limit: getAllCaesarDto.limit,
       },
       {
-        where: {
-          ...(getAllCaesarDto.caesar && {
-            caesar: getAllCaesarDto.caesar,
-          }),
-          ...(getAllCaesarDto.bank && {
-            bank: getAllCaesarDto.bank,
-          }),
-
-          ...(getAllCaesarDto.search && {
-            description: Like(`%${getAllCaesarDto.search}%`),
-          }),
-        },
+        where: finalQuery,
+        relations: this.relations,
       },
     )
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return this.caesarBankRepo.findOneOrFail(id).catch((err) => {
       throw new Error(err.message)
     })
@@ -65,7 +87,7 @@ export class CaesarBankService {
   }
 
   async update(
-    id: number,
+    id: string,
     updatecaesarBank: UpdateCaesarBankDto & {
       balance?: number
     },
@@ -88,24 +110,22 @@ export class CaesarBankService {
       ...updatecaesarBank,
     })
   }
-  deleteOne(id: number) {
-    return this.caesarBankRepo.delete(id)
+  deleteOne(id: string) {
+    return this.caesarBankRepo
+      .delete(id)
+      .catch((err) => {
+        this.caesarBankRepo.softDelete(id).catch((Err) => {
+          throw Err
+        })
+      })
+      .catch((err) => {
+        throw err
+        // throw new Error(`Service Error`)
+      })
   }
 
   deleteAll() {
     return this.caesarBankRepo.clear()
-  }
-
-  async init() {
-    await Promise.all(
-      caesarBankInitial.map((ea, index) =>
-        this.caesarBankRepo.save({
-          id: index + 1,
-          description: ea.description,
-        }),
-      ),
-    )
-    return `Caesar Bank populated with initial Data`
   }
 
   /**
@@ -114,9 +134,9 @@ export class CaesarBankService {
    * @param amount Amount in positive or negative values
    * @returns
    */
-  async pay(caesarBankId: number | CaesarBank, amount: number) {
+  async pay(caesarBankId: string | CaesarBank, amount: number) {
     let caesarBank: CaesarBank
-    if (typeof caesarBankId === 'number') {
+    if (typeof caesarBankId === 'string') {
       caesarBank = await this.findOne(caesarBankId)
     } else {
       caesarBank = caesarBankId as CaesarBank
@@ -134,4 +154,5 @@ export class CaesarBankService {
     )
   }
 }
-const caesarBankInitial: Partial<CaesarBank>[] = []
+
+// const caesarBankInitial: Partial<CaesarBank>[] = []

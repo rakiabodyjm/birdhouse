@@ -22,7 +22,7 @@ export class BankService {
       await this.caesarBankRepository.save({
         bank: res,
         caesar: null,
-        description: `${res.description} _destination`,
+        description: `${res.description} Fees`,
       })
       return res
     })
@@ -56,22 +56,7 @@ export class BankService {
       ...updateBank,
     }
     return this.bankRepository.save(update).then((res) => {
-      return this.caesarBankRepository
-        .findOneOrFail({
-          where: {
-            bank: res.id,
-          },
-        })
-        .then(async (caesarBank) => {
-          await this.caesarBankRepository.save({
-            ...caesarBank,
-            description: `${res.description} _destination`,
-          })
-          return res
-        })
-        .catch((err) => {
-          return null
-        })
+      return res
     })
   }
 
@@ -106,20 +91,15 @@ export class BankService {
   async init() {
     return await Promise.all(
       initialBanks.map(async (ea, index) => {
-        return await this.bankRepository
-          .save({
-            id: index + 1,
-            ...ea,
-          })
-          .then(async (res) => {
-            return await this.caesarBankRepository.save({
-              ...res,
-            })
-          })
+        return await this.bankRepository.save({
+          id: index + 1,
+          ...ea,
+        })
       }),
     )
   }
 }
+
 const initialBanks: Partial<Bank>[] = [
   {
     name: 'BDO',

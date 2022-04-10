@@ -1,15 +1,26 @@
+
+POST http://localhost:6006/auth/login
+Content-Type: application/json
+
+{
+    "email": "rakiabodyjm@gmail.com",
+    "password": "rakiabodyjm4690", 
+    "remember_me": true
+}
+
+
 ### GET ADMIN ACCOUNTS
 
 GET http://localhost:6006/admin
 
 ### CREATE NEW ADMIN
 POST http://localhost:6006/admin
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBOEZFRjEtQkIyMS1FQzExLUI2NjUtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIiwiZHNwIiwic3ViZGlzdHJpYnV0b3IiXSwiYWRtaW5faWQiOiJFMDU4QkJCNS1BRDU3LUVDMTEtQjY3MC0wMEUxOENFRjU5MzgiLCJkc3BfaWQiOiI3RDFGMjMyNy1EQjU3LUVDMTEtQjY3MC0wMEUxOENFRjU5MzgiLCJzdWJkaXN0cmlidXRvcl9pZCI6IkZEQzI4NTkzLUI5NTctRUMxMS1CNjcwLTAwRTE4Q0VGNTkzOCIsImlhdCI6MTY0ODMxMjc1MSwiZXhwIjoxNjQ4MzE2MzUxfQ.u79iQ3HsQ92gCTYCo1cGYi6yecYIfHkxlcQKQ6YUEK0
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNTZBMUQ3NDYtMDBCNy1FQzExLThDQ0QtMDIyMDAyMjAwMjIwIiwiZW1haWwiOiJyYWtpYWJvZHlqbUBnbWFpbC5jb20iLCJmaXJzdF9uYW1lIjoiSmFuZW8gTWlndWVsIiwibGFzdF9uYW1lIjoiVGlvbmdzb24iLCJyb2xlcyI6W10sImlhdCI6MTY0OTM5NzM4OCwiZXhwIjoxNjQ5NDExNzg4fQ.W0BbcRcKGEFGHdUo6KztnhFl9hLUKDhpEaXws3qSITY
 
 {
-    "name": "ADMIN NICO",
-    "user": "C9B9433E-F36B-1410-8214-00BFC2301278"
+    "name": "ADMIN REYNARD",
+    "user": "FCFF2287-04B7-EC11-8CCD-022002200220"
 }
 ###
 PATCH http://localhost:6006/admin/E058BBB5-AD57-EC11-B670-00E18CEF5938

@@ -6,3 +6,26 @@ Content-Type: application/json
     "transfer_type": 1, 
     "caesar_from": 
 }
+###
+GET http://localhost:6006/cash-transfer?as=LOAN
+
+###
+GET http://localhost:6006/cash-transfer/1C7B61E3-D3BB-EC11-8CD3-00155D1CD40B
+
+###
+# GET http://localhost:6006/cash-transfer?caesar=17FB518F-12B7-EC11-8CCD-022002200220
+
+
+###LOAN PAYMENT 
+POST http://localhost:6006/cash-transfer/loan-payment
+Content-Type: application/json
+
+{
+    "id": "BEF8BDE2-FABA-EC11-8CD1-00155D1CD40B", 
+    "amount": 3000, 
+    "caesar_bank_from": "1083B7A0-28BA-EC11-8CD1-00155D1CD40B",
+    "caesar_bank_to":"654E1DF0-78B9-EC11-8CD0-00155D1CD40B"
+
+    
+
+}

@@ -42,3 +42,5 @@ GET http://http://localhost:6006/retailer/search?searchQuery=john&subdistributor
 // if subd is given only retailers of one subd should appear
 
 //&dsp=bcfd02b7-bd24-ec11-b665-00e18cef5938
+###
+GET http://localhost:6006/retailer/csv-retailer

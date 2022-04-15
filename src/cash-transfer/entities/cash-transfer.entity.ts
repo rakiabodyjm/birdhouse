@@ -214,12 +214,17 @@ export class CashTransfer extends IntersectionType(
 
     const lastDayCount = whichShiftTo === 'second' ? 1 : 0.5
 
-    if (dayDiff >= 2) {
-      interestRate += firstDayCount + lastDayCount
-      interestRate += (dayDiff - 1) * 1
+    if (dayDiff === 0) {
+      interestRate += lastDayCount
     }
-    if (dayDiff <= 1) {
+    if (dayDiff === 1) {
       interestRate += firstDayCount + lastDayCount
+    }
+    if (dayDiff >= 2) {
+      const endCountInterests = firstDayCount + lastDayCount
+      interestRate += endCountInterests + 1 * (dayDiff - 1)
+
+      // interestRate += dayDiff
     }
 
     return Number(interestRate.toFixed(4))

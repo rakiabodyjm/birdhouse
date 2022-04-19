@@ -167,4 +167,9 @@ export class Caesar extends WithAccountTypes {
     default: 0,
   })
   cash_transfer_balance: number
+
+  @Column({
+    default: false,
+  })
+  has_loan: boolean
 }

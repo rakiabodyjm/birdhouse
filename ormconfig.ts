@@ -4,7 +4,7 @@ import { SqlServerConnectionOptions } from 'typeorm/driver/sqlserver/SqlServerCo
 config({
   path:
     process.env.NODE_ENV === 'production'
-      ? './.env.production'
+      ? './.env.production.local'
       : './.env.development.local',
 })
 const SQLConfig: SqlServerConnectionOptions & {

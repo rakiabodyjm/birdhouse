@@ -14,7 +14,7 @@ import { AxiosError, AxiosResponse } from 'axios'
 import { GetCaesarDto } from 'src/caesar/dto/get-caesar.dto'
 import { ExternalCaesar } from 'src/external-caesar/entities/external-caesar.entity'
 import { SearchCaesarDto } from 'src/caesar/dto/search-caesar.dto'
-import { plainToClass } from 'class-transformer'
+import { plainToClass, plainToInstance } from 'class-transformer'
 import createQueryBuilderAndIncludeRelations from 'src/utils/queryBuilderWithRelations'
 import { UpdateCaesarDto } from 'src/caesar/dto/update-caesar.dto'
 // import { ConfigService } from '@nestjs/config'
@@ -214,6 +214,11 @@ export class CaesarService {
               },
             },
             {
+              retailer: {
+                store_name: likeQuery,
+              },
+            },
+            {
               user: {
                 first_name: likeQuery,
               },
@@ -221,11 +226,6 @@ export class CaesarService {
             {
               user: {
                 last_name: likeQuery,
-              },
-            },
-            {
-              retailer: {
-                store_name: likeQuery,
               },
             },
           ],
@@ -357,10 +357,17 @@ export class CaesarService {
   //   })
   // }
 
-  async update(id: string, updateCaesarDto: UpdateCaesarDto) {
+  async update(
+    id: string,
+    updateCaesarDto: UpdateCaesarDto & {
+      has_loan?: boolean
+    },
+  ) {
     const caesar = await this.findOne(id)
     return this.caesarRepository.save({
       ...caesar,
+      ...plainToInstance(Caesar, { ...updateCaesarDto }),
+
       // ...(updateCaesarDto?.operator && { operator: updateCaesarDto.operator }),
       // ...(updateCaesarDto as Partial<Caesar>),
     })

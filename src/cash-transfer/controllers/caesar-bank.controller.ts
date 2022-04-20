@@ -31,7 +31,10 @@ export class CaesarBankController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, udpateCaesarBank: UpdateCaesarBankDto) {
+  update(
+    @Param('id') id: string,
+    @Body() udpateCaesarBank: UpdateCaesarBankDto,
+  ) {
     this.caesarBankService.update(id, udpateCaesarBank)
   }
 

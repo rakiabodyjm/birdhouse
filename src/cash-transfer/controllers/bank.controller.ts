@@ -44,8 +44,11 @@ export class BankController {
   }
 
   @Delete(':id')
-  deleteOne(@Param('id') id: string) {
-    return this.bankService.deleteOne(+id)
+  deleteOne(
+    @Param('id') id: string,
+    @Query('replacement_bank') replacement_bank: number,
+  ) {
+    return this.bankService.deleteOne(+id, replacement_bank)
   }
 
   @Delete()

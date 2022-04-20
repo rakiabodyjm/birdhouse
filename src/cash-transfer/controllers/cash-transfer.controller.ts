@@ -86,4 +86,9 @@ export class CashTransferController {
   loanPayment(@Body() createLoanPayment: CreateLoanPaymentDto) {
     return this.cashTransferService.loanPayment(createLoanPayment)
   }
+
+  @Get('loan-payments/:id')
+  getLoanPayments(@Param('id') cashTransferId: string) {
+    return this.cashTransferService.getLoanPayments(cashTransferId)
+  }
 }

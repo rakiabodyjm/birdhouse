@@ -20,21 +20,21 @@ export class CreateLoanPaymentDto {
   @IsOptional()
   to?: Caesar['id']
 
-  @IsOptional()
   @ExistsInDb(CaesarBank, 'id', {
     message: `Caesar Account TO bank doesn't exist`,
   })
+  @IsOptional()
   caesar_bank_to?: CaesarBank['id']
 
-  @IsOptional()
   @ExistsInDb(CaesarBank, 'id', {
     message: `Caesar Account FROM bank doesn't exist`,
   })
+  @IsOptional()
   caesar_bank_from?: any
 
-  @IsOptional()
   @ExistsInDb(Caesar, 'id', {
     message: `Caesar Account FROM not found`,
   })
-  from: Caesar['id']
+  @IsOptional()
+  from?: Caesar['id']
 }

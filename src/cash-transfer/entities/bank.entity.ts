@@ -1,5 +1,13 @@
 import { CaesarBank } from 'src/cash-transfer/entities/caesar-bank.entity'
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm'
 
 @Entity()
 export class Bank {
@@ -17,4 +25,19 @@ export class Bank {
 
   @OneToMany((type) => CaesarBank, (caesarBank) => caesarBank.bank)
   caesar_bank: CaesarBank[]
+
+  @CreateDateColumn({
+    type: 'datetime',
+  })
+  created_at: Date
+
+  @UpdateDateColumn({
+    type: 'datetime',
+  })
+  updated_at: Date
+
+  @DeleteDateColumn({
+    type: 'datetime',
+  })
+  deleted_at: Date
 }

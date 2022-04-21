@@ -2,7 +2,10 @@ import { PartialType } from '@nestjs/swagger'
 import { IsEnum, IsOptional } from 'class-validator'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { CaesarBank } from 'src/cash-transfer/entities/caesar-bank.entity'
-import { CashTransferAs } from 'src/cash-transfer/entities/cash-transfer.entity'
+import {
+  CashTransfer,
+  CashTransferAs,
+} from 'src/cash-transfer/entities/cash-transfer.entity'
 import { TransferType } from 'src/cash-transfer/entities/transfer-type.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
 import { PaginateOptions } from 'src/types/Paginated'
@@ -59,4 +62,10 @@ export class GetAllCashTransferDto extends PartialType(PaginateOptions) {
 
   @IsOptional()
   date_to?: Date
+
+  @ExistsInDb(CashTransfer, 'id', {
+    message: `Loan doesn't exist`,
+  })
+  @IsOptional()
+  loan?: any
 }

@@ -4,6 +4,7 @@ import { CashTransfer } from 'src/cash-transfer/entities/cash-transfer.entity'
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   Index,
   JoinColumn,
@@ -14,8 +15,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 
-@Unique(['description'])
-@Index(['description'])
+@Unique(['description', 'account_number'])
+@Index(['description', 'account_number'])
 @Entity()
 export class CaesarBank {
   @PrimaryGeneratedColumn('uuid')
@@ -59,6 +60,11 @@ export class CaesarBank {
   })
   balance: number
 
+  @Column({
+    default: null,
+  })
+  account_number?: string
+
   @CreateDateColumn({
     type: 'datetime',
   })
@@ -68,4 +74,9 @@ export class CaesarBank {
     type: 'datetime',
   })
   updated_at: Date
+
+  @DeleteDateColumn({
+    type: 'datetime',
+  })
+  deleted_at: Date
 }

@@ -1,3 +1,4 @@
+import { plainToClass } from 'class-transformer'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { CreateBankDto } from 'src/cash-transfer/dto/bank/create-bank.dto'
@@ -60,28 +61,45 @@ export class BankService {
     })
   }
 
-  deleteOne(id: number) {
+  deleteOne(id: number, replacementBank: Bank['id']) {
     this.caesarBankRepository
-      .findOneOrFail({
+      .find({
         where: {
           bank: id,
         },
       })
-      .catch((err) => {
-        return null
-      })
       .then((res) => {
-        if (res) {
-          return this.caesarBankRepository.delete(res.id)
-        }
-        return null
+        this.caesarBankRepository.save(
+          res.map((ea) =>
+            plainToClass(CaesarBank, {
+              ...ea,
+              bank: replacementBank,
+            }),
+          ),
+        )
       })
-      .then(() => {
-        return this.bankRepository.delete(id)
-      })
-      .catch((err) => {
-        throw err.message
-      })
+    return this.bankRepository.delete(id)
+    // this.caesarBankRepository
+    // .findOneOrFail({
+    //   where: {
+    //     bank: id,
+    //   },
+    // })
+    // .catch((err) => {
+    //   return null
+    // })
+    // .then((res) => {
+    //   if (res) {
+    //     return this.caesarBankRepository.delete(res.id)
+    //   }
+    //   return null
+    // })
+    // .then(() => {
+    //   return this.bankRepository.delete(id)
+    // })
+    // .catch((err) => {
+    //   throw err.message
+    // })
   }
 
   deleteAll() {

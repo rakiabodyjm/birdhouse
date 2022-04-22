@@ -21,11 +21,11 @@ export class CaesarBankService {
 
   relations = [
     'caesar',
-    'caesar.subdistributor',
-    'caesar.admin',
-    'caesar.user',
-    'caesar.dsp',
     'caesar.retailer',
+    'caesar.admin',
+    'caesar.subdistributor',
+    'caesar.dsp',
+    'caesar.user',
     'bank',
   ]
 
@@ -41,16 +41,67 @@ export class CaesarBankService {
       }),
     }
 
+    /**
+     * !!EMPHASIZE ORDER IS IMPORTANT FOR QUERYING OR SEARCHQUERY!!
+     * !!BASED ON RELATIONSHIP ORDER!!
+     */
+
     const finalQuery: FindOneOptions<CaesarBank>['where'] = searchQuery
       ? [
           {
             description: searchQuery,
             ...commonQuery,
           },
+          {
+            caesar: {
+              retailer: {
+                store_name: searchQuery,
+              },
+            },
+            ...commonQuery,
+          },
+          {
+            caesar: {
+              admin: {
+                name: searchQuery,
+              },
+            },
+            ...commonQuery,
+          },
+          {
+            caesar: {
+              subdistributor: {
+                name: searchQuery,
+              },
+            },
+            ...commonQuery,
+          },
+          {
+            caesar: {
+              dsp: {
+                dsp_code: searchQuery,
+              },
+            },
+            ...commonQuery,
+          },
+          {
+            caesar: {
+              user: {
+                first_name: searchQuery,
+              },
+            },
+            ...commonQuery,
+          },
+          {
+            caesar: {
+              user: {
+                last_name: searchQuery,
+              },
+            },
+            ...commonQuery,
+          },
         ]
       : commonQuery
-
-    console.log(finalQuery)
 
     return paginateFind(
       this.caesarBankRepo,
@@ -92,13 +143,14 @@ export class CaesarBankService {
       balance?: number
     },
   ) {
+    console.log('caeasrbank', updatecaesarBank)
     const caesarBank = await this.findOne(id)
-    if (updatecaesarBank.bank) {
+    if (updatecaesarBank?.bank) {
       updatecaesarBank.bank = await this.bankService.findOne(
         updatecaesarBank.bank,
       )
     }
-    if (updatecaesarBank.caesar) {
+    if (updatecaesarBank?.caesar) {
       updatecaesarBank.caesar = await this.caesarService.findOne(
         updatecaesarBank.caesar,
       )
@@ -112,7 +164,7 @@ export class CaesarBankService {
   }
   deleteOne(id: string) {
     return this.caesarBankRepo
-      .delete(id)
+      .softDelete(id)
       .catch((err) => {
         this.caesarBankRepo.softDelete(id).catch((Err) => {
           throw Err

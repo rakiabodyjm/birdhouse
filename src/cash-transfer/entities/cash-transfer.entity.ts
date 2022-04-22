@@ -65,22 +65,9 @@ export class CashTransfer extends IntersectionType(
   @PrimaryGeneratedColumn('uuid')
   id: string
 
-  // @JoinColumn({
-  //   name: 'transfer_type_id',
-  // })
-  // @ManyToOne(
-  //   (type) => TransferType,
-  //   (transferType) => transferType.cash_transfer,
-  // )
-  // transfer_type: TransferType
-
   @Column()
   amount: number
 
-  // @Column({
-  //   default: CashTransferAs.TRANSFER,
-  // })
-  // tag: CashTransferAs
   @Column({
     default: CashTransferAs.TRANSFER,
   })
@@ -137,11 +124,6 @@ export class CashTransfer extends IntersectionType(
   })
   bank_charge: number
 
-  // @Column({
-  //   default: null,
-  // })
-  // interest?: number
-
   @Column({
     default: 0,
   })
@@ -150,41 +132,28 @@ export class CashTransfer extends IntersectionType(
   @Column({ default: 0 })
   remaining_balance_to: number
 
-  // @OneToOne(() => Loan, (l) => l.cash_transfer_reference)
-  // loan_id: Loan
-
-  // @JoinColumn({
-  //   name: 'loan_payment_id',
-  // })
-  // @ManyToOne(() => Loan, (loan) => loan.payments)
-  // loan_payment_id: Loan
-  // // @Expose()
-  // // interest_amount() {
-  // //   if (this.as === CashTransferAs.LOAN) {
-  // //     return this.amount + 0.01 * this.amount
-  // //   }
-  // // }
-
-  // // @JoinColumn({
-  // //   name: 'loan_id',
-  // // })
-  // // @ManyToOne(() => Loan, (loan) => loan.payments)
-  // // loan: Loan
-
-  // // @
-
   @JoinColumn({
     name: 'loan_id',
+    referencedColumnName: 'id',
   })
   @ManyToOne(() => CashTransfer, (ct) => ct.payments)
   loan: CashTransfer
 
-  @OneToMany(() => CashTransfer, (ct) => ct.loan)
+  @Expose()
+  @OneToMany(() => CashTransfer, (ct) => ct.loan, {})
   payments: CashTransfer[]
+
+  @Column({
+    default: null,
+  })
+  loan_paid?: true
 
   @Expose()
   interest() {
     if (this.as !== CashTransferAs.LOAN) {
+      return null
+    }
+    if (this.loan_paid) {
       return null
     }
     let interestRate = 0
@@ -215,7 +184,8 @@ export class CashTransfer extends IntersectionType(
     const lastDayCount = whichShiftTo === 'second' ? 1 : 0.5
 
     if (dayDiff === 0) {
-      interestRate += lastDayCount
+      // interestRate = whichShiftFrom === whichShiftTo ? 0.5 : 1
+      return 1
     }
     if (dayDiff === 1) {
       interestRate += firstDayCount + lastDayCount
@@ -230,6 +200,11 @@ export class CashTransfer extends IntersectionType(
     return Number(interestRate.toFixed(4))
   }
 
+  @Column({
+    default: null,
+  })
+  is_loan_paid: boolean
+
   @Expose()
   total_amount() {
     const amount = this.amount || 0
@@ -241,21 +216,6 @@ export class CashTransfer extends IntersectionType(
       bank_charge +
       (this.as === CashTransferAs.LOAN ? (interest / 100) * amount : 0)
     )
-  }
-  loan_total() {
-    if (this.as === CashTransferAs.LOAN) {
-      return this.amount + this.amount * this.interest()
-    }
-    return null
-    // if (this.as === CashTransferAs.LOAN) {
-    //   const totalPaymentsDone =
-    //     this.payments?.reduce((acc, ea) => {
-    //       return acc + ea.amount
-    //     }, 0) || 0
-    //   const loanTotal = this.amount - totalPaymentsDone
-    //   return loanTotal
-    // }
-    // return null
   }
 }
 

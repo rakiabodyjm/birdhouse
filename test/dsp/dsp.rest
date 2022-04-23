@@ -45,6 +45,14 @@ GET http://localhost:6006/dsp?subdistributor=FDC28593-B957-EC11-B670-00E18CEF593
 
 ###SEARCH
 
-GET http://localhost:6006/dsp/search?searchQuery=arj&subdistributor=FDC28593-B957-EC11-B670-00E18CEF5938
+GET http://localhost:6006/dsp/search?searchQuery=dsp&subdistributor=FDC28593-B957-EC11-B670-00E18CEF5938
 ###
-GET http://localhost:6006/dsp/search?searchQuery=work&subdistributor=AF02DF31-DD2B-EC11-B666-00E18CEF5935
+GET http://localhost:6006/dsp/search?searchQuery=dsp
+
+### 
+PATCH http://localhost:6006/dsp/D4B9433E-F36B-1410-8214-00BFC2301278
+Content-Type: application/json
+
+{
+    "user": ""
+}

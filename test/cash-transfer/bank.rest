@@ -1,5 +1,5 @@
 ###
-GET http://localhost:6006/cash-transfer/bank/
+GET http://localhost:6006/cash-transfer/bank
 
 ### 
 POST http://localhost:6006/cash-transfer/bank
@@ -21,7 +21,7 @@ Content-Type: application/json
 
 
 ### 
-DELETE http://localhost:6006/cash-transfer/bank/14
+DELETE http://localhost:6006/cash-transfer/bank/7
 
 ### INIT
 POST http://localhost:6006/cash-transfer/bank/init

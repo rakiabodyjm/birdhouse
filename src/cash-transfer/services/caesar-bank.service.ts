@@ -53,6 +53,10 @@ export class CaesarBankService {
             ...commonQuery,
           },
           {
+            account_number: searchQuery,
+            ...commonQuery,
+          },
+          {
             caesar: {
               retailer: {
                 store_name: searchQuery,
@@ -143,7 +147,6 @@ export class CaesarBankService {
       balance?: number
     },
   ) {
-    console.log('caeasrbank', updatecaesarBank)
     const caesarBank = await this.findOne(id)
     if (updatecaesarBank?.bank) {
       updatecaesarBank.bank = await this.bankService.findOne(

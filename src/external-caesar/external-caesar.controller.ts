@@ -54,6 +54,11 @@ export class ExternalCaesarController {
     return this.externalCaesarService.findAll()
   }
 
+  @Delete(':id')
+  deleteOne(@Param('id') id: string) {
+    return this.externalCaesarService.deleteOne(id)
+  }
+
   @Delete()
   deleteAll() {
     return this.externalCaesarService.clear()

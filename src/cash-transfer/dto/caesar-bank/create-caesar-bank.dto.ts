@@ -3,8 +3,7 @@ import { NoDuplicateInDb } from 'src/pipes/validation/NoDuplicateInDb'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { Bank } from 'src/cash-transfer/entities/bank.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
-import { IsNotEmpty } from 'class-validator'
-import { Optional } from '@nestjs/common'
+import { IsNotEmpty, IsOptional } from 'class-validator'
 
 export class CreateCaesarBankDto {
   @ExistsInDb(Bank, 'id', {
@@ -23,7 +22,6 @@ export class CreateCaesarBankDto {
   @IsNotEmpty()
   description: string
 
-  @Optional()
-  @NoDuplicateInDb(CaesarBank, 'account_number')
+  @IsOptional()
   account_number: string
 }

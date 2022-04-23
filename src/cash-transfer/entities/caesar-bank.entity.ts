@@ -15,7 +15,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 
-@Unique(['description', 'account_number'])
+@Unique(['description', 'account_number', 'bank'])
 @Index(['description', 'account_number'])
 @Entity()
 export class CaesarBank {

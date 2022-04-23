@@ -118,7 +118,10 @@ export class Caesar extends WithAccountTypes {
 
   @OneToMany((type) => InventoryLog, (inventoryLog) => inventoryLog.caesar)
   inventoryLogs: InventoryLog[]
-  @OneToMany((type) => Inventory, (inventory) => inventory.caesar, {})
+
+  @OneToMany((type) => Inventory, (inventory) => inventory.caesar, {
+    createForeignKeyConstraints: true,
+  })
   inventory: Inventory[]
 
   @CreateDateColumn({

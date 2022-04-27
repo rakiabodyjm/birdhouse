@@ -93,7 +93,13 @@ export class CashTransfer extends IntersectionType(
     type: 'text',
     nullable: true,
   })
-  description: string
+  description?: string
+
+  @Column({
+    type: 'text',
+    nullable: true,
+  })
+  message?: string
 
   @JoinColumn({
     name: 'caesar_bank_to',
@@ -147,6 +153,11 @@ export class CashTransfer extends IntersectionType(
     default: null,
   })
   loan_paid?: true
+
+  @Column({
+    default: null,
+  })
+  override_interest?: null | number
 
   @Expose()
   interest() {

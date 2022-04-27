@@ -51,6 +51,9 @@ export class TransferCashTransfer {
     message: `Caesar's Account TO doesn't exist`,
   })
   to: any
+
+  @IsOptional()
+  message: string
 }
 
 export class LoanCashTransfer {

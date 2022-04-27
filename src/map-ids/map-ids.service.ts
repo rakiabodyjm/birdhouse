@@ -23,29 +23,45 @@ export class MapIdsService {
     let maps: MapId[] = []
 
     if (search) {
-      maps = await this.mapRepository
-        .find({
-          where: [
-            {
-              area_name: Like(`%${search}%`),
-            },
-            {
-              area_id: Like(`%${search}%`),
-            },
-            {
-              area_parent_pp_name: Like(`%${search}%`),
-            },
-            {
-              parent_name: Like(`%${search}%`),
-            },
-            {
-              parent_parent_name: Like(`%${search}%`),
-            },
-          ],
-        })
-        .then((res) => {
-          return res.slice(0, limit)
-        })
+      const queryResult = await Promise.all(
+        search
+          .split(' ')
+          .filter((searchParticle) => /[a-zA-Z0-9]/.test(searchParticle))
+          .reduce<MapId[]>((acc, ea) => {
+            const returnValue = [
+              ...acc,
+              this.mapRepository.find({
+                where: [
+                  {
+                    area_name: Like(`%${ea}%`),
+                  },
+                  {
+                    area_id: Like(`%${ea}%`),
+                  },
+                  {
+                    area_parent_pp_name: Like(`%${ea}%`),
+                  },
+                  {
+                    parent_name: Like(`%${ea}%`),
+                  },
+                  {
+                    parent_parent_name: Like(`%${ea}%`),
+                  },
+                ],
+                take: 100,
+              }),
+            ] as MapId[]
+            return returnValue
+          }, []),
+      ).then((mapIds) => {
+        return mapIds.filter(
+          (mapId, index, array) =>
+            array
+              .map((mapIdCopy) => mapIdCopy.area_id)
+              .indexOf(mapId.area_id) === index,
+        )
+      })
+      return queryResult
     } else {
       maps = await this.mapRepository.find({
         skip: page * limit,

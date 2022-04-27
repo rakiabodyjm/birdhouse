@@ -274,6 +274,7 @@ export class CashTransferService {
     bank_fee,
     as,
     to,
+    message,
   }: {
     caesar_bank_from: CaesarBank['id']
     caesar_bank_to?: CaesarBank['id']
@@ -283,6 +284,7 @@ export class CashTransferService {
     bank_fee?: number
     as: CashTransferAs
     to?: Caesar['id']
+    message: string
   }) {
     try {
       if (as === CashTransferAs.LOAN || as === CashTransferAs['LOAN PAYMENT']) {
@@ -362,6 +364,7 @@ export class CashTransferService {
         remaining_balance_to: caesar_bank_to
           ? (caesarBankTo as CaesarBank).balance
           : (caesarBankTo as Caesar).cash_transfer_balance,
+        message,
       }
 
       const newCashTransfer = this.cashTransferRepository.create(cashTransfer)
@@ -379,6 +382,7 @@ export class CashTransferService {
     bank_fee,
     as,
     to,
+    message,
   }: CreateCashTransferDto) {
     /**
      * find bank from and deduct amount + bank_fee
@@ -454,6 +458,7 @@ export class CashTransferService {
       as,
       remaining_balance_from: caesarBankFrom.balance,
       remaining_balance_to: remainingBalanceTo,
+      message,
       is_loan_paid: false,
     }
 
@@ -519,7 +524,6 @@ export class CashTransferService {
         ? -amount
         : -caesarFrom.cash_transfer_balance,
     )
-
     /**
      * add balance to caesarTo
      */

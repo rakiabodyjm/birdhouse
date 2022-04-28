@@ -6,7 +6,7 @@ GET http://localhost:6006/cash-transfer/caesar-bank
 ### WALLET CREDENTIALS
 ###
 
-GET http://localhost:6006/cash-transfer/caesar-bank?search=admin janeo
+GET http://localhost:6006/cash-transfer/caesar-bank?search=0049604
 ###
 
 

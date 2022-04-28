@@ -16,7 +16,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJha2lhY
 #     "password": "rakiabodyjm4690"
 # }
 ###
-GET http://localhost:6006/map-ids/?search=Solano
+GET http://localhost:6006/map-ids/?search=Binmaley
 
 ###
 GET http://localhost:6006/map-ids/

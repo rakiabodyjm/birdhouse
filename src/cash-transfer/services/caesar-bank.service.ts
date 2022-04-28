@@ -50,11 +50,9 @@ export class CaesarBankService {
       ? [
           {
             description: searchQuery,
-            ...commonQuery,
           },
           {
             account_number: searchQuery,
-            ...commonQuery,
           },
           {
             caesar: {
@@ -62,7 +60,6 @@ export class CaesarBankService {
                 store_name: searchQuery,
               },
             },
-            ...commonQuery,
           },
           {
             caesar: {
@@ -70,7 +67,6 @@ export class CaesarBankService {
                 name: searchQuery,
               },
             },
-            ...commonQuery,
           },
           {
             caesar: {
@@ -78,7 +74,6 @@ export class CaesarBankService {
                 name: searchQuery,
               },
             },
-            ...commonQuery,
           },
           {
             caesar: {
@@ -86,7 +81,6 @@ export class CaesarBankService {
                 dsp_code: searchQuery,
               },
             },
-            ...commonQuery,
           },
           {
             caesar: {
@@ -94,7 +88,6 @@ export class CaesarBankService {
                 first_name: searchQuery,
               },
             },
-            ...commonQuery,
           },
           {
             caesar: {
@@ -102,9 +95,11 @@ export class CaesarBankService {
                 last_name: searchQuery,
               },
             },
-            ...commonQuery,
           },
-        ]
+        ].map((ea) => ({
+          ...ea,
+          ...commonQuery,
+        }))
       : commonQuery
 
     return paginateFind(

@@ -1,3 +1,4 @@
+import { RevertCashTransfer } from 'src/cash-transfer/entities/revert-cash-transfer.entity'
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { CaesarService } from 'src/caesar/caesar.service'
@@ -19,8 +20,9 @@ export class RevertCashTransferService {
     private caesarBankService: CaesarBankService,
     private transferTypeService: TransferTypeService,
     private caesarService: CaesarService, // private actualCaesarService: ActualCaesarService,
-    @InjectRepository(TransferType)
-    private transferTypeRepository: Repository<TransferType>,
+    // @InjectRepository(TransferType)
+    @InjectRepository(RevertCashTransfer)
+    private revertCashTransferRepository: Repository<RevertCashTransfer>,
   ) {}
 
   relations = ['from', 'to', 'caesar_bank_from', 'caesar_bank_to', 'loan']
@@ -133,21 +135,12 @@ export class RevertCashTransferService {
     caesar_bank_to,
     amount,
     description,
-    bank_fee,
+    bank_charge,
     as,
     to,
     message,
-  }: {
-    caesar_bank_from: CaesarBank['id']
-    caesar_bank_to?: CaesarBank['id']
-    amount: number
-    // transfer_type: TransferType['id']
-    description
-    bank_fee?: number
-    as: CashTransferAs
-    to?: Caesar['id']
-    message: string
-  }) {
+    id,
+  }: Partial<CashTransfer>) {
     try {
       if (as === CashTransferAs.LOAN || as === CashTransferAs['LOAN PAYMENT']) {
         throw new Error(
@@ -173,7 +166,7 @@ export class RevertCashTransferService {
 
       const caesarBankFrom = await this.caesarBankService.pay(
         caesar_bank_from,
-        amount + (bank_fee || 0),
+        amount + (bank_charge || 0),
       )
 
       /**
@@ -181,7 +174,7 @@ export class RevertCashTransferService {
        */
       await this.caesarService.payCashTransferBalance(
         caesarBankFrom.caesar,
-        amount + (bank_fee || 0),
+        amount + (bank_charge || 0),
       )
 
       /**
@@ -200,37 +193,46 @@ export class RevertCashTransferService {
                */
               await this.caesarService.payCashTransferBalance(
                 res.caesar,
-                amount + (bank_fee || 0),
+                amount + (bank_charge || 0),
               )
               return res
             })
         : await this.caesarService.payCashTransferBalance(
             to,
-            amount + (bank_fee || 0),
+            amount + (bank_charge || 0),
           )
 
-      const cashTransfer: Partial<CashTransfer> = {
-        amount,
-        caesar_bank_from: caesarBankFrom,
-        ...(caesar_bank_to
-          ? {
-              caesar_bank_to: caesarBankTo as CaesarBank,
-            }
-          : { to: caesarBankTo as Caesar }),
+      return this.cashTransferRepository.delete(id).then(async (res) => {
+        return this.revertCashTransferRepository.save(
+          this.revertCashTransferRepository.create({
+            cash_transfer: await this.cashTransferRepository.findOne(id, {
+              withDeleted: true,
+            }),
+          }),
+        )
+      })
+      // const cashTransfer: Partial<CashTransfer> = {
+      //   amount,
+      //   caesar_bank_from: caesarBankFrom,
+      //   ...(caesar_bank_to
+      //     ? {
+      //         caesar_bank_to: caesarBankTo as CaesarBank,
+      //       }
+      //     : { to: caesarBankTo as Caesar }),
 
-        // transfer_type: transferType,
-        description,
-        bank_charge: bank_fee,
-        as,
-        remaining_balance_from: caesarBankFrom.balance,
-        remaining_balance_to: caesar_bank_to
-          ? (caesarBankTo as CaesarBank).balance
-          : (caesarBankTo as Caesar).cash_transfer_balance,
-        message,
-      }
+      //   // transfer_type: transferType,
+      //   description,
+      //   bank_charge: bank_charge,
+      //   as,
+      //   remaining_balance_from: caesarBankFrom.balance,
+      //   remaining_balance_to: caesar_bank_to
+      //     ? (caesarBankTo as CaesarBank).balance
+      //     : (caesarBankTo as Caesar).cash_transfer_balance,
+      //   message,
+      // }
 
-      const newCashTransfer = this.cashTransferRepository.create(cashTransfer)
-      return this.cashTransferRepository.save(newCashTransfer)
+      // const newCashTransfer = this.cashTransferRepository.create(cashTransfer)
+      // return this.cashTransferRepository.save(newCashTransfer)
     } catch (err) {
       throw err
     }

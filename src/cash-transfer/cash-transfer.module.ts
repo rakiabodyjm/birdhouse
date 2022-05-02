@@ -15,24 +15,31 @@ import { CaesarBankService } from 'src/cash-transfer/services/caesar-bank.servic
 import { CaesarModule } from 'src/caesar/caesar.module'
 import { RevertCashTransferController } from './controllers/revert-cash-transfer.controller'
 import { RevertCashTransferService } from './services/revert-cash-transfer.service'
+import { RevertCashTransfer } from 'src/cash-transfer/entities/revert-cash-transfer.entity'
 @Module({
   imports: [
     CaesarModule,
-    TypeOrmModule.forFeature([CashTransfer, Bank, CaesarBank, TransferType]),
+    TypeOrmModule.forFeature([
+      CashTransfer,
+      Bank,
+      CaesarBank,
+      TransferType,
+      RevertCashTransfer,
+    ]),
   ],
   controllers: [
     BankController,
     TransferTypeController,
     CaesarBankController,
     CashTransferController,
-    RevertCashTransferController
+    RevertCashTransferController,
   ],
   providers: [
     CashTransferService,
     BankService,
     TransferTypeService,
     CaesarBankService,
-    RevertCashTransferService
+    RevertCashTransferService,
   ],
   exports: [
     {

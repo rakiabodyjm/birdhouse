@@ -1,3 +1,4 @@
+import { RevertCashTransfer } from './revert-cash-transfer.entity'
 import { IntersectionType } from '@nestjs/swagger'
 import { Expose } from 'class-transformer'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
@@ -10,6 +11,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
@@ -158,6 +160,9 @@ export class CashTransfer extends IntersectionType(
     default: null,
   })
   override_interest?: null | number
+
+  @OneToOne(() => RevertCashTransfer, (rt) => rt.cash_transfer)
+  revert_cash_transfer: RevertCashTransfer
 
   @Expose()
   interest() {

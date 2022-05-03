@@ -34,3 +34,7 @@ Content-Type: application/json
 
 ### get loan payments
 GET http://localhost:6006/cash-transfer/loan-payments/A621FD61-0DC0-EC11-8CD3-00155D1CD40B
+
+### 
+
+

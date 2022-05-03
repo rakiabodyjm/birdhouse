@@ -31,15 +31,15 @@ import { RevertCashTransfer } from 'src/cash-transfer/entities/revert-cash-trans
     BankController,
     TransferTypeController,
     CaesarBankController,
-    CashTransferController,
     RevertCashTransferController,
+    CashTransferController,
   ],
   providers: [
     CashTransferService,
     BankService,
     TransferTypeService,
-    CaesarBankService,
     RevertCashTransferService,
+    CaesarBankService,
   ],
   exports: [
     {

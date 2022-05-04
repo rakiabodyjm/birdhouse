@@ -67,7 +67,10 @@ export class CashTransfer extends IntersectionType(
   @PrimaryGeneratedColumn('uuid')
   id: string
 
-  @Column()
+  @Column('decimal', {
+    precision: 18,
+    scale: 4,
+  })
   amount: number
 
   @Column({

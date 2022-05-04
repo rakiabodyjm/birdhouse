@@ -25,8 +25,15 @@ export class RevertCashTransferService {
     private revertCashTransferRepository: Repository<RevertCashTransfer>,
   ) {}
 
-  relations = ['from', 'to', 'caesar_bank_from', 'caesar_bank_to', 'loan']
+  relations = ['from', 'to', 'caesar_bank_from', 'caesar_bank_to']
 
+  async findAll({ as }: { as?: CashTransferAs }) {
+    return this.cashTransferRepository.find({
+      where: {
+        as,
+      },
+    })
+  }
   async findOne(id: string) {
     return await this.cashTransferRepository.findOneOrFail(id, {
       relations: this.relations,

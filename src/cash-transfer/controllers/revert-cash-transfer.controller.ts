@@ -1,3 +1,4 @@
+import { CashTransferAs } from 'src/cash-transfer/entities/cash-transfer.entity'
 import {
   Controller,
   UseInterceptors,
@@ -6,6 +7,7 @@ import {
   Post,
   Get,
   Param,
+  Query,
 } from '@nestjs/common'
 import { CashTransferService } from 'src/cash-transfer/services/cash-transfer.service'
 import { ErrorsInterceptor } from 'src/interceptors/error.interceptor'
@@ -20,6 +22,11 @@ export class RevertCashTransferController {
     private readonly revertCashTransferService: RevertCashTransferService,
     private readonly cashTransferService: CashTransferService,
   ) {}
+
+  @Get('/')
+  async findAll(@Query() getAllRevertCashTransfer: { as: CashTransferAs }) {
+    return this.findAll(getAllRevertCashTransfer)
+  }
 
   @Post('transfer/:id')
   async transfer(@Param('id') cashTransferId: string) {

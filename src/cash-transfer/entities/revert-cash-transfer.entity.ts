@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm'
@@ -12,6 +13,7 @@ export class RevertCashTransfer {
   @PrimaryGeneratedColumn('increment')
   id: number
 
+  @JoinColumn()
   @OneToOne(() => CashTransfer, (ct) => ct.revert_cash_transfer)
   cash_transfer: CashTransfer
 

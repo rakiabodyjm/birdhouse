@@ -1,3 +1,5 @@
+GET http://localhost:6006/cash-transfer/revert/
+
 ### WITHDRAW
 
 POST http://localhost:6006/cash-transfer/revert/withdraw/0E8AE6DF-12CD-EC11-8971-00155DBB6F03
@@ -15,7 +17,7 @@ Content-Type: application/json
 
 ### LOAN
 
-POST http://localhost:6006/cash-transfer/revert/loan/6F2B8456-17CD-EC11-8971-00155DBB6F03
+POST http://localhost:6006/cash-transfer/revert/loan/00f76747-28cd-ec11-8ce6-00155d1cd40b
 Content-Type: application/json
 
 ### LOAN PAYMENT

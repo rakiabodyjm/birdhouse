@@ -38,3 +38,10 @@ GET http://localhost:6006/cash-transfer/loan-payments/A621FD61-0DC0-EC11-8CD3-00
 ### 
 
 
+POST http://localhost:6006/cash-transfer/backupData
+
+###
+POST http://localhost:6006/cash-transfer/restoreData/cash-transfer-1651856277056-staging.json
+
+### 
+GET http://localhost:6006/cash-transfer/get-backup-files

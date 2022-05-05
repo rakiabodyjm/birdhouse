@@ -13,6 +13,8 @@ import { CaesarBankController } from 'src/cash-transfer/controllers/caesar-bank.
 import { TransferTypeService } from 'src/cash-transfer/services/transfer-type.service'
 import { CaesarBankService } from 'src/cash-transfer/services/caesar-bank.service'
 import { CaesarModule } from 'src/caesar/caesar.module'
+import { RevertCashTransferController } from './controllers/revert-cash-transfer.controller'
+import { RevertCashTransferService } from './services/revert-cash-transfer.service'
 @Module({
   imports: [
     CaesarModule,
@@ -23,12 +25,14 @@ import { CaesarModule } from 'src/caesar/caesar.module'
     TransferTypeController,
     CaesarBankController,
     CashTransferController,
+    RevertCashTransferController
   ],
   providers: [
     CashTransferService,
     BankService,
     TransferTypeService,
     CaesarBankService,
+    RevertCashTransferService
   ],
   exports: [
     {
@@ -36,6 +40,7 @@ import { CaesarModule } from 'src/caesar/caesar.module'
       useClass: CaesarBankService,
     },
     CashTransferService,
+    RevertCashTransferService,
     // BankService,
     TransferTypeService,
     // CaesarBankService,

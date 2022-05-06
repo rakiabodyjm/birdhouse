@@ -39,20 +39,15 @@ export class RevertCashTransferService {
     to,
     description,
     as,
-  }: { amount: number } & {
-    caesar_bank_from: CaesarBank['id']
-    to: Caesar['id']
-    description
-    bank_fee?: number
-    as: CashTransferAs
-  }) {
+    id,
+  }: Partial<CashTransfer> & { caesar_bank_from: CaesarBank }) {
     // const transferType = await this.transferTypeService.findOne(transfer_type)
     // const transferType = await this.transferTypeRepository.findOneOrFail({
     //   name: transfer_type.toUpperCase(),
     // })
-    const caesarTo = await this.caesarService.findOne(to)
+    const caesarTo = await this.caesarService.findOne(to.id)
     const bankWithDrawal = await this.caesarBankService
-      .findOne(caesar_bank_from)
+      .findOne(caesar_bank_from.id)
       .then((res) => {
         /**
          * deduct from caesarBankService
@@ -83,9 +78,17 @@ export class RevertCashTransferService {
       remaining_balance_from: bankWithDrawal.balance,
       remaining_balance_to: caesarTo.cash_transfer_balance,
     }
-
-    const newCashTransfer = this.cashTransferRepository.create(cashTransfer)
-    return this.cashTransferRepository.save(newCashTransfer)
+    return this.cashTransferRepository.delete(id).then(async (res) => {
+      return this.revertCashTransferRepository.save(
+        this.revertCashTransferRepository.create({
+          cash_transfer: await this.cashTransferRepository.findOne(id, {
+            withDeleted: true,
+          }),
+        }),
+      )
+    })
+    // const newCashTransfer = this.cashTransferRepository.create(cashTransfer)
+    // return this.cashTransferRepository.save(newCashTransfer)
   }
 
   async deposit({
@@ -93,41 +96,31 @@ export class RevertCashTransferService {
     from,
     amount,
     description,
-    bank_fee,
+    bank_charge,
     as,
-  }: {
-    caesar_bank_to: CaesarBank['id']
-    from: Caesar['id']
-    amount: number
-    bank_fee?: number
-    description: string
-    as: CashTransferAs
-  }) {
-    const caesarFrom = await this.caesarService.findOne(from)
-    const caesarBankTo = await this.caesarBankService.findOne(caesar_bank_to)
+    id,
+  }: Partial<CashTransfer> & { caesar_bank_from: CaesarBank }) {
+    const caesarFrom = await this.caesarService.findOne(from.id)
+    const caesarBankTo = await this.caesarBankService.findOne(caesar_bank_to.id)
 
     const cashTransferToCB = await this.caesarBankService
       .pay(caesarBankTo, -amount)
-      .then((res) => {
-        return this.cashTransferRepository.save(
-          this.cashTransferRepository.create({
-            amount: amount,
-            from: caesarFrom,
-            as,
-            bank_charge: bank_fee,
-            // remaining_balance_from: cashTransferFrom.cash_transfer_balance,
-            remaining_balance_from: caesarFrom.cash_transfer_balance,
-            remaining_balance_to: res.balance,
-            description,
-            caesar_bank_to: caesarBankTo,
-          } as Partial<CashTransfer>),
-        )
+      .then((payResult) => {
+        return payResult
       })
       .catch((err) => {
         console.log('deposit type, cashTransferToCbErrorToCb', err)
         throw err
       })
-    return cashTransferToCB
+    return this.cashTransferRepository.delete(id).then(async (res) => {
+      return this.revertCashTransferRepository.save(
+        this.revertCashTransferRepository.create({
+          cash_transfer: await this.cashTransferRepository.findOne(id, {
+            withDeleted: true,
+          }),
+        }),
+      )
+    })
   }
 
   async transfer({
@@ -243,11 +236,12 @@ export class RevertCashTransferService {
     caesar_bank_to,
     amount,
     description,
-    bank_fee,
+    bank_charge,
     as,
     to,
+    id,
     message,
-  }: CreateCashTransferDto) {
+  }: Partial<CashTransfer> & { caesar_bank_from: CaesarBank }) {
     /**
      * find bank from and deduct amount + bank_fee
      * and deduct from ultimate caesar balance
@@ -258,16 +252,16 @@ export class RevertCashTransferService {
       )
     }
     const caesarBankFrom = await this.caesarBankService
-      .findOne(caesar_bank_from)
+      .findOne(caesar_bank_from.id)
       .then(async (res) => {
         const caesarBankPay = await this.caesarBankService.pay(
           res,
-          amount + (bank_fee || 0),
+          amount + (bank_charge || 0),
         )
 
         await this.caesarService.payCashTransferBalance(
           caesarBankPay.caesar,
-          amount + (bank_fee || 0),
+          amount + (bank_charge || 0),
         )
         return caesarBankPay
       })
@@ -276,7 +270,7 @@ export class RevertCashTransferService {
       })
 
     const caesarBankTo = await this.caesarBankService
-      .findOne(caesar_bank_to)
+      .findOne(caesar_bank_to.id)
       .then((res) => {
         // return this.caesarBankService.pay(res, amount).then(() => {
         //   return res
@@ -284,9 +278,9 @@ export class RevertCashTransferService {
         return res
       })
 
-    const caesarTo = await this.caesarService.findOne(to).then((res) => {
+    const caesarTo = await this.caesarService.findOne(to.id).then((res) => {
       return this.caesarService
-        .payCashTransferBalance(res, -amount - (bank_fee || 0))
+        .payCashTransferBalance(res, amount - (bank_charge || 0))
         .then(async () => {
           return res
         })
@@ -318,7 +312,7 @@ export class RevertCashTransferService {
       caesar_bank_to: caesarBankTo,
       to: caesarTo,
       description,
-      bank_charge: bank_fee,
+      bank_charge: bank_charge,
       as,
       remaining_balance_from: caesarBankFrom.balance,
       remaining_balance_to: remainingBalanceTo,
@@ -326,7 +320,15 @@ export class RevertCashTransferService {
       is_loan_paid: false,
     }
 
-    return this.cashTransferRepository.save(newLoan)
+    return this.cashTransferRepository.delete(id).then(async (res) => {
+      return this.revertCashTransferRepository.save(
+        this.revertCashTransferRepository.create({
+          cash_transfer: await this.cashTransferRepository.findOne(id, {
+            withDeleted: true,
+          }),
+        }),
+      )
+    })
   }
 
   async loanPayment({
@@ -336,9 +338,9 @@ export class RevertCashTransferService {
     caesar_bank_from,
     from,
     to,
-  }: CreateLoanPaymentDto) {
+  }: Partial<CashTransfer> & { caesar_bank_from: CaesarBank }) {
     const loan = await this.findOne(id).then((res) => {
-      if (res.as !== CashTransferAs.LOAN) {
+      if (res.as === CashTransferAs.LOAN) {
         throw new Error(`Cash Transfer is not of type Loan, cannot pay`)
       }
       return res
@@ -363,7 +365,7 @@ export class RevertCashTransferService {
      * if caesar_bank_from only
      */
     const caesarBankFrom = caesar_bank_from
-      ? await this.caesarBankService.findOne(caesar_bank_from)
+      ? await this.caesarBankService.findOne(caesar_bank_from.id)
       : null
 
     const caesarFrom = await this.caesarService.findOne(
@@ -371,7 +373,7 @@ export class RevertCashTransferService {
     )
 
     const caesarBankTo = caesar_bank_to
-      ? await this.caesarBankService.findOne(caesar_bank_to)
+      ? await this.caesarBankService.findOne(caesar_bank_to.id)
       : null
 
     const caesarTo = await this.caesarService.findOne(
@@ -401,54 +403,14 @@ export class RevertCashTransferService {
       this.caesarBankService.pay(caesarBankTo?.id, -amount)
     }
 
-    const newLoanPayment: Partial<CashTransfer> = {
-      loan: id,
-      amount,
-      caesar_bank_from: caesarBankFrom,
-      caesar_bank_to: caesarBankTo,
-      to: caesarTo,
-      from: caesarFrom,
-      as: CashTransferAs['LOAN PAYMENT'],
-    }
-
-    this.cashTransferRepository.save(newLoanPayment).then(async (res) => {
-      /**
-       *
-       */
-      if (totalPayable <= amount) {
-        await this.cashTransferRepository.save({
-          ...loan,
-          is_loan_paid: true,
-        })
-      }
-      /**
-       * clear caesar of balance
-       */
-
-      if (
-        (
-          await this.cashTransferRepository.find({
-            where: [
-              {
-                to: caesarFrom.id,
-                is_loan_paid: false,
-                as: CashTransferAs.LOAN,
-              },
-              {
-                caesar_bank_to: caesarFrom.id,
-                is_loan_paid: false,
-                as: CashTransferAs.LOAN,
-              },
-            ],
-          })
-        ).length === 0
-      ) {
-        console.log('caesar no longer has loan')
-        this.caesarService.update(caesarFrom.id, {
-          has_loan: false,
-        })
-      }
-      return res
+    return this.cashTransferRepository.delete(id).then(async (res) => {
+      return this.revertCashTransferRepository.save(
+        this.revertCashTransferRepository.create({
+          cash_transfer: await this.cashTransferRepository.findOne(id, {
+            withDeleted: true,
+          }),
+        }),
+      )
     })
   }
 

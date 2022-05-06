@@ -3,18 +3,12 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   BadRequestException,
-  Body,
   Post,
   Get,
   Param,
 } from '@nestjs/common'
-import { Role } from 'src/auth/decorators/roles.decorator'
-import { RolesGuard } from 'src/auth/guards/roles.guard'
 import { CashTransferService } from 'src/cash-transfer/services/cash-transfer.service'
 import { ErrorsInterceptor } from 'src/interceptors/error.interceptor'
-import { Roles } from 'src/types/Roles'
-import { CreateCashTransferDto } from '../dto/cash-transfer/create-cash-transfer.dto'
-import { CreateLoanPaymentDto } from '../dto/cash-transfer/create-loan-payment.dto'
 import { RevertCashTransferService } from '../services/revert-cash-transfer.service'
 
 @Controller('cash-transfer/revert')
@@ -39,34 +33,46 @@ export class RevertCashTransferController {
       })
   }
 
-  @Post('withdraw')
-  withdraw(@Body() createCashTransferDto: CreateCashTransferDto) {
-    return this.revertCashTransferService.withdraw({
-      ...createCashTransferDto,
-    })
+  @Post('withdraw/:id')
+  async withdraw(@Param('id') cashTransferId: string) {
+    return this.revertCashTransferService
+      .withdraw({ ...(await this.cashTransferService.findOne(cashTransferId)) })
+      .catch((err) => {
+        throw new BadRequestException(err.message)
+      })
   }
 
-  @Post('deposit')
-  deposit(@Body() createCashTransferDto: CreateCashTransferDto) {
+  @Post('deposit/:id')
+  async deposit(@Param('id') cashTransferId: string) {
     return this.revertCashTransferService
       .deposit({
-        ...createCashTransferDto,
+        ...(await this.cashTransferService.findOne(cashTransferId)),
       })
       .catch((err) => {
         throw new BadRequestException(err.message)
       })
   }
 
-  @Post('loan')
-  loan(@Body() CreateCashTransferDto: CreateCashTransferDto) {
-    return this.revertCashTransferService.loan({
-      ...CreateCashTransferDto,
-    })
+  @Post('loan/:id')
+  async loan(@Param('id') cashTransferId: string) {
+    return this.revertCashTransferService
+      .loan({
+        ...(await this.cashTransferService.findOne(cashTransferId)),
+      })
+      .catch((err) => {
+        throw new BadRequestException(err.message)
+      })
   }
 
-  @Post('loan-payment')
-  loanPayment(@Body() createLoanPayment: CreateLoanPaymentDto) {
-    return this.revertCashTransferService.loanPayment(createLoanPayment)
+  @Post('loan-payment/:id')
+  async loanPayment(@Param('id') cashTransferId: string) {
+    return this.revertCashTransferService
+      .loanPayment({
+        ...(await this.cashTransferService.findOne(cashTransferId)),
+      })
+      .catch((err) => {
+        throw new BadRequestException(err.message)
+      })
   }
 
   @Get('loan-payments/:id')

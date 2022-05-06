@@ -1,0 +1,24 @@
+### WITHDRAW
+
+POST http://localhost:6006/cash-transfer/revert/withdraw/0E8AE6DF-12CD-EC11-8971-00155DBB6F03
+Content-Type: application/json
+
+### DEPOSIT
+
+POST http://localhost:6006/cash-transfer/revert/deposit/0E6CCC0A-14CD-EC11-8971-00155DBB6F03
+Content-Type: application/json
+
+### TRANSFER
+
+POST http://localhost:6006/cash-transfer/revert/transfer/D9A7AF6B-14CD-EC11-8971-00155DBB6F03
+Content-Type: application/json
+
+### LOAN
+
+POST http://localhost:6006/cash-transfer/revert/loan/6F2B8456-17CD-EC11-8971-00155DBB6F03
+Content-Type: application/json
+
+### LOAN PAYMENT
+
+POST http://localhost:6006/cash-transfer/revert/loan-payment/F3D5A1F9-17CD-EC11-8971-00155DBB6F03
+Content-Type: application/json

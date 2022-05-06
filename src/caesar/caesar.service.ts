@@ -17,6 +17,7 @@ import { SearchCaesarDto } from 'src/caesar/dto/search-caesar.dto'
 import { plainToClass, plainToInstance } from 'class-transformer'
 import createQueryBuilderAndIncludeRelations from 'src/utils/queryBuilderWithRelations'
 import { UpdateCaesarDto } from 'src/caesar/dto/update-caesar.dto'
+import { OnEvent } from '@nestjs/event-emitter'
 // import { ConfigService } from '@nestjs/config'
 
 @Injectable()
@@ -35,6 +36,52 @@ export class CaesarService {
     'bank_accounts',
   ]
 
+  @OnEvent('telco-account.created')
+  async createFromAccount({
+    ...userAccount
+  }: User & {
+    account_type: UserTypesAndUser
+  }) {
+    // const account = ['subdistribuor', 'retailer', 'dsp', 'admin', ].reduce(()=> , {} )
+    // console.log(userAccount, account)
+    // const account_type = Object?.keys(
+    //   userAccount?.user_type,
+    // )[0] as UserTypesAndUser
+
+    /**
+     * Formulate Body Request to External Caesar
+     */
+    const newCaesarUser: Partial<ExternalCaesar> = {
+      first_name: userAccount.first_name,
+      last_name: userAccount.last_name,
+      cp_number: userAccount.phone_number,
+      email: userAccount.email,
+      role: userAccount.account_type,
+      password: userAccount.phone_number,
+    }
+    const caesar_id$ = this.axiosService
+      .post('/external-caesar', newCaesarUser)
+      .pipe(map((response) => response.data as string))
+    const caesar_id = await firstValueFrom(caesar_id$).catch(
+      (err: AxiosError) => {
+        throw new Error(err.response.data.message)
+      },
+    )
+
+    /**
+     * Create local record of Caesar into dito_db
+     */
+    const caesarCreate = this.caesarRepository.create({
+      // account_id: account[account_type],
+      account_type: userAccount.account_type,
+      caesar_id,
+      [userAccount.account_type]: userAccount[userAccount.account_type],
+    })
+
+    const newCaesar = await this.caesarRepository.save(caesarCreate)
+    return this.injectExternalCaesar(newCaesar)
+  }
+
   async create({
     userAccount,
     ...account
@@ -43,6 +90,7 @@ export class CaesarService {
   } & Partial<Record<UserTypesAndUser, AccountTypes>> & {
       password: string
     }) {
+    console.log(userAccount, account)
     const account_type = Object.keys(account)[0] as UserTypesAndUser
 
     /**

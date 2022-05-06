@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter'
 import { InjectRepository } from '@nestjs/typeorm'
 import { isNotEmptyObject } from 'class-validator'
 import { GetAllRetailerDto } from 'src/retailers/dto/get-all-retailer.dto'
@@ -16,6 +17,7 @@ export class RetailersService {
   constructor(
     @InjectRepository(Retailer)
     private retailerRepository: Repository<Retailer>,
+    private eventEmitter: EventEmitter2,
   ) {
     this.relationsToLoad = ['dsp', 'subdistributor', 'user']
   }
@@ -25,7 +27,11 @@ export class RetailersService {
   async create(createRetailerDto: CreateRetailerDto): Promise<Retailer> {
     const newRetailer = this.retailerRepository.create(createRetailerDto)
     const newRetailerSave = await this.retailerRepository.save(newRetailer)
-
+    const userAccount = (await this.findOne(newRetailerSave.id)).user
+    this.eventEmitter.emit('telco-account.created', {
+      ...userAccount,
+      account_type: 'retailer',
+    })
     return newRetailerSave
 
     // return 'This action adds a new retailer';

@@ -20,6 +20,7 @@ import { DspService } from 'src/dsp/dsp.service'
 import { AdminService } from 'src/admin/admin.service'
 import { RetailersService } from 'src/retailers/retailers.service'
 import { SubdistributorService } from 'src/subdistributor/subdistributor.service'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 
 interface AccountRetrieve extends Record<UserTypes, any> {
   dsp: DspService
@@ -38,6 +39,7 @@ export class UserService {
     @Inject(RetailersService) private retailerService: RetailersService,
     @Inject(SubdistributorService)
     private subdistributorService: SubdistributorService,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   accountRetrieve: AccountRetrieve = {
@@ -57,6 +59,11 @@ export class UserService {
 
     const user = this.userRepository.create(createUserDto)
     await this.userRepository.save(user)
+    const userAccount = await this.findOne(user.id)
+    this.eventEmitter.emit('telco-account.created', {
+      ...userAccount,
+      account_type: 'user',
+    })
     return user
     // return 'This action adds a new user'
   }

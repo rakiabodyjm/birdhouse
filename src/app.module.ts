@@ -21,8 +21,10 @@ import { InventoryLogModule } from './inventorylog/inventorylog.module'
 import SQLConfig from 'root/ormconfig'
 import { SiteAccessGuard } from 'src/guards/site-access.guard'
 import { CashTransferModule } from './cash-transfer/cash-transfer.module'
+import { EventEmitterModule } from '@nestjs/event-emitter'
 @Module({
   imports: [
+    EventEmitterModule.forRoot(),
     CacheModule.register({
       isGlobal: true,
       ttl: 15,

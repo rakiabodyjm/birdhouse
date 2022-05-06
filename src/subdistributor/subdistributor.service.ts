@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 import { InjectRepository } from '@nestjs/typeorm'
 import { isNotEmptyObject } from 'class-validator'
 import { CaesarService } from 'src/caesar/caesar.service'
@@ -20,6 +21,7 @@ export class SubdistributorService {
     private subdRepository: Repository<Subdistributor>,
     private caesarService: CaesarService,
     private mapidService: MapIdsService,
+    private eventEmitter: EventEmitter2,
   ) {
     this.relationsToLoad = ['user']
   }
@@ -38,6 +40,12 @@ export class SubdistributorService {
 
     console.log(subdistributor)
     const subdSave = await this.subdRepository.save(subdistributor)
+
+    const userAccount = (await this.findOne(subdSave.id)).user
+    this.eventEmitter.emit('telco-account.created', {
+      ...userAccount,
+      account_type: 'subdistributor',
+    })
     return subdSave
   }
 

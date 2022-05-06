@@ -23,7 +23,6 @@ export class RevertCashTransferController {
 
   @Post('transfer/:id')
   async transfer(@Param('id') cashTransferId: string) {
-    console.log(this.cashTransferService.findOne(cashTransferId))
     return this.revertCashTransferService
       .transfer({
         // ...createCashTransferDto,
@@ -36,7 +35,6 @@ export class RevertCashTransferController {
 
   @Post('withdraw/:id')
   async withdraw(@Param('id') cashTransferId: string) {
-    console.log({ ...(await this.cashTransferService.findOne(cashTransferId)) })
     return this.revertCashTransferService
       .withdraw({ ...(await this.cashTransferService.findOne(cashTransferId)) })
       .catch((err) => {
@@ -44,16 +42,16 @@ export class RevertCashTransferController {
       })
   }
 
-  // @Post('deposit/:id')
-  // async deposit(@Param('id') cashTransferId: string) {
-  //   return this.revertCashTransferService
-  //     .deposit({
-  //       ...(await this.cashTransferService.findOne(cashTransferId)),
-  //     })
-  //     .catch((err) => {
-  //       throw new BadRequestException(err.message)
-  //     })
-  // }
+  @Post('deposit/:id')
+  async deposit(@Param('id') cashTransferId: string) {
+    return this.revertCashTransferService
+      .deposit({
+        ...(await this.cashTransferService.findOne(cashTransferId)),
+      })
+      .catch((err) => {
+        throw new BadRequestException(err.message)
+      })
+  }
 
   @Post('loan/:id')
   async loan(@Param('id') cashTransferId: string) {
@@ -66,15 +64,16 @@ export class RevertCashTransferController {
       })
   }
 
-  // @Post('loan-payment/:id')
-  // loanPayment(@Param('id') cashTransferId: string) {
-  //   return this.revertCashTransferService.loanPayment({
-  //       ...(await this.cashTransferService.findOne(cashTransferId)),
-  //     })
-  //     .catch((err) => {
-  //       throw new BadRequestException(err.message)
-  //     }))
-  // }
+  @Post('loan-payment/:id')
+  async loanPayment(@Param('id') cashTransferId: string) {
+    return this.revertCashTransferService
+      .loanPayment({
+        ...(await this.cashTransferService.findOne(cashTransferId)),
+      })
+      .catch((err) => {
+        throw new BadRequestException(err.message)
+      })
+  }
 
   @Get('loan-payments/:id')
   getLoanPayments(@Param('id') cashTransferId: string) {

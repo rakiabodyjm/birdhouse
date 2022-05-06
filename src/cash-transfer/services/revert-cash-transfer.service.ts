@@ -39,20 +39,15 @@ export class RevertCashTransferService {
     to,
     description,
     as,
-  }: { amount: number } & {
-    caesar_bank_from: CaesarBank['id']
-    to: Caesar['id']
-    description
-    bank_fee?: number
-    as: CashTransferAs
-  }) {
+    id,
+  }: Partial<CashTransfer> & { caesar_bank_from: CaesarBank }) {
     // const transferType = await this.transferTypeService.findOne(transfer_type)
     // const transferType = await this.transferTypeRepository.findOneOrFail({
     //   name: transfer_type.toUpperCase(),
     // })
-    const caesarTo = await this.caesarService.findOne(to)
+    const caesarTo = await this.caesarService.findOne(to.id)
     const bankWithDrawal = await this.caesarBankService
-      .findOne(caesar_bank_from)
+      .findOne(caesar_bank_from.id)
       .then((res) => {
         /**
          * deduct from caesarBankService
@@ -83,9 +78,17 @@ export class RevertCashTransferService {
       remaining_balance_from: bankWithDrawal.balance,
       remaining_balance_to: caesarTo.cash_transfer_balance,
     }
-
-    const newCashTransfer = this.cashTransferRepository.create(cashTransfer)
-    return this.cashTransferRepository.save(newCashTransfer)
+    return this.cashTransferRepository.delete(id).then(async (res) => {
+      return this.revertCashTransferRepository.save(
+        this.revertCashTransferRepository.create({
+          cash_transfer: await this.cashTransferRepository.findOne(id, {
+            withDeleted: true,
+          }),
+        }),
+      )
+    })
+    // const newCashTransfer = this.cashTransferRepository.create(cashTransfer)
+    // return this.cashTransferRepository.save(newCashTransfer)
   }
 
   async deposit({
@@ -247,7 +250,7 @@ export class RevertCashTransferService {
     as,
     to,
     message,
-  }: CreateCashTransferDto) {
+  }: Partial<CreateCashTransferDto>) {
     /**
      * find bank from and deduct amount + bank_fee
      * and deduct from ultimate caesar balance

@@ -21,6 +21,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
+import { CaesarBank } from 'src/cash-transfer/entities/caesar-bank.entity'
+import { CashTransfer } from 'src/cash-transfer/entities/cash-transfer.entity'
 
 class WithAccountTypes {
   @JoinColumn({
@@ -118,7 +120,10 @@ export class Caesar extends WithAccountTypes {
 
   @OneToMany((type) => InventoryLog, (inventoryLog) => inventoryLog.caesar)
   inventoryLogs: InventoryLog[]
-  @OneToMany((type) => Inventory, (inventory) => inventory.caesar, {})
+
+  @OneToMany((type) => Inventory, (inventory) => inventory.caesar, {
+    createForeignKeyConstraints: true,
+  })
   inventory: Inventory[]
 
   @CreateDateColumn({
@@ -153,4 +158,23 @@ export class Caesar extends WithAccountTypes {
 
   @Expose()
   data?: ExternalCaesar
+
+  @OneToMany((type) => CaesarBank, (caesarBank) => caesarBank.caesar)
+  bank_accounts: CaesarBank[]
+
+  @OneToMany((type) => CashTransfer, (cashTransfer) => cashTransfer.from)
+  cash_transfer_from: CashTransfer[]
+
+  @OneToMany((type) => CashTransfer, (cashTransfer) => cashTransfer.to)
+  cash_transfer_to: CashTransfer[]
+
+  @Column({
+    default: 0,
+  })
+  cash_transfer_balance: number
+
+  @Column({
+    default: false,
+  })
+  has_loan: boolean
 }

@@ -20,6 +20,7 @@ import { DspService } from 'src/dsp/dsp.service'
 import { AdminService } from 'src/admin/admin.service'
 import { RetailersService } from 'src/retailers/retailers.service'
 import { SubdistributorService } from 'src/subdistributor/subdistributor.service'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 
 interface AccountRetrieve extends Record<UserTypes, any> {
   dsp: DspService
@@ -38,6 +39,7 @@ export class UserService {
     @Inject(RetailersService) private retailerService: RetailersService,
     @Inject(SubdistributorService)
     private subdistributorService: SubdistributorService,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   accountRetrieve: AccountRetrieve = {
@@ -57,6 +59,11 @@ export class UserService {
 
     const user = this.userRepository.create(createUserDto)
     await this.userRepository.save(user)
+    const userAccount = await this.findOne(user.id)
+    this.eventEmitter.emit('telco-account.created', {
+      ...userAccount,
+      account_type: 'user',
+    })
     return user
     // return 'This action adds a new user'
   }
@@ -83,7 +90,7 @@ export class UserService {
     try {
       const userCache: User = await this.cacheManager.get(id)
 
-      if (userCache) {
+      if (userCache && !isCached) {
         if (isCached === true) {
           return userCache
         } else {
@@ -150,6 +157,7 @@ export class UserService {
       'admin',
       'retailer',
       'dsp',
+      'user',
     ]
     if (Object.keys(params).length === 0) {
       throw new Error(
@@ -169,11 +177,16 @@ export class UserService {
                   .then((res: Exclude<AccountTypes, User>) =>
                     this.findOne(res.user.id),
                   )
+                  .then((res) => {
+                    return res
+                  })
               : await this.findOne(params[accountType])
         }
       }),
     )
-
+    if (!account) {
+      throw new Error('UserService.findOneQuery error account not found')
+    }
     return account
   }
   async update(
@@ -277,5 +290,36 @@ export class UserService {
     })
 
     return roles
+  }
+
+  async addCustomRole(userId: User['id'], customRoleString: string) {
+    return this.findOne(userId).then((user) => {
+      if (user.custom_roles) {
+        user.custom_roles = JSON.stringify(
+          [
+            ...(JSON.parse(user.custom_roles) as string[]),
+            customRoleString,
+          ].filter((ea, index, array) => array.indexOf(ea) === index),
+        )
+      } else {
+        user.custom_roles = JSON.stringify([customRoleString])
+      }
+
+      return this.userRepository.save(user)
+    })
+  }
+
+  removeCustomRole(userId: User['id'], customRole: string) {
+    return this.findOne(userId).then((user) => {
+      if (!user.custom_roles) {
+        throw new Error(`User doesn't have a custom role`)
+      }
+      let roles = JSON.parse(user.custom_roles) as string[]
+      roles = roles.filter((ea) => ea !== customRole)
+
+      user.custom_roles = roles.length > 0 ? JSON.stringify(roles) : null
+      return this.userRepository.save(user)
+      // this.userRepository.save(roles.length > 0 ?  : )
+    })
   }
 }

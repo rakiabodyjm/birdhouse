@@ -1,14 +1,26 @@
+
+POST http://localhost:6006/auth/login
+Content-Type: application/json
+
+{
+    "email": "rakiabodyjm@gmail.com",
+    "password": "rakiabodyjm4690", 
+    "remember_me": true
+}
+
+
 ### GET ADMIN ACCOUNTS
 
 GET http://localhost:6006/admin
 
 ### CREATE NEW ADMIN
-POST https://api.caesarcoin.ph/admin
+POST http://localhost:6006/admin
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNTZBMUQ3NDYtMDBCNy1FQzExLThDQ0QtMDIyMDAyMjAwMjIwIiwiZW1haWwiOiJyYWtpYWJvZHlqbUBnbWFpbC5jb20iLCJmaXJzdF9uYW1lIjoiSmFuZW8gTWlndWVsIiwibGFzdF9uYW1lIjoiVGlvbmdzb24iLCJyb2xlcyI6W10sImlhdCI6MTY0OTM5NzM4OCwiZXhwIjoxNjQ5NDExNzg4fQ.W0BbcRcKGEFGHdUo6KztnhFl9hLUKDhpEaXws3qSITY
 
 {
-    "name": "Janeo",
-    "user": "B9D8E0EA-29A1-EC11-A22A-14CB6534284D"
+    "name": "ADMIN REYNARD",
+    "user": "FCFF2287-04B7-EC11-8CCD-022002200220"
 }
 ###
 PATCH http://localhost:6006/admin/E058BBB5-AD57-EC11-B670-00E18CEF5938
@@ -28,7 +40,7 @@ GET http://localhost:6006/admin?page=0&limit=3
 GET http://localhost:6006/admin/0A03B39E-C121-EC11-B665-00E18CEF5938
 
 ###
-GET http://localhost:6006/admin/search?searchQuery=Admin
+GET http://localhost:6006/admin/search?searchQuery=ADMIN NICO
 
 ### 
 GET http://localhost:6006/

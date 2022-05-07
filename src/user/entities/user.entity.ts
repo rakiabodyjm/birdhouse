@@ -16,9 +16,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
-
-@Entity()
 @Index(['first_name', 'last_name', 'phone_number', 'email', 'username'])
+@Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string
@@ -84,6 +83,12 @@ export class User {
       }
     })
 
+    if (this.custom_roles) {
+      ;(JSON.parse(this.custom_roles) as string[]).forEach((ea) => {
+        roles.push(ea)
+      })
+    }
+
     return roles
   }
 
@@ -134,8 +139,13 @@ export class User {
   })
   caesar_wallet?: Caesar
 
-  // @BeforeUpdate()
-  // setUpdatedAt() {
-  //   this.updated_at = new SQLDateGenerator().timeNow().getSQLDate()
-  // }
+  @BeforeUpdate()
+  setUpdatedAt() {
+    this.updated_at = new SQLDateGenerator().timeNow().getSQLDate()
+  }
+
+  @Column({
+    default: null,
+  })
+  custom_roles: string
 }

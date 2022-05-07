@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 import { InjectRepository } from '@nestjs/typeorm'
 import { isNotEmptyObject } from 'class-validator'
 import { GetAllDspDto } from 'src/dsp/dto/get-all-dsp.dto'
@@ -16,6 +17,7 @@ export class DspService {
   constructor(
     @InjectRepository(Dsp) private dspRepository: Repository<Dsp>,
     private mapidService: MapIdsService,
+    private eventEmitter: EventEmitter2,
   ) {
     this.includedRelations = ['area_id', 'user', 'subdistributor']
   }
@@ -40,6 +42,11 @@ export class DspService {
     const dspSave = await this.dspRepository.save(
       this.dspRepository.create(newDSP),
     )
+    const userAccount = (await this.findOne(dspSave.id)).user
+    this.eventEmitter.emit('telco-account.created', {
+      ...userAccount,
+      account_type: 'dsp',
+    })
     return dspSave
   }
 

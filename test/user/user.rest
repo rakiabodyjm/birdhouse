@@ -1,3 +1,14 @@
+###
+
+POST http://localhost:6006/auth/login
+Content-Type: application/json
+
+{
+    "email": "rakiabodyjm",
+    "password": "rakiabodyjm4690",
+    "remember_me": true
+}
+
 
 ### CREATE USER
 POST http://localhost:6006/user
@@ -36,7 +47,6 @@ Content-Type: application/json
  
 ### SHOW ALL USERS
 GET http://localhost:6006/user
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNkUwNjQzM0UtRjM2Qi0xNDEwLTgyMDktMDBCRkMyMzAxMjc4IiwiZW1haWwiOiJqbV9wb2dpMzEwIiwiZmlyc3RfbmFtZSI6IkphbmVvIE1pZ3VlbCIsImxhc3RfbmFtZSI6IlRpb25nc29uIiwicm9sZXMiOlsiZHNwIiwic3ViZGlzdHJpYnV0b3IiXSwiaWF0IjoxNjQ2MjQ5MDY1LCJleHAiOjE2NDYyNTI2NjV9.qzMq4vcjaCrvjeFy13DNbXfmDsuPxjJ8U0USSztM5go
 
 
 ### CLEAR ALL USERS
@@ -47,9 +57,9 @@ Content-Type: application/json
 
 ###sDELETE http://localhost:6006/user/E18EB353-D403-EC11-B661-00E18CEF5938
 ### GET USER BY ID
-GET http://localhost:6006/user/EFA8FEF1-BB21-EC11-B665-00E18CEF5938
+GET http://localhost:6006/user/FCFF2287-04B7-EC11-8CCD-022002200220
 ### UPDATE USER BY ID
-PATCH http://localhost:6006/user/EFA8FEF1-BB21-EC11-B665-00E18CEF5938
+PATCH http://localhost:6006/user/56A1D746-00B7-EC11-8CCD-022002200220
 Content-Type: application/json
 
 {
@@ -79,17 +89,13 @@ Content-Type: application/json
 PATCH http://localhost:6006/user/suspend/45E069F2-CDFA-EB11-B65F-00E18CEF5938
 
 ### DELETE USER BY ID
-DELETE http://localhost:6006/user/AE02DF31-DD2B-EC11-B666-00E18CEF5935
-
-
-
-
-
+DELETE http://localhost:6006/user/6E06433E-F36B-1410-8209-00BFC2301278
+###
 
 
 
 ### SEARCH
-GET http://localhost:6006/user/search?find=jake
+GET http://localhost:6006/user/search?find=Janeo
 
 ###Pagination
 GET http://localhost:6006/user?page=0&limit=3
@@ -97,3 +103,9 @@ GET http://localhost:6006/user?page=0&limit=3
 
 ###
 GET http://localhost:6006/user/query?admin=0A03B39E-C121-EC11-B665-00E18CEF5938
+
+###
+GET http://localhost:6006/user/FCFF2287-04B7-EC11-8CCD-022002200220/add-custom-role/ct-operator
+###
+
+DELETE http://localhost:6006/user/FCFF2287-04B7-EC11-8CCD-022002200220/remove-custom-role/ct-operator

@@ -72,7 +72,6 @@ export class CreateUserDto {
   address2: string
 
   @Transform(({ value }) => {
-    console.log('Transforming password', value)
     return Bcrypt().generatePassword(value)
   })
   @ApiProperty()

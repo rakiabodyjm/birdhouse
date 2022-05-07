@@ -7,6 +7,18 @@
     "name": "Janeo Miguel Tiongson",
     "url": "https://github.com/rakiabodyjm"
   },
+  "contributors": [
+    {
+      "name": "Jerome C. Gapasin",
+      "email": "gapasinjerome99@gmail.com",
+      "url": "https://github.com/bluerose29"
+    },
+    {
+      "name": "Reynard Visperas",
+      "email": "visperas30@gmail.com",
+      "url": "https://github.com/RCVisperas"
+    }
+  ],
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -37,6 +49,7 @@
     "@nestjs/common": "^8.0.6",
     "@nestjs/config": "^1.0.1",
     "@nestjs/core": "^8.0.6",
+    "@nestjs/event-emitter": "^1.1.1",
     "@nestjs/graphql": "^8.0.2",
     "@nestjs/jwt": "^8.0.0",
     "@nestjs/mapped-types": "^1.0.0",

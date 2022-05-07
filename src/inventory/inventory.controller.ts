@@ -49,7 +49,7 @@ export class InventoryController {
    */
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Post()
-  @UseInterceptors(InventoryLoggerInterceptor)
+  // @UseInterceptors(InventoryLoggerInterceptor)
   async create(@Body() createInventoryDto: CreateInventoryDto) {
     const { quantity, asset: assetId, caesar: caesarId } = createInventoryDto
     const caesar = await this.caesarService.findOne(caesarId)
@@ -115,7 +115,7 @@ export class InventoryController {
    */
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Patch(':id')
-  @UseInterceptors(InventoryLoggerInterceptor)
+  // @UseInterceptors(InventoryLoggerInterceptor)
   async update(
     @Param('id') id: string,
     @Body() updateInventoryDto: UpdateInventoryDto,

@@ -163,4 +163,34 @@ export class UserController {
         throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
       })
   }
+
+  @Get(':id/add-custom-role/:param')
+  addCustomRole(
+    @Param('id') id: string,
+    @Param('param') param: string,
+   ): Promise<User> {
+    return this.userService
+      .addCustomRole(id, param)
+      .then((res) => {
+        return res
+      })
+      .catch((err) => {
+        throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
+      })
+  }
+
+  @Delete(':id/remove-custom-role/:param')
+  removeCustomRole(
+    @Param('id') id: string,
+    @Param('param') param: string,
+   ): Promise<User> {
+    return this.userService
+      .removeCustomRole(id, param)
+      .then((res) => {
+        return res
+      })
+      .catch((err) => {
+        throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
+      })
+  }
 }

@@ -1,4 +1,4 @@
-import { CacheModule, forwardRef, Module } from '@nestjs/common'
+import { forwardRef, Module } from '@nestjs/common'
 import { CaesarService } from './caesar.service'
 import { CaesarController } from './caesar.controller'
 import { TypeOrmModule } from '@nestjs/typeorm'
@@ -10,7 +10,7 @@ import { CaesarApiService } from 'src/caesar/ceasar-api.service'
 import { CaesarApiController } from 'src/caesar/caesar-api.controller'
 @Module({
   imports: [
-    CacheModule.register(),
+    // CacheModule.register(),
     TypeOrmModule.forFeature([Caesar]),
     forwardRef(() => UserModule),
     ConfigModule,

@@ -45,13 +45,14 @@ GET http://localhost:6006/inventory/A57E433E-F36B-1410-8206-00BFC2301278
 ###
 
 
-PATCH http://localhost:6006/inventory/3C08433E-F36B-1410-8209-00BFC2301278
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRUZBOEZFRjEtQkIyMS1FQzExLUI2NjUtMDBFMThDRUY1OTM4IiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIiwiZHNwIiwic3ViZGlzdHJpYnV0b3IiXSwiaWF0IjoxNjQ1ODYxMjYxLCJleHAiOjE2NDU4NjQ4NjF9.hTW5VbpAid_SNoxTSY6XUyRmtsVqMExUenoLF2wi0xQ
+PATCH http://localhost:6006/inventory/D619FD14-98B6-EC11-8CCD-022002200220
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNTZBMUQ3NDYtMDBCNy1FQzExLThDQ0QtMDIyMDAyMjAwMjIwIiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJKYW5lbyBNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIiwiZHNwIiwic3ViZGlzdHJpYnV0b3IiXSwiYWRtaW5faWQiOiIwODlFNjVFRS0wMEI3LUVDMTEtOENDRC0wMjIwMDIyMDAyMjAiLCJkc3BfaWQiOiI0MzY1N0VDQS0xMEI3LUVDMTEtOENDRC0wMjIwMDIyMDAyMjAiLCJzdWJkaXN0cmlidXRvcl9pZCI6IkE1QjBGRDY0LTEwQjctRUMxMS04Q0NELTAyMjAwMjIwMDIyMCIsImlhdCI6MTY0OTY2OTkxMCwiZXhwIjoxNjQ5Njg0MzEwfQ.UqZeqGkR0xblZ2wj70-arD7KNdbn9MtBJqQj0g8IOLc
 Content-Type: application/json
 
 {
-    "quantity": 42, 
-    "srp_for_dsp": 1.4
+    # "quantity": 42, 
+    # "srp_for_dsp": 1.4
+    "caesar": "4A94FE3D-06B7-EC11-8CCD-022002200220"
     # "caesar":"AC7E433E-F36B-1410-8206-00BFC2301278" 
     # "unit_price":0.9
     # "description": "REALM1000 Issued Regular Load"
@@ -63,7 +64,7 @@ DELETE http://localhost:6006/inventory/
 
 ### 
 
-DELETE http://localhost:6006/inventory/A7CAB5D9-175F-EC11-B672-00E18CEF5938
+DELETE http://localhost:6006/inventory/136DF925-98B6-EC11-8CCD-022002200220
 
 ###
 GET http://localhost:6006/inventory/test-findby-asset-and-caesar

@@ -10,38 +10,87 @@ import { Like, Repository } from 'typeorm'
 import { HttpService } from '@nestjs/axios'
 import { User } from 'src/user/entities/user.entity'
 import { firstValueFrom, map } from 'rxjs'
-import { AxiosResponse } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 import { GetCaesarDto } from 'src/caesar/dto/get-caesar.dto'
 import { ExternalCaesar } from 'src/external-caesar/entities/external-caesar.entity'
-import { CaesarApiService } from 'src/caesar/ceasar-api.service'
 import { SearchCaesarDto } from 'src/caesar/dto/search-caesar.dto'
-import { plainToClass } from 'class-transformer'
-import { ConfigService } from '@nestjs/config'
+import { plainToClass, plainToInstance } from 'class-transformer'
 import createQueryBuilderAndIncludeRelations from 'src/utils/queryBuilderWithRelations'
+import { UpdateCaesarDto } from 'src/caesar/dto/update-caesar.dto'
+import { OnEvent } from '@nestjs/event-emitter'
+// import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 export class CaesarService {
   constructor(
     @InjectRepository(Caesar)
     private readonly caesarRepository: Repository<Caesar>,
-    private axiosService: HttpService,
-    private caesarApiService: CaesarApiService,
-    private configService: ConfigService,
+    private axiosService: HttpService, // private caesarApiService: CaesarApiService, // private configService: ConfigService,
   ) {}
-  relations: UserTypesAndUser[] = [
+  relations = [
     'admin',
     'subdistributor',
     'dsp',
     'retailer',
     'user',
+    'bank_accounts',
   ]
+
+  @OnEvent('telco-account.created')
+  async createFromAccount({
+    ...userAccount
+  }: User & {
+    account_type: UserTypesAndUser
+  }) {
+    // const account = ['subdistribuor', 'retailer', 'dsp', 'admin', ].reduce(()=> , {} )
+    // console.log(userAccount, account)
+    // const account_type = Object?.keys(
+    //   userAccount?.user_type,
+    // )[0] as UserTypesAndUser
+
+    /**
+     * Formulate Body Request to External Caesar
+     */
+    const newCaesarUser: Partial<ExternalCaesar> = {
+      first_name: userAccount.first_name,
+      last_name: userAccount.last_name,
+      cp_number: userAccount.phone_number,
+      email: userAccount.email,
+      role: userAccount.account_type,
+      password: userAccount.phone_number,
+    }
+    const caesar_id$ = this.axiosService
+      .post('/external-caesar', newCaesarUser)
+      .pipe(map((response) => response.data as string))
+    const caesar_id = await firstValueFrom(caesar_id$).catch(
+      (err: AxiosError) => {
+        throw new Error(err.response.data.message)
+      },
+    )
+
+    /**
+     * Create local record of Caesar into dito_db
+     */
+    const caesarCreate = this.caesarRepository.create({
+      // account_id: account[account_type],
+      account_type: userAccount.account_type,
+      caesar_id,
+      [userAccount.account_type]: userAccount[userAccount.account_type],
+    })
+
+    const newCaesar = await this.caesarRepository.save(caesarCreate)
+    return this.injectExternalCaesar(newCaesar)
+  }
 
   async create({
     userAccount,
     ...account
   }: {
     userAccount: User
-  } & Partial<Record<UserTypesAndUser, AccountTypes>>) {
+  } & Partial<Record<UserTypesAndUser, AccountTypes>> & {
+      password: string
+    }) {
+    console.log(userAccount, account)
     const account_type = Object.keys(account)[0] as UserTypesAndUser
 
     /**
@@ -53,11 +102,16 @@ export class CaesarService {
       cp_number: userAccount.phone_number,
       email: userAccount.email,
       role: account_type,
+      password: userAccount.password,
     }
     const caesar_id$ = this.axiosService
       .post('/external-caesar', newCaesarUser)
       .pipe(map((response) => response.data as string))
-    const caesar_id = await firstValueFrom(caesar_id$)
+    const caesar_id = await firstValueFrom(caesar_id$).catch(
+      (err: AxiosError) => {
+        throw new Error(err.response.data.message)
+      },
+    )
 
     /**
      * Create local record of Caesar into dito_db
@@ -133,7 +187,6 @@ export class CaesarService {
     const { searchQuery } = searchCaesarDto
     const { page = 0, limit = 100 } = searchCaesarDto
     delete searchCaesarDto.searchQuery
-    const likeSearchQuery = Like(`%${searchQuery}%`)
 
     const query = createQueryBuilderAndIncludeRelations(this.caesarRepository, {
       entityName: 'caesar',
@@ -177,13 +230,65 @@ export class CaesarService {
     return query
   }
 
+  searchV2(params: SearchCaesarDto) {
+    const likeQuery = params?.searchQuery
+      ? Like(`%${params.searchQuery}%`)
+      : undefined
+    return paginateFind(
+      this.caesarRepository,
+      {
+        ...params,
+      },
+      {
+        relations: [...this.relations],
+        ...(likeQuery && {
+          order: {
+            created_at: 'DESC',
+          },
+          where: [
+            {
+              admin: {
+                name: likeQuery,
+              },
+            },
+            {
+              subdistributor: {
+                name: likeQuery,
+              },
+            },
+            {
+              dsp: {
+                dsp_code: likeQuery,
+              },
+            },
+            {
+              retailer: {
+                store_name: likeQuery,
+              },
+            },
+            {
+              user: {
+                first_name: likeQuery,
+              },
+            },
+            {
+              user: {
+                last_name: likeQuery,
+              },
+            },
+          ],
+        }),
+      },
+    )
+  }
   findOne<T = GetCaesarDto>(accountQuery: T): Promise<Caesar>
   findOne<T = string>(caesarId: T): Promise<Caesar>
   findOne(id: GetCaesarDto | string) {
     if (typeof id === 'string') {
       const caesar = this.caesarRepository
         .findOneOrFail(id, {
-          relations: ['admin', 'dsp', 'retailer', 'subdistributor', 'user'],
+          // relations: ['admin', 'dsp', 'retailer', 'subdistributor', 'user'],
+          relations: this.relations,
         })
         .then(async (res) => {
           const withExternalCaesar = await this.injectExternalCaesar(res).catch(
@@ -276,5 +381,56 @@ export class CaesarService {
       throw new Error(err.message)
     })
     return topUpResponse
+  }
+
+  // update(id: string, updateCaesar: UpdateCaesarDto) {
+  //   console.log(updateCaesar)
+  //   return this.findOne(id).then(async (res) => {
+  //     console.log(res)
+  //     if (updateCaesar.banks) {
+  //       updateCaesar.banks = [
+  //         ...(await Promise.all(
+  //           updateCaesar.banks.map((ea) =>
+  //             this.bankService.findOne(ea).catch((err) => {
+  //               throw new Error(`Bank doesn't exist ${ea}`)
+  //             }),
+  //           ),
+  //         )),
+  //       ]
+  //     }
+  //     return this.caesarRepository.save({
+  //       ...res,
+  //       ...updateCaesar,
+  //     })
+  //   })
+  // }
+
+  async update(
+    id: string,
+    updateCaesarDto: UpdateCaesarDto & {
+      has_loan?: boolean
+    },
+  ) {
+    const caesar = await this.findOne(id)
+    return this.caesarRepository.save({
+      ...caesar,
+      ...plainToInstance(Caesar, { ...updateCaesarDto }),
+
+      // ...(updateCaesarDto?.operator && { operator: updateCaesarDto.operator }),
+      // ...(updateCaesarDto as Partial<Caesar>),
+    })
+  }
+
+  async payCashTransferBalance(caesar: Caesar | Caesar['id'], amount: number) {
+    let currentCaesar: Caesar
+    if (typeof caesar === 'string') {
+      currentCaesar = await this.findOne(caesar)
+    } else {
+      currentCaesar = caesar
+    }
+    return this.caesarRepository.save({
+      ...currentCaesar,
+      cash_transfer_balance: currentCaesar.cash_transfer_balance + amount,
+    })
   }
 }

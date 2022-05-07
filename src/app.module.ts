@@ -20,19 +20,24 @@ import { TransactionModule } from './transaction/transaction.module'
 import { InventoryLogModule } from './inventorylog/inventorylog.module'
 import SQLConfig from 'root/ormconfig'
 import { SiteAccessGuard } from 'src/guards/site-access.guard'
-import { AuthGuard } from '@nestjs/passport'
-
+import { CashTransferModule } from './cash-transfer/cash-transfer.module'
+import { EventEmitterModule } from '@nestjs/event-emitter'
 @Module({
   imports: [
-    CacheModule.register(),
+    EventEmitterModule.forRoot(),
+    CacheModule.register({
+      isGlobal: true,
+      ttl: 15,
+    }),
     ConfigModule.forRoot({
       envFilePath:
         process.env.NODE_ENV === 'production'
-          ? './.env.production'
-          : './.env.development',
+          ? ['.env.production.local', '.env.production']
+          : ['.env.development.local', '.env.development'],
       isGlobal: true,
       cache: true,
     }),
+
     TypeOrmModule.forRoot(SQLConfig),
     UserModule,
     MapIdsModule,
@@ -56,6 +61,7 @@ import { AuthGuard } from '@nestjs/passport'
       }),
       inject: [ConfigService],
     }),
+    CashTransferModule,
   ],
   controllers: [AppController],
   providers: [
@@ -63,7 +69,7 @@ import { AuthGuard } from '@nestjs/passport'
       ? [
           {
             provide: 'APP_GUARD',
-            useValue: AuthGuard('jwt'),
+            useClass: JwtAuthGuard,
           },
         ]
       : [
@@ -78,6 +84,10 @@ import { AuthGuard } from '@nestjs/passport'
         ]),
 
     AppService,
+    // {
+    //   provide: 'APP_INTERCEPTOR',
+    //   useClass: CacheInterceptor,
+    // },
   ],
 })
 export class AppModule {}

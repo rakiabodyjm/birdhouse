@@ -17,7 +17,7 @@ export const accountModules = [
 ]
 @Module({
   imports: [
-    CacheModule.register(),
+    // CacheModule.register(),
     TypeOrmModule.forFeature([User]),
     ...accountModules.map((module) => forwardRef(() => module)),
     JwtModule.register({

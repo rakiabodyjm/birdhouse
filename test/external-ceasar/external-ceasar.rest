@@ -11,9 +11,14 @@ Content-Type: application/json
 
 ###
 GET http://localhost:6006/external-caesar
+pay-caesar-secret: Oasis2089$
 
 ###
-DELETE http://localhost:6006/external-caesar
+DELETE http://localhost:6006/external-caesar/1005
+pay-caesar-secret: Oasis2089$
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNTZBMUQ3NDYtMDBCNy1FQzExLThDQ0QtMDIyMDAyMjAwMjIwIiwiZW1haWwiOiJyYWtpYWJvZHlqbSIsImZpcnN0X25hbWUiOiJKYW5lbyBNaWd1ZWwiLCJsYXN0X25hbWUiOiJUaW9uZ3NvbiIsInJvbGVzIjpbImFkbWluIl0sImFkbWluX2lkIjoiMDg5RTY1RUUtMDBCNy1FQzExLThDQ0QtMDIyMDAyMjAwMjIwIiwiaWF0IjoxNjUwODg1MjAxLCJleHAiOjE2NTA4OTk2MDF9.V5vSSl-TEN7LxYOdbzWDcAnl_g-4e64CfVJdpMDmM0w
+# Content-Type: application/json
+
 
 ###
 GET http://localhost:6006/external-caesar/6

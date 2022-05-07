@@ -53,6 +53,10 @@ export class ExternalCaesarService {
       }),
     )
   }
+
+  async deleteOne(id: string) {
+    return this.externalCaesarRepo.delete(id)
+  }
 }
 
 class InitialParams {

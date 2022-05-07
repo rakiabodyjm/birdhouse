@@ -1,10 +1,11 @@
-import { Expose } from 'class-transformer'
-import { UserTypes, UserTypesAndUser } from 'src/types/Roles'
+import { Exclude, Expose } from 'class-transformer'
+import { UserTypesAndUser } from 'src/types/Roles'
 import {
   Column,
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm'
 
@@ -12,6 +13,7 @@ const dollarExchangeRate = process.env.USD_EXCHANGE_RATE || 49
 const pesoExchangeRate = process.env.PESO_EXCHANGE_RATE || 1
 
 @Entity()
+@Unique(['email', 'role'])
 export class ExternalCaesar {
   @PrimaryGeneratedColumn('increment')
   wallet_id: string
@@ -36,6 +38,10 @@ export class ExternalCaesar {
     scale: 2,
   })
   caesar_coin: number
+
+  @Column()
+  @Exclude()
+  password: string
 
   // @Column('decimal', {
   //   nullable: true,

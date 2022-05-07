@@ -1,0 +1,32 @@
+### 
+GET http://localhost:6006/cash-transfer/caesar-bank
+
+
+
+### WALLET CREDENTIALS
+###
+
+GET http://localhost:6006/cash-transfer/caesar-bank?search=0049604
+###
+
+
+###
+DELETE http://localhost:6006/cash-transfer/caesar-bank/32ACC16E-6FB6-EC11-8CCD-022002200220
+### 
+DELETE http://localhost:6006/cash-transfer/caesar-bank/4
+
+###Initialize
+
+POST http://localhost:6006/cash-transfer/caesar-bank/init
+
+### delete all 
+DELETE http://localhost:6006/cash-transfer/caesar-bank/42188D62-06B7-EC11-8CCD-022002200220
+
+
+### 
+PATCH http://localhost:6006/cash-transfer/caesar-bank/85F4B8DE-DEC1-EC11-8CD5-00155D1CD40B
+Content-Type: application/json
+
+{
+    "bank": 5
+}

@@ -1,4 +1,5 @@
 import { Injectable, Query } from '@nestjs/common'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 import { InjectRepository } from '@nestjs/typeorm'
 import { isNotEmptyObject } from 'class-validator'
 import { GetAllAdminDto } from 'src/admin/dto/get-all-admin.dto'
@@ -17,6 +18,7 @@ export class AdminService {
   constructor(
     @InjectRepository(Admin)
     private adminRepository: Repository<Admin>,
+    private eventEmitter: EventEmitter2,
   ) {
     this.relationsToLoad = ['user']
   }
@@ -24,6 +26,11 @@ export class AdminService {
   async create(createAdminDto: CreateAdminDto) {
     const newAdmin = this.adminRepository.create(createAdminDto)
     await this.adminRepository.save(newAdmin)
+    const userAccount = (await this.findOne(newAdmin.id)).user
+    this.eventEmitter.emit('telco-account.created', {
+      ...userAccount,
+      account_type: 'admin',
+    })
 
     return newAdmin
     // return 'This action adds a new admin'

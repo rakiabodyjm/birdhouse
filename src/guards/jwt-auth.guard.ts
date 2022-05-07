@@ -1,10 +1,9 @@
 import { AuthGuard } from '@nestjs/passport'
 import { IS_PUBLIC_KEY } from './../auth/decorators/public.decorator'
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common'
+import { Injectable, ExecutionContext } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { JwtService } from '@nestjs/jwt'
 import { Request } from 'express'
-import { User } from 'src/user/entities/user.entity'
 import { UserService } from 'src/user/user.service'
 
 @Injectable()
@@ -26,7 +25,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       context.getClass(),
     ])
 
-    if (isPublic || this.isException()) {
+    if (
+      isPublic ||
+      this.isException() ||
+      process.env.NODE_ENV === 'development'
+    ) {
       return true
     }
 
@@ -39,12 +42,12 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
    *
    *
    */
-  getTokenFromHeader() {
-    const request: Request = this.context.switchToHttp().getRequest()
-    const token = request.headers.authorization?.split(' ')[1]
+  // getTokenFromHeader() {
+  //   const request: Request = this.context.switchToHttp().getRequest()
+  //   const token = request.headers.authorization?.split(' ')[1]
 
-    return token
-  }
+  //   return token
+  // }
 
   /**
    * Links that do not need checking
@@ -56,10 +59,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     return isException
   }
 
-  async getUserFromToken(token: string) {
-    const { user_id } = this.jwtService.decode(token) as {
-      [key: string]: any
-    }
-    return await this.userService.findOne(user_id)
-  }
+  // async getUserFromToken(token: string) {
+  //   const { user_id } = this.jwtService.decode(token) as {
+  //     [key: string]: any
+  //   }
+  //   return await this.userService.findOne(user_id)
+  // }
 }

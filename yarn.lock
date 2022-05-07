@@ -5574,6 +5574,7 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
 
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 <<<<<<< HEAD
 negotiator@0.6.2:
@@ -5592,6 +5593,8 @@ needle@^2.2.1:
 
 =======
 >>>>>>> 9562c6d20ed6d4360fbd2ec23e7316d5b7a00f0c
+=======
+>>>>>>> Stashed changes
 negotiator@0.6.3:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.3.tgz#58e323a72fedc0d6f9cd4d31fe49f51479590ccd"
@@ -5657,6 +5660,7 @@ node-notifier@^8.0.0:
     uuid "^8.3.0"
     which "^2.0.2"
 
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 <<<<<<< HEAD
 node-releases@^2.0.1:
@@ -5682,14 +5686,19 @@ node-pre-gyp@^0.11.0:
 
 =======
 >>>>>>> 9562c6d20ed6d4360fbd2ec23e7316d5b7a00f0c
+=======
+>>>>>>> Stashed changes
 node-releases@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-2.0.2.tgz#7139fe71e2f4f11b47d4d2986aaf8c48699e0c01"
   integrity sha512-XxYDdcQ6eKqp/YjI+tb2C5WM2LgjnZrfYg4vgQt49EK268b6gYCHsBLrK2qvJo4FmCtqmKezb0WZFK4fkrZNsg==
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 >>>>>>> d6ebaa0999dcd25ef288a064459bc72eab8b1027
 =======
 >>>>>>> 9562c6d20ed6d4360fbd2ec23e7316d5b7a00f0c
+=======
+>>>>>>> Stashed changes
 
 nopt@^5.0.0:
   version "5.0.0"
@@ -6489,6 +6498,7 @@ safe-buffer@5.1.2, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
   integrity sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==
 
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 <<<<<<< HEAD
 safe-buffer@^5.0.1, safe-buffer@~5.2.0:
@@ -6498,6 +6508,9 @@ safe-buffer@5.2.1, safe-buffer@^5.0.1, safe-buffer@^5.1.2, safe-buffer@^5.2.1, s
 =======
 safe-buffer@5.2.1, safe-buffer@^5.0.1, safe-buffer@~5.2.0:
 >>>>>>> 9562c6d20ed6d4360fbd2ec23e7316d5b7a00f0c
+=======
+safe-buffer@5.2.1, safe-buffer@^5.0.1, safe-buffer@~5.2.0:
+>>>>>>> Stashed changes
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.2.1.tgz#1eaf9fa9bdb1fdd4ec75f58f9cdb4e6b7827eec6"
   integrity sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==
@@ -6541,6 +6554,7 @@ saxes@^5.0.1:
   dependencies:
     xmlchars "^2.2.0"
 
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 <<<<<<< HEAD
 "semver@2 || 3 || 4 || 5", semver@^5.4.1, semver@^5.5.0, semver@^5.6.0:
@@ -6550,6 +6564,9 @@ saxes@^5.0.1:
 =======
 "semver@2 || 3 || 4 || 5", semver@^5.5.0, semver@^5.6.0:
 >>>>>>> 9562c6d20ed6d4360fbd2ec23e7316d5b7a00f0c
+=======
+"semver@2 || 3 || 4 || 5", semver@^5.5.0, semver@^5.6.0:
+>>>>>>> Stashed changes
   version "5.7.1"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.7.1.tgz#a954f931aeba508d307bbf069eff0c01c96116f7"
   integrity sha512-sauaDf/PZdVgrLTNYHRtpXa1iRiKcaebiKQ1BJdpQlWH2lCvexQdX55snPFyK7QzpudqbCI0qXFfOasHdyNDGQ==
@@ -6838,8 +6855,11 @@ sprintf-js@~1.0.2:
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
 
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> Stashed changes
 sqlstring@2.3.1:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/sqlstring/-/sqlstring-2.3.1.tgz#475393ff9e91479aea62dcaf0ca3d14983a7fb40"

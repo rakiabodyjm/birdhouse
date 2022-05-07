@@ -227,6 +227,7 @@ export class CaesarService {
           },
         } as Paginated<Caesar>
       })
+
     return query
   }
 
@@ -432,5 +433,9 @@ export class CaesarService {
       ...currentCaesar,
       cash_transfer_balance: currentCaesar.cash_transfer_balance + amount,
     })
+  }
+
+  async deleteOne(id: string) {
+    return this.caesarRepository.delete(id)
   }
 }

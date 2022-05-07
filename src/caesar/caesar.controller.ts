@@ -127,6 +127,11 @@ export class CaesarController {
     return this.caesarService.clear()
   }
 
+  @Delete(':id')
+  deleteOne(@Param('id') id: string) {
+    return this.caesarService.deleteOne(id)
+  }
+
   @Role(Roles.ADMIN)
   @UseGuards(RolesGuard)
   @Post('topup')

@@ -24,7 +24,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:6006/retailer/B9EC3682-EC16-EC11-B664-00E18CEF5938
+DELETE http://localhost:6006/retailer/7ED5309C-ABCD-EC11-8CE7-00155D1CD40B
 
 ### 
 GET http://localhost:6006/retailer/40B139E9-1FA1-EC11-A22A-501AC5192008
@@ -32,12 +32,12 @@ GET http://localhost:6006/retailer/40B139E9-1FA1-EC11-A22A-501AC5192008
 GET http://localhost:6006/retailer?page=0&limit=2&dsp=326C42B9-1FA1-EC11-A22A-501AC5192008&countOnly=true
 
 ### 
-GET http://http://localhost:6006/retailer?subdistributor=CFB5D438-BC21-EC11-B665-00E18CEF5938
+GET http://localhost:6006/retailer?subdistributor=CFB5D438-BC21-EC11-B665-00E18CEF5938
 ###
-GET http://http://localhost:6006/retailer/search?searchQuery=SOLANO&subdistributor=AF02DF31-DD2B-EC11-B666-00E18CEF5935&dsp=bcfd02b7-bd24-ec11-b665-00e18cef5938
+GET http://localhost:6006/retailer/search?searchQuery=test
 
 ###
-GET http://http://localhost:6006/retailer/search?searchQuery=john&subdistributor=AF02DF31-DD2B-EC11-B666-00E18CEF5935
+GET http://localhost:6006/retailer/search?searchQuery=john&subdistributor=AF02DF31-DD2B-EC11-B666-00E18CEF5935
 
 // if subd is given only retailers of one subd should appear
 

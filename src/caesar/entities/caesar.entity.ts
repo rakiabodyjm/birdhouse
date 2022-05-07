@@ -168,7 +168,9 @@ export class Caesar extends WithAccountTypes {
   @OneToMany((type) => CashTransfer, (cashTransfer) => cashTransfer.to)
   cash_transfer_to: CashTransfer[]
 
-  @Column({
+  @Column('decimal', {
+    precision: 18,
+    scale: 4,
     default: 0,
   })
   cash_transfer_balance: number

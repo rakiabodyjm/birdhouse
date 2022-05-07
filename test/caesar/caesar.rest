@@ -21,11 +21,11 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:6006/caesar
+DELETE http://localhost:6006/caesar/7FD5309C-ABCD-EC11-8CE7-00155D1CD40B
 
 
 ###
-GET http://localhost:6006/caesar/search?searchQuery=Reynard retailer&limit=1
+GET http://localhost:6006/caesar/search?searchQuery=test
 
 ###TEST-PAY
 
@@ -62,4 +62,4 @@ Content-Type: application/json
 
 ### SEARCH V2
 
-GET http://localhost:6006/caesar/search-v2?searchQuery=&limit+100
+GET http://localhost:6006/caesar/search-v2?searchQuery=test&limit+100

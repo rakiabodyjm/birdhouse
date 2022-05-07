@@ -55,7 +55,9 @@ export class CaesarBank {
   )
   cash_transfer_to: CashTransfer[]
 
-  @Column({
+  @Column('decimal', {
+    precision: 18,
+    scale: 4,
     default: 0,
   })
   balance: number

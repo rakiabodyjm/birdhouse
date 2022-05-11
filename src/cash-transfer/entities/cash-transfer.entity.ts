@@ -73,6 +73,9 @@ export class CashTransfer extends IntersectionType(
   })
   amount: number
 
+  @Column({ unique: true })
+  ref_num: string
+
   @Column({
     default: CashTransferAs.TRANSFER,
   })

@@ -31,7 +31,15 @@ export class CashTransferService {
     private transferTypeRepository: Repository<TransferType>,
   ) {}
 
-  relations = ['from', 'to', 'caesar_bank_from', 'caesar_bank_to', 'loan']
+  relations = [
+    'from',
+    'to',
+    'caesar_bank_from',
+    'caesar_bank_to',
+    'caesar_bank_from.caesar',
+    'caesar_bank_to.caesar',
+    'loan',
+  ]
 
   async findAll(getAllCashTransfer: GetAllCashTransferDto) {
     const {
@@ -62,6 +70,67 @@ export class CashTransferService {
         loan,
       }),
     }
+
+    const finalQuery =
+      caesar || caesar_bank
+        ? [
+            ...(caesar
+              ? [
+                  {
+                    to: {
+                      id: caesar,
+                    },
+                    ...commonQuery,
+                  },
+                  {
+                    from: {
+                      id: caesar,
+                    },
+                    ...commonQuery,
+                  },
+                  {
+                    caesar_bank_from: {
+                      caesar: caesar,
+                    },
+                    ...commonQuery,
+                  },
+                  {
+                    caesar_bank_to: {
+                      caesar: caesar,
+                    },
+                    ...commonQuery,
+                  },
+                ]
+              : []),
+            ...(caesar_bank
+              ? [
+                  {
+                    caesar_bank_to: caesar_bank,
+                    ...commonQuery,
+                  },
+                  {
+                    caesar_bank_from: caesar_bank,
+                    ...commonQuery,
+                  },
+                ]
+              : []),
+          ]
+        : {
+            ...(caesar_bank_from && {
+              caesar_bank_from: getAllCashTransfer.caesar_bank_from,
+            }),
+            ...(caesar_bank_to && {
+              caesar_bank_to: getAllCashTransfer.caesar_bank_to,
+            }),
+            ...(to && {
+              to: getAllCashTransfer.to,
+            }),
+            ...(from && {
+              from: getAllCashTransfer.from,
+            }),
+            ...commonQuery,
+          }
+
     return paginateFind(
       this.cashTransferRepository,
       {
@@ -69,63 +138,7 @@ export class CashTransferService {
         limit: getAllCashTransfer.limit,
       },
       {
-        where:
-          caesar || caesar_bank
-            ? [
-                ...(caesar
-                  ? [
-                      {
-                        to: {
-                          caesar_id: caesar,
-                        },
-                        ...commonQuery,
-                      },
-                      {
-                        from: {
-                          caesar_id: caesar,
-                        },
-                        ...commonQuery,
-                      },
-                      {
-                        caesar_bank_from: {
-                          caesar: caesar,
-                        },
-                      },
-                      {
-                        caesar_bank_to: {
-                          caesar,
-                        },
-                      },
-                    ]
-                  : []),
-                ...(caesar_bank
-                  ? [
-                      {
-                        caesar_bank_to: caesar_bank,
-                        ...commonQuery,
-                      },
-                      {
-                        caesar_bank_from: caesar_bank,
-                        ...commonQuery,
-                      },
-                    ]
-                  : []),
-              ]
-            : {
-                ...(caesar_bank_from && {
-                  caesar_bank_from: getAllCashTransfer.caesar_bank_from,
-                }),
-                ...(caesar_bank_to && {
-                  caesar_bank_to: getAllCashTransfer.caesar_bank_to,
-                }),
-                ...(to && {
-                  to: getAllCashTransfer.to,
-                }),
-                ...(from && {
-                  from: getAllCashTransfer.from,
-                }),
-                ...commonQuery,
-              },
+        where: finalQuery,
         order: {
           created_at: 'DESC',
         },

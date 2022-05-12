@@ -52,6 +52,7 @@ export class CashTransferService {
       date_to,
       caesar,
       caesar_bank,
+      account_type,
       as,
     } = getAllCashTransfer
     let { loan } = getAllCashTransfer
@@ -72,7 +73,7 @@ export class CashTransferService {
     }
 
     const finalQuery =
-      caesar || caesar_bank
+      caesar || caesar_bank || account_type
         ? [
             ...(caesar
               ? [
@@ -110,6 +111,22 @@ export class CashTransferService {
                   },
                   {
                     caesar_bank_from: caesar_bank,
+                    ...commonQuery,
+                  },
+                ]
+              : []),
+            ...(account_type
+              ? [
+                  {
+                    to: {
+                      account_type,
+                    },
+                    ...commonQuery,
+                  },
+                  {
+                    from: {
+                      account_type,
+                    },
                     ...commonQuery,
                   },
                 ]
@@ -170,15 +187,22 @@ export class CashTransferService {
     return id
   }
   async findOne(id: string) {
-    return await this.cashTransferRepository.findOneOrFail(id, {
-      relations: this.relations,
-    })
+    return await this.cashTransferRepository
+      .findOneOrFail(id, {
+        relations: this.relations,
+      })
+      .catch(() => {
+        return this.findByRef(id)
+      })
   }
 
-  async findByRef(ref_num: string) {
-    return await this.cashTransferRepository.findOne(ref_num, {
-      relations: this.relations,
-    })
+  async findByRef(ref_num: string): Promise<CashTransfer> {
+    return await this.cashTransferRepository.findOneOrFail(
+      { ref_num },
+      {
+        relations: this.relations,
+      },
+    )
   }
 
   async update(id: string, updateCashTransferDto: UpdateCashTransferDto) {

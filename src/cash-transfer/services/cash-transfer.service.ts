@@ -381,7 +381,6 @@ export class CashTransferService {
           caesar_bank_from,
           -amount - (bank_fee || 0),
         ))
-      console.log('from', from)
       const caesarFrom =
         caesarBankFrom?.caesar ||
         (await this.caesarService.payCashTransferBalance(
@@ -389,7 +388,6 @@ export class CashTransferService {
           -amount - (bank_fee || 0),
         ))
 
-      console.log(caesarFrom)
       /**
        * Deduct Amount from caeasrBank balance
        */

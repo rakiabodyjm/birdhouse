@@ -57,6 +57,12 @@ export class TransferCashTransfer {
   to: any
 
   @IsOptional()
+  @ExistsInDb(Caesar, 'id', {
+    message: `Caesar's Account TO doesn't exist`,
+  })
+  from: any
+
+  @IsOptional()
   message: string
 }
 

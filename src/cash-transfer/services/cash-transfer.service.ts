@@ -336,6 +336,7 @@ export class CashTransferService {
     bank_fee,
     as,
     to,
+    from,
     message,
     ref_num,
   }: {
@@ -346,6 +347,7 @@ export class CashTransferService {
     description
     bank_fee?: number
     as: CashTransferAs
+    from?: Caesar['id']
     to?: Caesar['id']
     message: string
     ref_num: string
@@ -377,12 +379,14 @@ export class CashTransferService {
         caesar_bank_from,
         -amount - (bank_fee || 0),
       )
-
+      const caesarFrom =
+        caesarBankFrom?.caesar ||
+        (await this.caesarBankService.pay(from, -amount - (bank_fee || 0)))
       /**
        * Deduct Amount from caeasrBank balance
        */
       await this.caesarService.payCashTransferBalance(
-        caesarBankFrom.caesar,
+        caesarFrom.id,
         -amount - (bank_fee || 0),
       )
 

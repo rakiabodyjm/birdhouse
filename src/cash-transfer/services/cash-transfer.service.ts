@@ -375,13 +375,21 @@ export class CashTransferService {
       //   )
       // }
 
-      const caesarBankFrom = await this.caesarBankService.pay(
-        caesar_bank_from,
-        -amount - (bank_fee || 0),
-      )
+      const caesarBankFrom =
+        caesar_bank_from &&
+        (await this.caesarBankService.pay(
+          caesar_bank_from,
+          -amount - (bank_fee || 0),
+        ))
+      console.log('from', from)
       const caesarFrom =
         caesarBankFrom?.caesar ||
-        (await this.caesarBankService.pay(from, -amount - (bank_fee || 0)))
+        (await this.caesarService.payCashTransferBalance(
+          from,
+          -amount - (bank_fee || 0),
+        ))
+
+      console.log(caesarFrom)
       /**
        * Deduct Amount from caeasrBank balance
        */
@@ -429,7 +437,8 @@ export class CashTransferService {
         bank_charge: bank_fee,
         as,
         ref_num,
-        remaining_balance_from: caesarBankFrom.balance,
+        remaining_balance_from:
+          caesarFrom?.cash_transfer_balance || caesarBankFrom?.balance,
         remaining_balance_to: caesar_bank_to
           ? (caesarBankTo as CaesarBank).balance
           : (caesarBankTo as Caesar).cash_transfer_balance,

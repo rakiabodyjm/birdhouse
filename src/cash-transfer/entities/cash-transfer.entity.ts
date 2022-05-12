@@ -73,6 +73,9 @@ export class CashTransfer extends IntersectionType(
   })
   amount: number
 
+  @Column({ unique: true })
+  ref_num: string
+
   @Column({
     default: CashTransferAs.TRANSFER,
   })
@@ -161,8 +164,9 @@ export class CashTransfer extends IntersectionType(
 
   @Column({
     default: null,
+    nullable: true,
   })
-  override_interest?: null | number
+  override_interest?: number
 
   @OneToOne(() => RevertCashTransfer, (rt) => rt.cash_transfer)
   revert_cash_transfer: RevertCashTransfer
@@ -174,6 +178,9 @@ export class CashTransfer extends IntersectionType(
     }
     if (this.loan_paid) {
       return null
+    }
+    if (this.override_interest) {
+      return this.override_interest
     }
     let interestRate = 0
     const dateNow = new Date(Date.now())

@@ -2,8 +2,12 @@ import { IntersectionType } from '@nestjs/mapped-types'
 import { IsEnum, IsNotEmpty, IsNumber, IsOptional } from 'class-validator'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { CaesarBank } from 'src/cash-transfer/entities/caesar-bank.entity'
-import { CashTransferAs } from 'src/cash-transfer/entities/cash-transfer.entity'
+import {
+  CashTransfer,
+  CashTransferAs,
+} from 'src/cash-transfer/entities/cash-transfer.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
+import { NoDuplicateInDb } from 'src/pipes/validation/NoDuplicateInDb'
 
 export class DepositCashTransfer {
   @IsOptional()
@@ -81,6 +85,11 @@ export class GenericCashTransfer {
   })
   @IsNumber()
   amount: number
+
+  @NoDuplicateInDb(CashTransfer, 'ct_name', {
+    message: 'Cash Transfer ID already used',
+  })
+  ref_num: string
 
   @IsOptional()
   description: string

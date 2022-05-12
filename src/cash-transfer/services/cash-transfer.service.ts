@@ -16,6 +16,7 @@ import { TransferTypeService } from 'src/cash-transfer/services/transfer-type.se
 import paginateFind from 'src/utils/paginate'
 import { FindOneOptions, LessThan, MoreThan, Repository } from 'typeorm'
 import { plainToInstance } from 'class-transformer'
+import { v4 as uuid } from 'uuid'
 import { CreateLoanPaymentDto } from 'src/cash-transfer/dto/cash-transfer/create-loan-payment.dto'
 
 @Injectable()
@@ -146,18 +147,36 @@ export class CashTransferService {
     )
   }
 
+  async findByCTID(ref_num: string): Promise<CashTransfer> {
+    const id = await this.cashTransferRepository.findOne(
+      {
+        ref_num,
+      },
+      { relations: this.relations },
+    )
+    return id
+  }
   async findOne(id: string) {
     return await this.cashTransferRepository.findOneOrFail(id, {
       relations: this.relations,
     })
   }
 
+  async findByRef(ref_num: string) {
+    return await this.cashTransferRepository.findOne(ref_num, {
+      relations: this.relations,
+    })
+  }
+
   async update(id: string, updateCashTransferDto: UpdateCashTransferDto) {
     const updateCashTransfer = await this.findOne(id)
-    return this.cashTransferRepository.save({
-      ...updateCashTransfer,
-      ...updateCashTransferDto,
-    })
+    return plainToInstance(
+      CashTransfer,
+      await this.cashTransferRepository.save({
+        ...updateCashTransfer,
+        ...updateCashTransferDto,
+      }),
+    )
   }
 
   delete(id: string) {
@@ -175,12 +194,14 @@ export class CashTransferService {
     to,
     description,
     as,
+    ref_num,
   }: { amount: number } & {
     caesar_bank_from: CaesarBank['id']
     to: Caesar['id']
     description
     bank_fee?: number
     as: CashTransferAs
+    ref_num: string
   }) {
     // const transferType = await this.transferTypeService.findOne(transfer_type)
     // const transferType = await this.transferTypeRepository.findOneOrFail({
@@ -216,6 +237,7 @@ export class CashTransferService {
       to: caesarTo,
       description,
       as,
+      ref_num,
       remaining_balance_from: bankWithDrawal.balance,
       remaining_balance_to: caesarTo.cash_transfer_balance,
     }
@@ -231,6 +253,7 @@ export class CashTransferService {
     description,
     bank_fee,
     as,
+    ref_num,
   }: {
     caesar_bank_to: CaesarBank['id']
     from: Caesar['id']
@@ -238,6 +261,7 @@ export class CashTransferService {
     bank_fee?: number
     description: string
     as: CashTransferAs
+    ref_num: string
   }) {
     const caesarFrom = await this.caesarService.findOne(from)
     const caesarBankTo = await this.caesarBankService.findOne(caesar_bank_to)
@@ -255,6 +279,7 @@ export class CashTransferService {
             remaining_balance_from: caesarFrom.cash_transfer_balance,
             remaining_balance_to: res.balance,
             description,
+            ref_num,
             caesar_bank_to: caesarBankTo,
           } as Partial<CashTransfer>),
         )
@@ -275,6 +300,7 @@ export class CashTransferService {
     as,
     to,
     message,
+    ref_num,
   }: {
     caesar_bank_from: CaesarBank['id']
     caesar_bank_to?: CaesarBank['id']
@@ -285,6 +311,7 @@ export class CashTransferService {
     as: CashTransferAs
     to?: Caesar['id']
     message: string
+    ref_num: string
   }) {
     try {
       if (as === CashTransferAs.LOAN || as === CashTransferAs['LOAN PAYMENT']) {
@@ -360,6 +387,7 @@ export class CashTransferService {
         description,
         bank_charge: bank_fee,
         as,
+        ref_num,
         remaining_balance_from: caesarBankFrom.balance,
         remaining_balance_to: caesar_bank_to
           ? (caesarBankTo as CaesarBank).balance
@@ -383,6 +411,7 @@ export class CashTransferService {
     as,
     to,
     message,
+    ref_num,
   }: CreateCashTransferDto) {
     /**
      * find bank from and deduct amount + bank_fee
@@ -456,6 +485,7 @@ export class CashTransferService {
       description,
       bank_charge: bank_fee,
       as,
+      ref_num,
       remaining_balance_from: caesarBankFrom.balance,
       remaining_balance_to: remainingBalanceTo,
       message,
@@ -472,6 +502,7 @@ export class CashTransferService {
     caesar_bank_from,
     from,
     to,
+    ref_num,
   }: CreateLoanPaymentDto) {
     const loan = await this.findOne(id).then((res) => {
       if (res.as !== CashTransferAs.LOAN) {
@@ -544,6 +575,7 @@ export class CashTransferService {
       caesar_bank_to: caesarBankTo,
       to: caesarTo,
       from: caesarFrom,
+      ref_num,
       as: CashTransferAs['LOAN PAYMENT'],
     }
 

@@ -56,3 +56,16 @@ Content-Type: application/json
     "created_at": "2022-05-01T08:58"
 
 }
+
+###
+POST http://localhost:6006/cash-transfer/transfer
+Content-Type: application/json
+
+{
+    "amount": 5000.25, 
+    "as": "TRANSFER", 
+    "from": "23C24E12-24CC-EC11-8CE1-00155D1CD40B", 
+    "caesar_bank_to":"654E1DF0-78B9-EC11-8CD0-00155D1CD40B",
+    "message":null, 
+    "description":null 
+}

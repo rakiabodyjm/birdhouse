@@ -306,20 +306,31 @@ export class CashTransferService {
     const cashTransferToCB = await this.caesarBankService
       .pay(caesarBankTo, amount)
       .then((res) => {
-        return this.cashTransferRepository.save(
-          this.cashTransferRepository.create({
-            amount: amount,
-            from: caesarFrom,
-            as,
-            bank_charge: bank_fee,
-            // remaining_balance_from: cashTransferFrom.cash_transfer_balance,
-            remaining_balance_from: caesarFrom.cash_transfer_balance,
-            remaining_balance_to: res.balance,
-            description,
-            ref_num,
-            caesar_bank_to: caesarBankTo,
-          } as Partial<CashTransfer>),
-        )
+        return this.cashTransferRepository
+          .save(
+            this.cashTransferRepository.create({
+              amount: amount,
+              from: caesarFrom,
+              as,
+              bank_charge: bank_fee,
+              // remaining_balance_from: cashTransferFrom.cash_transfer_balance,
+              remaining_balance_from: caesarFrom.cash_transfer_balance,
+              remaining_balance_to: res.balance,
+              description,
+              ref_num,
+              caesar_bank_to: caesarBankTo,
+            } as Partial<CashTransfer>),
+          )
+          .then(async (res) => {
+            // console.log('paying to caesar atm, ', caesarBankTo?.caesar?.id)
+            const result = await this.caesarService.payCashTransferBalance(
+              // res.caesar_bank_to.,
+              caesarBankTo.caesar.id,
+              amount,
+            )
+            // console.log('result of deposit to caesar', result)
+            return res
+          })
       })
       .catch((err) => {
         console.log('deposit type, cashTransferToCbErrorToCb', err)
@@ -375,13 +386,19 @@ export class CashTransferService {
       //   )
       // }
 
-      const caesarBankFrom = await this.caesarBankService.pay(
-        caesar_bank_from,
-        -amount - (bank_fee || 0),
-      )
+      const caesarBankFrom =
+        caesar_bank_from &&
+        (await this.caesarBankService.pay(
+          caesar_bank_from,
+          -amount - (bank_fee || 0),
+        ))
+
       const caesarFrom =
-        caesarBankFrom?.caesar ||
-        (await this.caesarBankService.pay(from, -amount - (bank_fee || 0)))
+        caesarBankFrom?.caesar || (await this.caesarService.findOne(from))
+
+      // if (caesarFrom?.cash_transfer_balance < amount + bank_fee) {
+      //   throw new Error(``)
+      // }
       /**
        * Deduct Amount from caeasrBank balance
        */
@@ -429,7 +446,8 @@ export class CashTransferService {
         bank_charge: bank_fee,
         as,
         ref_num,
-        remaining_balance_from: caesarBankFrom.balance,
+        remaining_balance_from:
+          caesarFrom?.cash_transfer_balance || caesarBankFrom?.balance,
         remaining_balance_to: caesar_bank_to
           ? (caesarBankTo as CaesarBank).balance
           : (caesarBankTo as Caesar).cash_transfer_balance,
@@ -481,22 +499,28 @@ export class CashTransferService {
         throw err
       })
 
-    const caesarBankTo = await this.caesarBankService
-      .findOne(caesar_bank_to)
-      .then((res) => {
-        // return this.caesarBankService.pay(res, amount).then(() => {
-        //   return res
-        // })
-        return res
-      })
+    // console.log('caesar_bank_to', caesar_bank_to, 'to', to)
 
-    const caesarTo = await this.caesarService.findOne(to).then((res) => {
-      return this.caesarService
-        .payCashTransferBalance(res, amount + (bank_fee || 0))
-        .then(async () => {
-          return res
+    const caesarBankTo = caesar_bank_to
+      ? await this.caesarBankService
+          .findOne(caesar_bank_to)
+          .then((res) => {
+            return res
+          })
+          .then((res) => {
+            return this.caesarBankService.pay(res, amount + (bank_fee || 0))
+          })
+      : undefined
+
+    const caesarTo = to
+      ? await this.caesarService.findOne(to).then((res) => {
+          return this.caesarService
+            .payCashTransferBalance(res, amount + (bank_fee || 0))
+            .then(async () => {
+              return res
+            })
         })
-    })
+      : undefined
 
     /**
      * update caesar to indicate it has loan
@@ -506,17 +530,21 @@ export class CashTransferService {
       has_loan: true,
     })
 
-    const remainingBalanceTo = await this.cashTransferRepository
-      .find({
-        as: CashTransferAs.LOAN,
-        to: caesarTo,
-      })
-      .then(async (res) => {
-        // return res.reduce((acc, ea) => {
-        //   return acc + ea.loan_total()
-        // }, 0)
-        return 0
-      })
+    // const remainingBalanceTo = await this.cashTransferRepository
+    //   .find({
+    //     as: CashTransferAs.LOAN,
+    //     to: caesarTo,
+    //   })
+    //   .then(async (res) => {
+    //     // return res.reduce((acc, ea) => {
+    //     //   return acc + ea.loan_total()
+    //     // }, 0)
+    //     return 0
+    //   })
+
+    const remainingBalanceTo = to
+      ? caesarTo?.cash_transfer_balance + (amount + (bank_fee || 0))
+      : caesarBankTo?.balance + (amount + (bank_fee || 0))
 
     const newLoan: Partial<CashTransfer> = {
       amount,
@@ -587,15 +615,25 @@ export class CashTransferService {
     )
 
     /**
-     * deduct from balance of caesarFrom
+     * deduct from balance of caesarFrom and caesarBankFrom
      */
 
-    await this.caesarService.payCashTransferBalance(
-      caesarFrom.id,
-      caesarFrom.cash_transfer_balance >= amount
-        ? -amount
-        : -caesarFrom.cash_transfer_balance,
-    )
+    if (caesarFrom) {
+      await this.caesarService.payCashTransferBalance(
+        caesarFrom.id,
+        caesarFrom.cash_transfer_balance >= amount
+          ? -amount
+          : -caesarFrom.cash_transfer_balance,
+      )
+    }
+
+    if (caesarBankFrom) {
+      await this.caesarBankService.pay(
+        caesarBankFrom,
+        caesarBankFrom.balance >= amount ? -amount : caesarBankFrom.balance,
+      )
+    }
+
     /**
      * add balance to caesarTo
      */
@@ -624,7 +662,7 @@ export class CashTransferService {
       /**
        *
        */
-      if (totalPayable >= amount) {
+      if (totalPayable <= amount) {
         await this.cashTransferRepository.save({
           ...loan,
           is_loan_paid: true,

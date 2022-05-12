@@ -7,42 +7,23 @@ module.exports = {
       instances: 2,
       autorestart: false,
 
-      env_production: {
-        NODE_ENV: 'production',
-        HOST: 'http://localhost',
-        REST_HOST: 'http://localhost:6006',
-        CAESAR_HOST: 'http://localhost:6006',
-        PORT: 6006,
-        SECRET_KEY: 'Oasis2089$',
-
-        SQL_SERVER_HOST: 'realm1000-db-server.database.windows.net',
-        SQL_SERVER_PORT: 1433,
-        SQL_SERVER_USERNAME: 'realm1000',
-        SQL_SERVER_PASSWORD: 'Oasis2089$',
-
-        SQL_SERVER_DATABASE: 'alpha_db',
-        CLIENT_URL:
-          'https://caesarcoin.ph;https://telco.caesarcoin.ph;https://realm1000.com;',
-
-        USD_EXCHANGE_RATE: 49,
-      },
       env: {
         HOST: 'http://localhost',
         REST_HOST: 'http://localhost:6006',
         CAESAR_HOST: 'http://localhost:6006',
         PORT: 6006,
-        NODE_ENV: 'development',
+        NODE_ENV: 'production',
         SECRET_KEY: 'Oasis2089$',
-        SQL_SERVER_HOST: 'realm1000-db-server.database.windows.net',
+        SQL_SERVER_HOST: '20.20.0.161',
         SQL_SERVER_PORT: 1433,
         SQL_SERVER_USERNAME: 'realm1000',
         SQL_SERVER_PASSWORD: 'Oasis2089$',
 
-        SQL_SERVER_DATABASE: 'alpha_db',
+        SQL_SERVER_DATABASE: 'alpha_db_staging',
         CLIENT_URL:
-          'https://caesarcoin.ph;https://telco.caesarcoin.ph;https://realm1000.com;',
+          'https://telco.ap.ngrok.io;http://telco.ap.ngrok.io;https://caesarcoin.ph;http://caesarcoin.ph',
 
-        USD_EXCHANGE_RATE: 49,
+        USD_EXCHANGE_RATE: 52,
       },
     },
   ],

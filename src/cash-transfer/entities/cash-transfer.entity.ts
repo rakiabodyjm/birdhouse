@@ -73,7 +73,7 @@ export class CashTransfer extends IntersectionType(
   })
   amount: number
 
-  @Column({ unique: true })
+  @Column({ nullable: true })
   ref_num: string
 
   @Column({

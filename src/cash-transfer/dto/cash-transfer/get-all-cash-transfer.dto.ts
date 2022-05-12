@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/swagger'
-import { IsEnum, IsOptional } from 'class-validator'
+import { IsEnum, IsIn, IsOptional } from 'class-validator'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { CaesarBank } from 'src/cash-transfer/entities/caesar-bank.entity'
 import {
@@ -9,6 +9,7 @@ import {
 import { TransferType } from 'src/cash-transfer/entities/transfer-type.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
 import { PaginateOptions } from 'src/types/Paginated'
+import { RolesArray } from 'src/types/Roles'
 
 export class GetAllCashTransferDto extends PartialType(PaginateOptions) {
   @ExistsInDb(Caesar, 'id', {
@@ -68,4 +69,8 @@ export class GetAllCashTransferDto extends PartialType(PaginateOptions) {
   })
   @IsOptional()
   loan?: any
+
+  @IsIn([...RolesArray, 'user'])
+  @IsOptional()
+  account_type?: Caesar['account_type']
 }

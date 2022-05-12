@@ -31,7 +31,15 @@ export class CashTransferService {
     private transferTypeRepository: Repository<TransferType>,
   ) {}
 
-  relations = ['from', 'to', 'caesar_bank_from', 'caesar_bank_to', 'loan']
+  relations = [
+    'from',
+    'to',
+    'caesar_bank_from',
+    'caesar_bank_to',
+    'caesar_bank_from.caesar',
+    'caesar_bank_to.caesar',
+    'loan',
+  ]
 
   async findAll(getAllCashTransfer: GetAllCashTransferDto) {
     const {
@@ -44,6 +52,7 @@ export class CashTransferService {
       date_to,
       caesar,
       caesar_bank,
+      account_type,
       as,
     } = getAllCashTransfer
     let { loan } = getAllCashTransfer
@@ -62,6 +71,83 @@ export class CashTransferService {
         loan,
       }),
     }
+
+    const finalQuery =
+      caesar || caesar_bank || account_type
+        ? [
+            ...(caesar
+              ? [
+                  {
+                    to: {
+                      id: caesar,
+                    },
+                    ...commonQuery,
+                  },
+                  {
+                    from: {
+                      id: caesar,
+                    },
+                    ...commonQuery,
+                  },
+                  {
+                    caesar_bank_from: {
+                      caesar: caesar,
+                    },
+                    ...commonQuery,
+                  },
+                  {
+                    caesar_bank_to: {
+                      caesar: caesar,
+                    },
+                    ...commonQuery,
+                  },
+                ]
+              : []),
+            ...(caesar_bank
+              ? [
+                  {
+                    caesar_bank_to: caesar_bank,
+                    ...commonQuery,
+                  },
+                  {
+                    caesar_bank_from: caesar_bank,
+                    ...commonQuery,
+                  },
+                ]
+              : []),
+            ...(account_type
+              ? [
+                  {
+                    to: {
+                      account_type,
+                    },
+                    ...commonQuery,
+                  },
+                  {
+                    from: {
+                      account_type,
+                    },
+                    ...commonQuery,
+                  },
+                ]
+              : []),
+          ]
+        : {
+            ...(caesar_bank_from && {
+              caesar_bank_from: getAllCashTransfer.caesar_bank_from,
+            }),
+            ...(caesar_bank_to && {
+              caesar_bank_to: getAllCashTransfer.caesar_bank_to,
+            }),
+            ...(to && {
+              to: getAllCashTransfer.to,
+            }),
+            ...(from && {
+              from: getAllCashTransfer.from,
+            }),
+            ...commonQuery,
+          }
+
     return paginateFind(
       this.cashTransferRepository,
       {
@@ -69,63 +155,7 @@ export class CashTransferService {
         limit: getAllCashTransfer.limit,
       },
       {
-        where:
-          caesar || caesar_bank
-            ? [
-                ...(caesar
-                  ? [
-                      {
-                        to: {
-                          caesar_id: caesar,
-                        },
-                        ...commonQuery,
-                      },
-                      {
-                        from: {
-                          caesar_id: caesar,
-                        },
-                        ...commonQuery,
-                      },
-                      {
-                        caesar_bank_from: {
-                          caesar: caesar,
-                        },
-                      },
-                      {
-                        caesar_bank_to: {
-                          caesar,
-                        },
-                      },
-                    ]
-                  : []),
-                ...(caesar_bank
-                  ? [
-                      {
-                        caesar_bank_to: caesar_bank,
-                        ...commonQuery,
-                      },
-                      {
-                        caesar_bank_from: caesar_bank,
-                        ...commonQuery,
-                      },
-                    ]
-                  : []),
-              ]
-            : {
-                ...(caesar_bank_from && {
-                  caesar_bank_from: getAllCashTransfer.caesar_bank_from,
-                }),
-                ...(caesar_bank_to && {
-                  caesar_bank_to: getAllCashTransfer.caesar_bank_to,
-                }),
-                ...(to && {
-                  to: getAllCashTransfer.to,
-                }),
-                ...(from && {
-                  from: getAllCashTransfer.from,
-                }),
-                ...commonQuery,
-              },
+        where: finalQuery,
         order: {
           created_at: 'DESC',
         },
@@ -157,15 +187,22 @@ export class CashTransferService {
     return id
   }
   async findOne(id: string) {
-    return await this.cashTransferRepository.findOneOrFail(id, {
-      relations: this.relations,
-    })
+    return await this.cashTransferRepository
+      .findOneOrFail(id, {
+        relations: this.relations,
+      })
+      .catch(() => {
+        return this.findByRef(id)
+      })
   }
 
-  async findByRef(ref_num: string) {
-    return await this.cashTransferRepository.findOne(ref_num, {
-      relations: this.relations,
-    })
+  async findByRef(ref_num: string): Promise<CashTransfer> {
+    return await this.cashTransferRepository.findOneOrFail(
+      { ref_num },
+      {
+        relations: this.relations,
+      },
+    )
   }
 
   async update(id: string, updateCashTransferDto: UpdateCashTransferDto) {

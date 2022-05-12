@@ -44,4 +44,15 @@ POST http://localhost:6006/cash-transfer/backupData
 POST http://localhost:6006/cash-transfer/restoreData/cash-transfer-1651856277056-staging.json
 
 ### 
-GET http://localhost:6006/cash-transfer/get-backup-files
+GET http://localhost:6006/cash-transfer/B919034B-F1D0-EC11-8975-00155DBB6F03
+
+### 
+PATCH http://localhost:6006/cash-transfer/B919034B-F1D0-EC11-8975-00155DBB6F03
+Content-Type: application/json
+
+{
+
+    "override_interest": 5,
+    "created_at": "2022-05-01T08:58"
+
+}

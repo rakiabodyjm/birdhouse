@@ -183,10 +183,13 @@ export class CashTransferService {
 
   async update(id: string, updateCashTransferDto: UpdateCashTransferDto) {
     const updateCashTransfer = await this.findOne(id)
-    return this.cashTransferRepository.save({
-      ...updateCashTransfer,
-      ...updateCashTransferDto,
-    })
+    return plainToInstance(
+      CashTransfer,
+      await this.cashTransferRepository.save({
+        ...updateCashTransfer,
+        ...updateCashTransferDto,
+      }),
+    )
   }
 
   delete(id: string) {

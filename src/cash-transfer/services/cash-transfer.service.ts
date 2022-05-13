@@ -91,13 +91,17 @@ export class CashTransferService {
                   },
                   {
                     caesar_bank_from: {
-                      caesar: caesar,
+                      caesar: {
+                        id: caesar,
+                      },
                     },
                     ...commonQuery,
                   },
                   {
                     caesar_bank_to: {
-                      caesar: caesar,
+                      caesar: {
+                        id: caesar,
+                      },
                     },
                     ...commonQuery,
                   },
@@ -147,6 +151,8 @@ export class CashTransferService {
             }),
             ...commonQuery,
           }
+
+    console.log(finalQuery)
 
     return paginateFind(
       this.cashTransferRepository,
@@ -434,14 +440,19 @@ export class CashTransferService {
 
       const cashTransfer: Partial<CashTransfer> = {
         amount,
-        caesar_bank_from: caesarBankFrom,
+        ...(caesar_bank_from
+          ? {
+              caesar_bank_from: caesarBankFrom,
+            }
+          : {
+              from: caesarFrom,
+            }),
         ...(caesar_bank_to
           ? {
               caesar_bank_to: caesarBankTo as CaesarBank,
             }
           : { to: caesarBankTo as Caesar }),
 
-        // transfer_type: transferType,
         description,
         bank_charge: bank_fee,
         as,

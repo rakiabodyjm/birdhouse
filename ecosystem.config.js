@@ -21,7 +21,7 @@ module.exports = {
 
         SQL_SERVER_DATABASE: 'alpha_db_staging',
         CLIENT_URL:
-          'https://telco.ap.ngrok.io;http://telco.ap.ngrok.io;https://caesarcoin.ph;http://caesarcoin.ph',
+          'https://telco.ap.ngrok.io;http://telco.ap.ngrok.io;https://caesarcoin.ph;http://caesarcoin.ph;https://telco.caesarcoin.ph',
 
         USD_EXCHANGE_RATE: 52,
       },

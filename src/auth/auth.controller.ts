@@ -99,7 +99,9 @@ export class AuthController {
         expires: cookieExpiry,
         sameSite: true,
         signed: true,
-        domain: req.headers.host,
+        ...(process.env.NODE_ENV === 'production' && {
+          domain: req.headers.host,
+        }),
       })
 
       return {

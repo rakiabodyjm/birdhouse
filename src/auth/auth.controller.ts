@@ -97,10 +97,11 @@ export class AuthController {
       res.cookie('ra', access_token, {
         httpOnly: true,
         expires: cookieExpiry,
-        sameSite: true,
+        sameSite: 'none',
         signed: true,
         ...(process.env.NODE_ENV === 'production' && {
           domain: req.headers.host,
+          secure: true,
         }),
       })
 

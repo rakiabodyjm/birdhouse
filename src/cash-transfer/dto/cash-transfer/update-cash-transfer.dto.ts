@@ -4,7 +4,7 @@ import { CreateCashTransferDto } from './create-cash-transfer.dto'
 
 export class UpdateCashTransferDto {
   @IsOptional()
-  override_interest?: number
+  override_interest?: number | null
 
   @IsOptional()
   created_at: string

@@ -147,9 +147,12 @@ export class AuthController {
     res.cookie('ra', req.signedCookies.ra, {
       httpOnly: true,
       expires: new Date(Date.now()),
-      sameSite: true,
+      sameSite: 'none',
       signed: true,
-      domain: req.headers.host,
+      ...(process.env.NODE_ENV === 'production' && {
+        domain: req.headers.host,
+        secure: true,
+      }),
     })
 
     return {

@@ -54,12 +54,14 @@ export class MapIdsService {
             return returnValue
           }, []),
       ).then((mapIds) => {
-        return mapIds.filter(
-          (mapId, index, array) =>
-            array
-              .map((mapIdCopy) => mapIdCopy.area_id)
-              .indexOf(mapId.area_id) === index,
-        )
+        return mapIds
+          .flat()
+          .filter(
+            (mapId, index, array) =>
+              array
+                .map((mapIdCopy) => mapIdCopy.area_id)
+                .indexOf(mapId.area_id) === index,
+          )
       })
       return queryResult
     } else {

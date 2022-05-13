@@ -15,6 +15,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
+import { SQLDateGenerator } from 'src/utils/SQLDateGenerator'
 
 export enum CashTransferAs {
   DEPOSIT = 'DEPOSIT',
@@ -245,6 +246,12 @@ export class CashTransfer extends IntersectionType(
       (this.as === CashTransferAs.LOAN ? (interest / 100) * amount : 0)
     )
   }
+
+  @Column({
+    type: 'datetime',
+    default: new SQLDateGenerator().timeNow().getSQLDate(),
+  })
+  original_created_at: Date
 }
 
 const monthNames = [

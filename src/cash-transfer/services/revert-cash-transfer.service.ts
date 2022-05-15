@@ -8,9 +8,7 @@ import { CreateCashTransferDto } from '../dto/cash-transfer/create-cash-transfer
 import { CreateLoanPaymentDto } from '../dto/cash-transfer/create-loan-payment.dto'
 import { CaesarBank } from '../entities/caesar-bank.entity'
 import { CashTransfer, CashTransferAs } from '../entities/cash-transfer.entity'
-import { TransferType } from '../entities/transfer-type.entity'
 import { CaesarBankService } from './caesar-bank.service'
-import { TransferTypeService } from './transfer-type.service'
 
 @Injectable()
 export class RevertCashTransferService {
@@ -18,7 +16,6 @@ export class RevertCashTransferService {
     @InjectRepository(CashTransfer)
     private cashTransferRepository: Repository<CashTransfer>,
     private caesarBankService: CaesarBankService,
-    private transferTypeService: TransferTypeService,
     private caesarService: CaesarService, // private actualCaesarService: ActualCaesarService,
     // @InjectRepository(TransferType)
     @InjectRepository(RevertCashTransfer)

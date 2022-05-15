@@ -1,3 +1,5 @@
+import { CreateDepositTransferDto } from './../dto/cash-transfer/create-deposit-transfer.dto'
+import { CreateLoanTransferDto } from './../dto/cash-transfer/create-loan-transfer.dto'
 import { CreateLoanPaymentDto } from './../dto/cash-transfer/create-loan-payment.dto'
 import {
   Controller,
@@ -14,7 +16,6 @@ import {
   HttpStatus,
 } from '@nestjs/common'
 import { CashTransferService } from 'src/cash-transfer/services/cash-transfer.service'
-import { CreateCashTransferDto } from 'src/cash-transfer/dto/cash-transfer/create-cash-transfer.dto'
 import { UpdateCashTransferDto } from 'src/cash-transfer/dto/cash-transfer/update-cash-transfer.dto'
 import { GetAllCashTransferDto } from 'src/cash-transfer/dto/cash-transfer/get-all-cash-transfer.dto'
 import { ErrorsInterceptor } from 'src/interceptors/error.interceptor'
@@ -23,7 +24,7 @@ import { CashTransfer } from 'src/cash-transfer/entities/cash-transfer.entity'
 import { Repository } from 'typeorm'
 import * as fs from 'fs'
 import * as path from 'path'
-import { v4 } from 'uuid'
+import { CreateCashTransferDto } from 'src/cash-transfer/dto/cash-transfer/create-cash-transfer.dto'
 
 @Controller('cash-transfer')
 @UseInterceptors(ErrorsInterceptor, ClassSerializerInterceptor)
@@ -73,23 +74,6 @@ export class CashTransferController {
   @Post('transfer')
   async transfer(@Body() createCashTransferDto: CreateCashTransferDto) {
     try {
-      const ref_num = createCashTransferDto.ref_num
-      const date = new Date()
-      const month = date.getMonth() + 1
-      const fileNameExt =
-        date.getFullYear().toString().substring(2, 4) +
-        month.toString().padStart(2, '0') +
-        date.getDate().toString().padStart(2, '0')
-
-      const uuidTag: string = v4().split('-')[4].toUpperCase()
-      const duplicateID = await this.cashTransferService.findByCTID(ref_num)
-
-      if (duplicateID) {
-        createCashTransferDto.ref_num = fileNameExt + '-TF-' + uuidTag
-      } else {
-        createCashTransferDto.ref_num = fileNameExt + '-TF-' + uuidTag
-      }
-
       const transfer = await this.cashTransferService.transfer({
         ...createCashTransferDto,
       })
@@ -108,22 +92,7 @@ export class CashTransferController {
     //   ...createCashTransferDto,
     // })
     try {
-      const ref_num = createCashTransferDto.ref_num
-      const date = new Date()
-      const month = date.getMonth() + 1
-      const fileNameExt =
-        date.getFullYear().toString().substring(2, 4) +
-        month.toString().padStart(2, '0') +
-        date.getDate().toString().padStart(2, '0')
-
-      const uuidTag: string = v4().split('-')[4].toUpperCase()
-      const duplicateID = await this.cashTransferService.findByCTID(ref_num)
-
-      if (duplicateID) {
-        createCashTransferDto.ref_num = fileNameExt + '-WD-' + uuidTag
-      } else {
-        createCashTransferDto.ref_num = fileNameExt + '-WD-' + uuidTag
-      }
+      // const ref_num = createCashTransferDto.ref_num
 
       const withdraw = await this.cashTransferService.withdraw({
         ...createCashTransferDto,
@@ -138,25 +107,8 @@ export class CashTransferController {
   }
 
   @Post('deposit')
-  async deposit(@Body() createCashTransferDto: CreateCashTransferDto) {
+  async deposit(@Body() createCashTransferDto: CreateDepositTransferDto) {
     try {
-      const ref_num = createCashTransferDto.ref_num
-      const date = new Date()
-      const month = date.getMonth() + 1
-      const fileNameExt =
-        date.getFullYear().toString().substring(2, 4) +
-        month.toString().padStart(2, '0') +
-        date.getDate().toString().padStart(2, '0')
-
-      const uuidTag: string = v4().split('-')[4].toUpperCase()
-      const duplicateID = await this.cashTransferService.findByCTID(ref_num)
-
-      if (duplicateID) {
-        createCashTransferDto.ref_num = fileNameExt + '-DP-' + uuidTag
-      } else {
-        createCashTransferDto.ref_num = fileNameExt + '-DP-' + uuidTag
-      }
-
       const deposit = await this.cashTransferService.deposit({
         ...createCashTransferDto,
       })
@@ -170,25 +122,8 @@ export class CashTransferController {
   }
 
   @Post('loan')
-  async loan(@Body() createCashTransferDto: CreateCashTransferDto) {
+  async loan(@Body() createCashTransferDto: CreateLoanTransferDto) {
     try {
-      const ref_num = createCashTransferDto.ref_num
-      const date = new Date()
-      const month = date.getMonth() + 1
-      const fileNameExt =
-        date.getFullYear().toString().substring(2, 4) +
-        month.toString().padStart(2, '0') +
-        date.getDate().toString().padStart(2, '0')
-
-      const uuidTag: string = v4().split('-')[4].toUpperCase()
-      const duplicateID = await this.cashTransferService.findByCTID(ref_num)
-
-      if (duplicateID) {
-        createCashTransferDto.ref_num = fileNameExt + '-LN-' + uuidTag
-      } else {
-        createCashTransferDto.ref_num = fileNameExt + '-LN-' + uuidTag
-      }
-
       const loan = await this.cashTransferService.loan({
         ...createCashTransferDto,
       })
@@ -204,23 +139,6 @@ export class CashTransferController {
   @Post('loan-payment')
   async loanPayment(@Body() createLoanPayment: CreateLoanPaymentDto) {
     try {
-      const ref_num = createLoanPayment.ref_num
-      const date = new Date()
-      const month = date.getMonth() + 1
-      const fileNameExt =
-        date.getFullYear().toString().substring(2, 4) +
-        month.toString().padStart(2, '0') +
-        date.getDate().toString().padStart(2, '0')
-
-      const uuidTag: string = v4().split('-')[4].toUpperCase()
-      const duplicateID = await this.cashTransferService.findByCTID(ref_num)
-
-      if (duplicateID) {
-        createLoanPayment.ref_num = fileNameExt + '-LP-' + uuidTag
-      } else {
-        createLoanPayment.ref_num = fileNameExt + '-LP-' + uuidTag
-      }
-
       const loanPayment = await this.cashTransferService.loanPayment({
         ...createLoanPayment,
       })
@@ -272,27 +190,6 @@ export class CashTransferController {
   @Post('restoreData/:name?')
   restoreData(@Param('name') name?: string) {
     const pathLoc = path.resolve(process.cwd(), 'data', 'cash-transfer')
-
-    // const files = fs.readdirSync(pathLoc)
-
-    // let selected:string|null=null
-    /**
-     * get latest
-     */
-    // files.filter(ea => {
-
-    //     const [, , , namae] = ea
-    //   if (namae && name && (name === namae)) {
-    //       return true
-    //   } else if(!name) {
-
-    //   }
-    //   return false
-    //   }).forEach(ea => {
-    //     const [cash, transfer, date, namae] = ea.split('-')
-
-    //     if(Number(date) > 0)
-    //   })
 
     const read = fs.readFileSync(path.resolve(pathLoc, name), {
       encoding: 'utf-8',

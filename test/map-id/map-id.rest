@@ -1,10 +1,10 @@
-# POST http://localhost:6006/map-ids/populate
+POST http://localhost:6006/map-ids/populate
 # Content-Type: application/json
 
 ###
 
 GET http://localhost:6006/map-ids?search=&limit=100
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJha2lhYm9keWptQGdtYWlsLmNvbSIsInJvbGUiOltdLCJpYXQiOjE2Mjg5MjAyNzIsImV4cCI6MTYyOTAwNjY3Mn0.4BOTl6GZpjakfiMDjau4MCKZQ9bsOHEN10MtRqowWDE
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJha2lhYm9keWptQGdtYWlsLmNvbSIsInJvbGUiOltdLCJpYXQiOjE2Mjg5MjAyNzIsImV4cCI6MTYyOTAwNjY3Mn0.4BOTl6GZpjakfiMDjau4MCKZQ9bsOHEN10MtRqowWDE
 
 ###
 

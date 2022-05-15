@@ -20,7 +20,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNTZBM
 
 {
     "name": "ADMIN REYNARD",
-    "user": "FCFF2287-04B7-EC11-8CCD-022002200220"
+    "user": "5DBB79B2-72D3-EC11-8CE8-00155D1CD40B"
 }
 ###
 PATCH http://localhost:6006/admin/E058BBB5-AD57-EC11-B670-00E18CEF5938

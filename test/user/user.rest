@@ -105,7 +105,7 @@ GET http://localhost:6006/user?page=0&limit=3
 GET http://localhost:6006/user/query?admin=0A03B39E-C121-EC11-B665-00E18CEF5938
 
 ###
-GET http://localhost:6006/user/FCFF2287-04B7-EC11-8CCD-022002200220/add-custom-role/ct-operator
+GET http://localhost:6006/user/5DBB79B2-72D3-EC11-8CE8-00155D1CD40B/add-custom-role/ct-admin
 ###
 
 DELETE http://localhost:6006/user/FCFF2287-04B7-EC11-8CCD-022002200220/remove-custom-role/ct-operator

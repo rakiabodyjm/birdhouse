@@ -62,4 +62,4 @@ Content-Type: application/json
 
 ### SEARCH V2
 
-GET http://localhost:6006/caesar/search-v2?searchQuery=test&limit+100
+GET http://localhost:6006/caesar/search-v2?searchQuery=&limit+100

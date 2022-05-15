@@ -7,7 +7,7 @@ Content-Type: application/json
     "caesar_from": 
 }
 ###
-GET http://localhost:6006/cash-transfer?as=LOAN
+GET http://localhost:6006/cash-transfer
 
 ###
 GET http://localhost:6006/cash-transfer?loan=C9D8C799-6AC0-EC11-8CD4-00155D1CD40B

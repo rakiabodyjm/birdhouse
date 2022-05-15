@@ -12,11 +12,6 @@ export class CreateLoanPaymentDto {
   })
   id: any
 
-  @NoDuplicateInDb(CashTransfer, 'ct_name', {
-    message: 'Cash Transfer ID already used',
-  })
-  ref_num: string
-
   @IsNotEmpty()
   amount: number
 

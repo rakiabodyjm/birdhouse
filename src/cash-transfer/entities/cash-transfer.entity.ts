@@ -134,17 +134,23 @@ export class CashTransfer extends IntersectionType(
   @ManyToOne(() => Caesar, (caesar) => caesar.cash_transfer_from)
   from: Caesar
 
-  @Column({
+  @Column('decimal', {
+    precision: 18,
+    scale: 4,
     default: 0,
   })
   bank_charge: number
 
-  @Column({
-    default: 0,
+  @Column('decimal', {
+    precision: 18,
+    scale: 4,
   })
   remaining_balance_from: number
 
-  @Column({ default: 0 })
+  @Column('decimal', {
+    precision: 18,
+    scale: 4,
+  })
   remaining_balance_to: number
 
   @JoinColumn({
@@ -163,9 +169,11 @@ export class CashTransfer extends IntersectionType(
   })
   loan_paid?: true
 
-  @Column({
+  @Column('decimal', {
     default: null,
     nullable: true,
+    precision: 4,
+    scale: 2,
   })
   override_interest?: number
 
@@ -249,7 +257,8 @@ export class CashTransfer extends IntersectionType(
 
   @Column({
     type: 'datetime',
-    default: new SQLDateGenerator().timeNow().getSQLDate(),
+    // default: new SQLDateGenerator().timeNow().getSQLDate(),
+    default: () => 'CURRENT_TIMESTAMP',
   })
   original_created_at: Date
 }

@@ -6,7 +6,6 @@ import {
   CashTransfer,
   CashTransferAs,
 } from 'src/cash-transfer/entities/cash-transfer.entity'
-import { TransferType } from 'src/cash-transfer/entities/transfer-type.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
 import { PaginateOptions } from 'src/types/Paginated'
 import { RolesArray } from 'src/types/Roles'

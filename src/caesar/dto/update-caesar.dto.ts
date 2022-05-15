@@ -1,6 +1,7 @@
+import { UserTypesAndUser } from './../../types/Roles'
 import { PartialType } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
-import { IsOptional } from 'class-validator'
+import { IsIn, IsOptional } from 'class-validator'
 import { Bcrypt } from 'src/utils/Bcrypt'
 // import { Transform } from 'class-transformer'
 // import { IsOptional } from 'class-validator'
@@ -18,4 +19,19 @@ export class UpdateCaesarDto extends PartialType(CreateCaesarDto) {
   })
   @IsOptional()
   password?: string
+
+  @IsOptional()
+  @IsIn(
+    [
+      'admin',
+      'retailer',
+      'dsp',
+      'subdistributor',
+      'user',
+    ] as UserTypesAndUser[],
+    {
+      message: `Must be in UserTypesAndUser`,
+    },
+  )
+  account_type?: string
 }

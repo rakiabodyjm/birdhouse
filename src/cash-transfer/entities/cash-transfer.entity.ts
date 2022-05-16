@@ -145,7 +145,7 @@ export class CashTransfer extends IntersectionType(
     precision: 18,
     scale: 4,
   })
-  remaining_balance_from: number
+  remaining_balance_from?: number
 
   @Column('decimal', {
     precision: 18,
@@ -176,6 +176,9 @@ export class CashTransfer extends IntersectionType(
     scale: 2,
   })
   override_interest?: number
+
+  @Column({ default: null })
+  commmision?: number
 
   @OneToOne(() => RevertCashTransfer, (rt) => rt.cash_transfer)
   revert_cash_transfer: RevertCashTransfer

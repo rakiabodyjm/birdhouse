@@ -177,6 +177,9 @@ export class CashTransfer extends IntersectionType(
   })
   override_interest?: number
 
+  @Column({ default: null })
+  commmision?: number
+
   @OneToOne(() => RevertCashTransfer, (rt) => rt.cash_transfer)
   revert_cash_transfer: RevertCashTransfer
 

@@ -29,9 +29,11 @@ export class GenericCashTransfer {
   as: CashTransferAs
 
   @IsOptional()
+  @IsNumber()
   bank_fee: number
 
   @IsOptional()
+  @IsNumber()
   interest: number
 }
 

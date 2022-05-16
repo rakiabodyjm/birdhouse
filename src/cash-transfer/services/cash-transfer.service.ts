@@ -406,7 +406,7 @@ export class CashTransferService {
     if ((caesar_bank_to && to) || (caesar_bank_from && from)) {
       throw new Error(`Loan must only include one source and one destination`)
     }
-    if (!(from || caesar_bank_from) && !(to || caesar_bank_to)) {
+    if (!(from || caesar_bank_from) || !(to || caesar_bank_to)) {
       throw new Error(
         `Must have one source account and one destination account`,
       )
@@ -474,7 +474,7 @@ export class CashTransferService {
     from,
     to,
   }: CreateLoanPaymentDto) {
-    if (!(from || caesar_bank_from) && !(to || caesar_bank_to)) {
+    if (!(from || caesar_bank_from) || !(to || caesar_bank_to)) {
       throw new Error(
         `Must have one source account and one destination account`,
       )

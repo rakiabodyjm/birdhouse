@@ -373,10 +373,10 @@ export class CashTransferService {
         caesar_bank_from: caesarBankFrom,
         caesar_bank_to: caesarBankTo,
         remaining_balance_from:
-          caesarBankFromUpdated.balance ||
-          caesarFromUpdated.cash_transfer_balance,
+          caesarBankFromUpdated?.balance ||
+          caesarFromUpdated?.cash_transfer_balance,
         remaining_balance_to:
-          caesarBankToUpdated.balance || caesarToUpdated.cash_transfer_balance,
+          caesarBankToUpdated?.balance || caesarToUpdated.cash_transfer_balance,
         description,
         message,
         from: caesarFrom,
@@ -455,8 +455,8 @@ export class CashTransferService {
       as,
       ref_num: await this.generateRefNum(as),
       remaining_balance_from:
-        caesarBankFromUpdated.balance ||
-        caesarFromUpdated.cash_transfer_balance,
+        caesarBankFromUpdated?.balance ||
+        caesarFromUpdated?.cash_transfer_balance,
       remaining_balance_to:
         caesarBankToUpdated?.balance || caesarToUpdated?.cash_transfer_balance,
       is_loan_paid: false,
@@ -562,7 +562,7 @@ export class CashTransferService {
      */
     if (caesarBankTo) {
       caesarBankToUpdated = await this.caesarBankService.pay(
-        caesarBankTo?.id,
+        caesarBankTo.id,
         amount,
       )
     }

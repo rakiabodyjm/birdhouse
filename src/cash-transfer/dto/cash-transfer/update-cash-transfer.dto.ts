@@ -1,3 +1,4 @@
+import { CashTransfer } from 'src/cash-transfer/entities/cash-transfer.entity'
 import { PartialType } from '@nestjs/swagger'
 import { IsNumber, IsOptional } from 'class-validator'
 import { CreateCashTransferDto } from './create-cash-transfer.dto'
@@ -8,5 +9,5 @@ export class UpdateCashTransferDto {
   override_interest?: number | null
 
   @IsOptional()
-  created_at: string
+  created_at: Date
 }

@@ -34,4 +34,7 @@ export class UpdateCaesarDto extends PartialType(CreateCaesarDto) {
     },
   )
   account_type?: string
+
+  @IsOptional()
+  has_loan: boolean
 }

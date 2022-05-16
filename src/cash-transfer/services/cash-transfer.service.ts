@@ -445,8 +445,8 @@ export class CashTransferService {
       as,
       ref_num: await this.generateRefNum(as),
       remaining_balance_from:
-        caesarBankFromUpdated?.balance ||
-        caesarFromUpdated?.cash_transfer_balance,
+        caesarBankFromUpdated.balance ||
+        caesarFromUpdated.cash_transfer_balance,
       remaining_balance_to:
         caesarBankToUpdated?.balance || caesarToUpdated?.cash_transfer_balance,
       is_loan_paid: false,
@@ -527,8 +527,9 @@ export class CashTransferService {
     /**
      * add balance to caesarTo
      */
-    this.caesarService.payCashTransferBalance(caesarTo.id, amount)
-
+    if (caesarTo) {
+      this.caesarService.payCashTransferBalance(caesarTo.id, amount)
+    }
     /**
      * if destination is caesarBankTo
      * add balance to caesarBankTo

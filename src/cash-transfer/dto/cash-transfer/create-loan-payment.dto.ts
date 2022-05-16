@@ -7,6 +7,7 @@ import {
   IsOptional,
   Min,
   Validate,
+  ValidateIf,
 } from 'class-validator'
 import { CashTransfer } from 'src/cash-transfer/entities/cash-transfer.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
@@ -25,24 +26,28 @@ export class CreateLoanPaymentDto {
   @ExistsInDb(Caesar, 'id', {
     message: `Caesar Account TO not found`,
   })
+  @ValidateIf((o) => !o.caesar_bank_to || o.to)
   @IsOptional()
   to?: Caesar['id']
 
   @ExistsInDb(CaesarBank, 'id', {
     message: `Caesar Account TO bank doesn't exist`,
   })
+  @ValidateIf((o) => !o.to || o.caesar_bank_to)
   @IsOptional()
   caesar_bank_to?: CaesarBank['id']
 
   @ExistsInDb(CaesarBank, 'id', {
     message: `Caesar Account FROM bank doesn't exist`,
   })
+  @ValidateIf((o) => !o.from || o.caesar_bank_from)
   @IsOptional()
   caesar_bank_from?: any
 
   @ExistsInDb(Caesar, 'id', {
     message: `Caesar Account FROM not found`,
   })
+  @ValidateIf((o) => !o.caesar_bank_from || o.from)
   @IsOptional()
   from?: Caesar['id']
 }

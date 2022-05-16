@@ -7,7 +7,6 @@ import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { CreateCashTransferDto } from 'src/cash-transfer/dto/cash-transfer/create-cash-transfer.dto'
 import { GetAllCashTransferDto } from 'src/cash-transfer/dto/cash-transfer/get-all-cash-transfer.dto'
 import { UpdateCashTransferDto } from 'src/cash-transfer/dto/cash-transfer/update-cash-transfer.dto'
-import { CaesarBank } from 'src/cash-transfer/entities/caesar-bank.entity'
 import {
   CashTransfer,
   CashTransferAs,
@@ -16,7 +15,7 @@ import { CaesarBankService } from 'src/cash-transfer/services/caesar-bank.servic
 import paginateFind from 'src/utils/paginate'
 import { FindOneOptions, LessThan, MoreThan, Repository } from 'typeorm'
 import { plainToInstance } from 'class-transformer'
-import { v4 as uuid, v4 } from 'uuid'
+import { v4 } from 'uuid'
 import { CreateLoanPaymentDto } from 'src/cash-transfer/dto/cash-transfer/create-loan-payment.dto'
 import { CreateLoanTransferDto } from 'src/cash-transfer/dto/cash-transfer/create-loan-transfer.dto'
 
@@ -328,6 +327,11 @@ export class CashTransferService {
         )
       }
 
+      if (!(caesar_bank_to || to) || !(caesar_bank_from || from)) {
+        throw new Error(`
+        Cash Transfer must include one source and one destination account`)
+      }
+
       const caesarBankFrom = caesar_bank_from
         ? await this.caesarBankService.findOne(caesar_bank_from)
         : undefined
@@ -402,6 +406,12 @@ export class CashTransferService {
     if ((caesar_bank_to && to) || (caesar_bank_from && from)) {
       throw new Error(`Loan must only include one source and one destination`)
     }
+    if (!(from || caesar_bank_from) && !(to || caesar_bank_to)) {
+      throw new Error(
+        `Must have one source account and one destination account`,
+      )
+    }
+
     const caesarBankFrom = caesar_bank_from
       ? await this.caesarBankService.findOne(caesar_bank_from)
       : undefined
@@ -451,6 +461,7 @@ export class CashTransferService {
         caesarBankToUpdated?.balance || caesarToUpdated?.cash_transfer_balance,
       is_loan_paid: false,
     }
+    console.log(newLoan)
 
     return this.cashTransferRepository.save(newLoan)
   }
@@ -463,6 +474,12 @@ export class CashTransferService {
     from,
     to,
   }: CreateLoanPaymentDto) {
+    if (!(from || caesar_bank_from) && !(to || caesar_bank_to)) {
+      throw new Error(
+        `Must have one source account and one destination account`,
+      )
+    }
+
     const loan = await this.findOne(id).then((res) => {
       if (res.as !== CashTransferAs.LOAN) {
         throw new Error(`Cash Transfer is not of type Loan, cannot pay`)
@@ -508,8 +525,13 @@ export class CashTransferService {
      * deduct from balance of caesarFrom and caesarBankFrom
      */
 
+    let caesarFromUpdated
+    let caesarBankFromUpdated
+    let caesarToUpdated
+    let caesarBankToUpdated
+
     if (caesarFrom) {
-      await this.caesarService.payCashTransferBalance(
+      caesarFromUpdated = await this.caesarService.payCashTransferBalance(
         caesarFrom.id,
         caesarFrom.cash_transfer_balance >= amount
           ? -amount
@@ -518,7 +540,7 @@ export class CashTransferService {
     }
 
     if (caesarBankFrom) {
-      await this.caesarBankService.pay(
+      caesarBankFromUpdated = await this.caesarBankService.pay(
         caesarBankFrom,
         caesarBankFrom.balance >= amount ? -amount : caesarBankFrom.balance,
       )
@@ -528,14 +550,21 @@ export class CashTransferService {
      * add balance to caesarTo
      */
     if (caesarTo) {
-      this.caesarService.payCashTransferBalance(caesarTo.id, amount)
+      caesarToUpdated = await this.caesarService.payCashTransferBalance(
+        caesarTo.id,
+        amount,
+      )
     }
+
     /**
      * if destination is caesarBankTo
      * add balance to caesarBankTo
      */
     if (caesarBankTo) {
-      this.caesarBankService.pay(caesarBankTo?.id, amount)
+      caesarBankToUpdated = await this.caesarBankService.pay(
+        caesarBankTo?.id,
+        amount,
+      )
     }
 
     const newLoanPayment: Partial<CashTransfer> = {
@@ -547,6 +576,11 @@ export class CashTransferService {
       from: caesarFrom,
       ref_num: await this.generateRefNum(CashTransferAs['LOAN PAYMENT']),
       as: CashTransferAs['LOAN PAYMENT'],
+      remaining_balance_from:
+        caesarBankFromUpdated?.balance ||
+        caesarFromUpdated?.cash_transfer_balance,
+      remaining_balance_to:
+        caesarBankToUpdated?.balance || caesarToUpdated?.cash_transfer_balance,
     }
 
     this.cashTransferRepository.save(newLoanPayment).then(async (res) => {
@@ -573,7 +607,17 @@ export class CashTransferService {
                 as: CashTransferAs.LOAN,
               },
               {
+                caesar_bank_to: caesarBankFrom?.id,
+                is_loan_paid: false,
+                as: CashTransferAs.LOAN,
+              },
+              {
                 caesar_bank_to: caesarFrom.id,
+                is_loan_paid: false,
+                as: CashTransferAs.LOAN,
+              },
+              {
+                to: caesarTo?.id,
                 is_loan_paid: false,
                 as: CashTransferAs.LOAN,
               },
@@ -581,10 +625,10 @@ export class CashTransferService {
           })
         ).length === 0
       ) {
-        console.log('caesar no longer has loan')
-        this.caesarService.update(caesarFrom.id, {
-          has_loan: false,
-        })
+        // console.log('caesar no longer has loan')
+        // this.caesarService.update(caesarFrom.id, {
+        //   has_loan: false,
+        // })
       }
       return res
     })

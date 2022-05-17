@@ -235,6 +235,13 @@ export class CaesarService {
     const likeQuery = params?.searchQuery
       ? Like(`%${params.searchQuery}%`)
       : undefined
+
+    const commonQuery = {
+      ...(params?.account_type && {
+        account_type: params.account_type,
+      }),
+    }
+
     return paginateFind(
       this.caesarRepository,
       {
@@ -277,7 +284,10 @@ export class CaesarService {
                 last_name: likeQuery,
               },
             },
-          ],
+          ].map((ea) => ({
+            ...ea,
+            ...commonQuery,
+          })),
         }),
       },
     )

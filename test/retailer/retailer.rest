@@ -9,9 +9,9 @@ Content-Type: application/json
     "e_bind_number": "09498460475", 
     "id_type": "LTO Driver's License",
     "id_number": "2014-14123-123T", 
-    "user" : "EFA8FEF1-BB21-EC11-B665-00E18CEF5938", 
-    "subdistributor": "CFB5D438-BC21-EC11-B665-00E18CEF5938", 
-    "dsp": "BCFD02B7-BD24-EC11-B665-00E18CEF5938"
+    "user" : "56A1D746-00B7-EC11-8CCD-022002200220", 
+    "subdistributor": "FDC28593-B957-EC11-B670-00E18CEF5938", 
+    "dsp": "20398D63-91D2-EC11-8CE8-00155D1CD40B"
 }
 ###
 PATCH http://localhost:6006/retailer/6FEC2144-D058-EC11-B670-00E18CEF5938
@@ -27,7 +27,7 @@ Content-Type: application/json
 DELETE http://localhost:6006/retailer/7ED5309C-ABCD-EC11-8CE7-00155D1CD40B
 
 ### 
-GET http://localhost:6006/retailer/40B139E9-1FA1-EC11-A22A-501AC5192008
+GET http://localhost:6006/retailer/86C0A99B-D1D4-EC11-8CE8-00155D1CD40B
 ###PAGINATED
 GET http://localhost:6006/retailer?page=0&limit=2&dsp=326C42B9-1FA1-EC11-A22A-501AC5192008&countOnly=true
 

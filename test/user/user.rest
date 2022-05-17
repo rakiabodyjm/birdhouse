@@ -15,13 +15,13 @@ POST http://localhost:6006/user
 Content-Type: application/json
 
 {
-   "first_name": "Janeo Miguel",
-    "last_name": "Tiongson",
+   "first_name": "Test",
+    "last_name": "User",
     "phone_number": "+639498460475",
     "password": "rakiabodyjm4690",
     "address1": "#16 General Santos Street.,Brgy. Roxas",
     "address2": null,
-    "email": "rakiabodyjm@gmail.com",
+    "email": "test_user@realm1000.com"
     
     # "subdistributor":{
     #     "name": "REALM1000 SUBDISTRIBUTOR ACCOUNT", 
@@ -39,9 +39,9 @@ Content-Type: application/json
     #     "subdistributor": "AF02DF31-DD2B-EC11-B666-00E18CEF5935", 
     #     "dsp": "B675433E-F36B-1410-86C5-00E785D37B7B"
     # }
-    "admin":{
-        "name": "Janeo"
-    }
+    # "admin":{
+    #     "name": "Janeo"
+    # }
   
 }
  
@@ -89,7 +89,7 @@ Content-Type: application/json
 PATCH http://localhost:6006/user/suspend/45E069F2-CDFA-EB11-B65F-00E18CEF5938
 
 ### DELETE USER BY ID
-DELETE http://localhost:6006/user/8D01F340-ABCD-EC11-8CE7-00155D1CD40B
+DELETE http://localhost:6006/user/D49EE955-3BD5-EC11-8CE8-00155D1CD40B
 ###
 
 

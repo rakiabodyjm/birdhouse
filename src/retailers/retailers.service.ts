@@ -2,12 +2,16 @@ import { Injectable } from '@nestjs/common'
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter'
 import { InjectRepository } from '@nestjs/typeorm'
 import { isNotEmptyObject } from 'class-validator'
+import { Dsp } from 'src/dsp/entities/dsp.entity'
 import { GetAllRetailerDto } from 'src/retailers/dto/get-all-retailer.dto'
 import SearchRetailerDto from 'src/retailers/dto/search-retailer.dto'
 import { Retailer } from 'src/retailers/entities/retailer.entity'
 import { Paginated } from 'src/types/Paginated'
+import { User } from 'src/user/entities/user.entity'
+import { Bcrypt } from 'src/utils/Bcrypt'
 import paginateFind from 'src/utils/paginate'
 import { Repository } from 'typeorm'
+import { CreateRetailerOnlyDto } from './dto/create-retailer-only.dto'
 import { CreateRetailerDto } from './dto/create-retailer.dto'
 import { UpdateRetailerDto } from './dto/update-retailer.dto'
 
@@ -17,6 +21,8 @@ export class RetailersService {
     @InjectRepository(Retailer)
     private retailerRepository: Repository<Retailer>,
     private eventEmitter: EventEmitter2,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {
     // this.relationsToLoad = ['dsp', 'subdistributor', 'user']
   }
@@ -32,6 +38,52 @@ export class RetailersService {
       account_type: 'retailer',
     })
     return newRetailerSave
+
+    // return 'This action adds a new retailer';
+  }
+
+  async createRetailerOnly(
+    createRetailerOnlyDto: CreateRetailerOnlyDto,
+  ): Promise<Retailer> {
+    const {
+      address,
+      dsp,
+      first_name,
+      last_name,
+      phone_number,
+      subdistributor,
+    } = createRetailerOnlyDto
+    const newUser = this.userRepository.create({
+      first_name,
+      last_name,
+      phone_number,
+      address1: address,
+      username: phone_number,
+      email: `${phone_number}@realm1000.com`,
+      password: Bcrypt().generatePassword(phone_number),
+    })
+
+    const userSave = await this.userRepository.save(newUser)
+    const newRetailer = this.retailerRepository.create({
+      dsp,
+      subdistributor,
+      store_name: `${first_name} ${last_name} Retailer`,
+      e_bind_number: phone_number,
+      id_number: phone_number,
+      id_type: phone_number,
+      user: userSave,
+    })
+
+    // const newRetailer = this.retailerRepository.create(createRetailerOnlyDto)
+    // const newRetailerSave = await this.retailerRepository.save(newRetailer)
+    const retailerSave = await this.retailerRepository.save(newRetailer)
+    console.log(retailerSave)
+    const userAccount = (await this.findOne(retailerSave.id)).user
+    this.eventEmitter.emit('telco-account.created', {
+      ...userAccount,
+      account_type: 'retailer',
+    })
+    return retailerSave
 
     // return 'This action adds a new retailer';
   }

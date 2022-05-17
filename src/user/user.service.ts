@@ -68,6 +68,20 @@ export class UserService {
     // return 'This action adds a new user'
   }
 
+  async createUserForRetailerOnly(createUserDto: CreateUserDto): Promise<User> {
+    // const userSearch = await this.userRepository.findOne({
+    //   email: createUserDto.email,
+    // })
+    // if (userSearch) {
+    //   throw new Error('Email already taken')
+    // }
+
+    const user = this.userRepository.create(createUserDto)
+    await this.userRepository.save(user)
+    return user
+    // return 'This action adds a new user'
+  }
+
   async findAll(
     params?: GetAllUserDto,
   ): Promise<User[] | Promise<Paginated<User>>> {

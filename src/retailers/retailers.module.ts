@@ -3,9 +3,11 @@ import { RetailersService } from './retailers.service'
 import { RetailersController } from './retailers.controller'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Retailer } from 'src/retailers/entities/retailer.entity'
+import { UserService } from 'src/user/user.service'
+import { User } from 'src/user/entities/user.entity'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Retailer])],
+  imports: [TypeOrmModule.forFeature([Retailer, User])],
   controllers: [RetailersController],
   providers: [RetailersService],
   exports: [RetailersService],

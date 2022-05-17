@@ -24,6 +24,7 @@ import SearchRetailerDto from 'src/retailers/dto/search-retailer.dto'
 import * as csvToJson from 'csvtojson'
 import * as path from 'path'
 import * as fs from 'fs'
+import { CreateRetailerOnlyDto } from './dto/create-retailer-only.dto'
 @Controller('retailer')
 @ApiTags('Retailer Routes')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -33,6 +34,13 @@ export class RetailersController {
   @Post()
   create(@Body() createRetailerDto: CreateRetailerDto): Promise<Retailer> {
     return this.retailersService.create(createRetailerDto)
+  }
+
+  @Post('cash-transfer')
+  createRetailerOnly(
+    @Body() createRetailerOnlyDto: CreateRetailerOnlyDto,
+  ): Promise<Retailer> {
+    return this.retailersService.createRetailerOnly(createRetailerOnlyDto)
   }
 
   @Get()

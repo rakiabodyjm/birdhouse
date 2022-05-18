@@ -349,14 +349,14 @@ export class CashTransferService {
       const caesarBankFromUpdated = caesarBankFrom
         ? await this.caesarBankService.pay(
             caesarBankFrom.id,
-            -amount - (bank_fee || 0),
+            -amount - (bank_fee ? bank_fee : 0),
           )
         : undefined
 
       const caesarFromUpdated = caesarFrom
         ? await this.caesarService.payCashTransferBalance(
             caesarFrom.id,
-            -amount - (bank_fee || 0),
+            -amount - (bank_fee ? bank_fee : 0),
           )
         : undefined
 
@@ -375,16 +375,21 @@ export class CashTransferService {
         bank_charge: bank_fee,
         caesar_bank_from: caesarBankFrom,
         caesar_bank_to: caesarBankTo,
-        remaining_balance_from:
-          caesarBankFromUpdated?.balance ||
-          caesarFromUpdated?.cash_transfer_balance,
-        remaining_balance_to:
-          caesarBankToUpdated?.balance || caesarToUpdated.cash_transfer_balance,
+        remaining_balance_from: caesarBankFromUpdated
+          ? caesarBankFromUpdated?.balance
+          : caesarFromUpdated?.cash_transfer_balance,
+        remaining_balance_to: caesarBankToUpdated
+          ? caesarBankToUpdated?.balance
+          : caesarToUpdated.cash_transfer_balance,
         description,
         message,
         from: caesarFrom,
         to: caesarTo,
       }
+      console.log(
+        caesarBankFromUpdated?.balance,
+        caesarFromUpdated?.cash_transfer_balance,
+      )
 
       return this.cashTransferRepository.save(newCashTransfer)
     } catch (err) {

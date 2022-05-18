@@ -21,7 +21,7 @@ async function bootstrap() {
     )
     .use(cookieParser(process.env.SECRET_KEY || 'Oasis2089$'))
     .enableCors(
-      process.env.NODE_ENV === 'development'
+      process.env.NODE_ENV === 'production'
         ? {}
         : {
             credentials: true,

@@ -347,13 +347,16 @@ export class CashTransferService {
       const caesarTo = to ? await this.caesarService.findOne(to) : undefined
 
       const caesarBankFromUpdated = caesarBankFrom
-        ? await this.caesarBankService.pay(caesarBankFrom.id, -amount)
+        ? await this.caesarBankService.pay(
+            caesarBankFrom.id,
+            -amount - (bank_fee || 0),
+          )
         : undefined
 
       const caesarFromUpdated = caesarFrom
         ? await this.caesarService.payCashTransferBalance(
             caesarFrom.id,
-            -amount,
+            -amount - (bank_fee || 0),
           )
         : undefined
 
@@ -425,11 +428,17 @@ export class CashTransferService {
     const caesarTo = to ? await this.caesarService.findOne(to) : undefined
 
     const caesarBankFromUpdated = caesarBankFrom
-      ? await this.caesarBankService.pay(caesarBankFrom.id, -amount)
+      ? await this.caesarBankService.pay(
+          caesarBankFrom.id,
+          -amount - (bank_fee || 0),
+        )
       : undefined
 
     const caesarFromUpdated = caesarFrom
-      ? await this.caesarService.payCashTransferBalance(caesarFrom.id, -amount)
+      ? await this.caesarService.payCashTransferBalance(
+          caesarFrom.id,
+          -amount - (bank_fee || 0),
+        )
       : undefined
 
     const caesarBankToUpdated = caesarBankTo
@@ -542,7 +551,7 @@ export class CashTransferService {
     if (caesarBankFrom) {
       caesarBankFromUpdated = await this.caesarBankService.pay(
         caesarBankFrom,
-        caesarBankFrom.balance >= amount ? -amount : caesarBankFrom.balance,
+        caesarBankFrom.balance >= amount ? -amount : -caesarBankFrom.balance,
       )
     }
 

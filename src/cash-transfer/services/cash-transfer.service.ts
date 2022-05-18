@@ -386,10 +386,6 @@ export class CashTransferService {
         from: caesarFrom,
         to: caesarTo,
       }
-      console.log(
-        caesarBankFromUpdated?.balance,
-        caesarFromUpdated?.cash_transfer_balance,
-      )
 
       return this.cashTransferRepository.save(newCashTransfer)
     } catch (err) {

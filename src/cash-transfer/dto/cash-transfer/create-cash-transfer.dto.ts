@@ -33,9 +33,9 @@ export class GenericCashTransfer {
   @IsNumber()
   bank_fee: number
 
-  @IsOptional()
-  @IsNumber()
-  interest: number
+  // @IsOptional()
+  // @IsNumber()
+  // interest?: number
 }
 
 export class CreateCashTransferDto extends GenericCashTransfer {

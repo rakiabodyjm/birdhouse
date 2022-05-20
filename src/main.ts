@@ -20,7 +20,6 @@ async function bootstrap() {
       }),
     )
     .use(cookieParser(process.env.SECRET_KEY || 'Oasis2089$'))
-<<<<<<< HEAD
     .enableCors({
       credentials: true,
       // origin: function (origin, callback) {
@@ -38,29 +37,6 @@ async function bootstrap() {
           ? process.env.CLIENT_URL.split(';')
           : process.env.CLIENT_URL,
     })
-=======
-    .enableCors(
-      process.env.NODE_ENV === 'production'
-        ? {}
-        : {
-            credentials: true,
-            // origin: function (origin, callback) {
-            //   if (process.env.CLIENT_URL.split(';').indexOf(origin) !== -1) {
-            //     // console.log('allowed cors for:', origin)
-            //     callback(null, true)
-            //   } else {
-            //     // console.log('blocked cors for:', origin)
-            //     callback(new Error('Not allowed by CORS'))
-            //   }
-            // },
-            // origin: true,
-            origin:
-              process.env.CLIENT_URL.indexOf(';') > -1
-                ? process.env.CLIENT_URL.split(';')
-                : process.env.CLIENT_URL,
-          },
-    )
->>>>>>> 302bc36467ba990a40bf9bd3429967a310498985
 
   const port = process.env.PORT || 6000
 

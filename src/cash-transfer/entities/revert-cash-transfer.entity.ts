@@ -13,7 +13,7 @@ export class RevertCashTransfer {
   @PrimaryGeneratedColumn('increment')
   id: number
 
-  @JoinColumn()
+  @JoinColumn({ name: 'cash_trasnfer_id' })
   @OneToOne(() => CashTransfer, (ct) => ct.revert_cash_transfer)
   cash_transfer: CashTransfer
 

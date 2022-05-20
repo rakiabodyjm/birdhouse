@@ -7,7 +7,7 @@ Content-Type: application/json
 
 ### DEPOSIT
 
-POST http://localhost:6006/cash-transfer/revert/deposit/0E6CCC0A-14CD-EC11-8971-00155DBB6F03
+POST http://localhost:6006/cash-transfer/revert/540862BE-DED7-EC11-8980-00155DBB6F03
 Content-Type: application/json
 
 ### TRANSFER
@@ -17,7 +17,7 @@ Content-Type: application/json
 
 ### LOAN
 
-POST http://localhost:6006/cash-transfer/revert/loan/00f76747-28cd-ec11-8ce6-00155d1cd40b
+POST http://localhost:6006/cash-transfer/revert/loan/57E1DCA4-A7D5-EC11-897A-00155DBB6F03
 Content-Type: application/json
 
 ### LOAN PAYMENT

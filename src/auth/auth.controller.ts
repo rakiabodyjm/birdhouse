@@ -100,7 +100,7 @@ export class AuthController {
         sameSite: 'none',
         signed: true,
         ...(process.env.NODE_ENV === 'production' && {
-          domain: req.headers.host,
+          // domain: req.headers.host,
           secure: true,
         }),
       })

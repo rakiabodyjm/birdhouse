@@ -1,11 +1,11 @@
 ###
 
-POST http://localhost:6006/auth/login
+POST https://telco.caesarcoin.ph/api/auth/login
 Content-Type: application/json
 
 {
-    "email": "rakiabodyjm",
-    "password": "rakiabodyjm4690",
+    "email": "jakeezz15",
+    "password": "password",
     "remember_me": true
 }
 

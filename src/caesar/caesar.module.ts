@@ -16,12 +16,19 @@ import { CaesarApiController } from 'src/caesar/caesar-api.controller'
     ConfigModule,
     HttpModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        baseURL: configService.get('REST_HOST'),
-        headers: {
-          'pay-caesar-secret': configService.get('SECRET_KEY'),
-        },
-      }),
+      useFactory: async (configService: ConfigService) => {
+        console.log(
+          'configService',
+          configService.get('REST_HOST'),
+          configService.get('SECRET_KEY'),
+        )
+        return {
+          baseURL: configService.get('REST_HOST'),
+          headers: {
+            'pay-caesar-secret': configService.get('SECRET_KEY'),
+          },
+        }
+      },
       inject: [ConfigService],
     }),
   ],

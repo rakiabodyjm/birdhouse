@@ -455,11 +455,17 @@ export class CashTransferService {
       bank_charge: bank_fee,
       as,
       ref_num: await this.generateRefNum(as),
-      remaining_balance_from:
-        caesarBankFromUpdated?.balance ||
-        caesarFromUpdated?.cash_transfer_balance,
-      remaining_balance_to:
-        caesarBankToUpdated?.balance || caesarToUpdated?.cash_transfer_balance,
+      // remaining_balance_from:
+      //   caesarBankFromUpdated?.balance ||
+      //   caesarFromUpdated?.cash_transfer_balance||0,
+      remaining_balance_from: caesarBankFromUpdated
+        ? caesarBankFromUpdated.balance
+        : caesarFromUpdated.cash_transfer_balance,
+      // remaining_balance_to:
+      // caesarBankToUpdated?.balance || caesarToUpdated?.cash_transfer_balance||0,
+      remaining_balance_to: caesarBankToUpdated
+        ? caesarBankToUpdated.balance
+        : caesarToUpdated.cash_transfer_balance,
       is_loan_paid: false,
     }
     console.log(newLoan)

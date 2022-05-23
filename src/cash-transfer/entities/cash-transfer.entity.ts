@@ -253,7 +253,7 @@ export class CashTransfer extends IntersectionType(
 
     return (
       amount +
-      bank_charge +
+      // bank_charge +
       (this.as === CashTransferAs.LOAN ? (interest / 100) * amount : 0)
     )
   }

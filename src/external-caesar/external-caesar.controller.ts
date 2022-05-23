@@ -11,6 +11,7 @@ import {
   HttpException,
   HttpStatus,
   UseGuards,
+  Patch,
 } from '@nestjs/common'
 import { ExternalCaesarService } from './external-caesar.service'
 import { CreateExternalCaesarDto } from './dto/create-external-caesar.dto'
@@ -22,6 +23,7 @@ import {
 } from 'src/external-caesar/dto/topup-external-caesar.dto'
 import { PayCaesarSecretGuard } from 'src/external-caesar/guards/pay-caesar-secret.guard'
 import { ConfigService } from '@nestjs/config'
+import { UpdateExternalCaesarDto } from './dto/update-external-caesar.dto'
 
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('external-caesar')
@@ -47,6 +49,18 @@ export class ExternalCaesarController {
     }
 
     return this.externalCaesarService.create(newExternalCaesar)
+  }
+
+  @Patch()
+  update(@Body() updateExternalCaesarDto: UpdateExternalCaesarDto) {
+    const editExternalCaesar: Partial<ExternalCaesar> = {
+      ...updateExternalCaesarDto,
+      caesar_coin: 0,
+      // peso: 0,
+      // dollar: 0,
+    }
+
+    return this.externalCaesarService.update(editExternalCaesar)
   }
 
   @Get()

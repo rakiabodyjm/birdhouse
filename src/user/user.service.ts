@@ -226,7 +226,10 @@ export class UserService {
           ttl: 10 * 60 * 1000,
         })
       }
-
+      this.eventEmitter.emit('user-account.updated', {
+        ...user,
+        account_type: 'user',
+      })
       return userQuery
     } catch (err) {
       console.log(err)

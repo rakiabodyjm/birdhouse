@@ -14,6 +14,18 @@ export class UpdateCaesarDto extends PartialType(CreateCaesarDto) {
   // @Transform(({ value }) => value === 'true' || value === true)
   // operator?: boolean
 
+  @IsOptional()
+  first_name?: string
+
+  @IsOptional()
+  last_name?: string
+
+  @IsOptional()
+  cp_number?: string
+
+  @IsOptional()
+  email?: string
+
   @Transform(({ value }) => {
     return Bcrypt().generatePassword(value)
   })

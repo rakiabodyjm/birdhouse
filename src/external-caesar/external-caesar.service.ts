@@ -42,6 +42,17 @@ export class ExternalCaesarService {
       })
   }
 
+  async update(updateCaesar: Partial<ExternalCaesar>) {
+    return this.externalCaesarRepo
+      .save(this.externalCaesarRepo.create(updateCaesar))
+      .then((res) => {
+        return res.wallet_id
+      })
+      .catch((err) => {
+        throw new Error(err)
+      })
+  }
+
   async topUp({ id, amount }: { id: string; amount: number }) {
     const caesar = await this.findOne(id).catch((err) => {
       throw new Error(err.message)

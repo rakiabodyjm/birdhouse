@@ -18,6 +18,7 @@ import { plainToClass, plainToInstance } from 'class-transformer'
 import createQueryBuilderAndIncludeRelations from 'src/utils/queryBuilderWithRelations'
 import { UpdateCaesarDto } from 'src/caesar/dto/update-caesar.dto'
 import { OnEvent } from '@nestjs/event-emitter'
+import e from 'express'
 // import { ConfigService } from '@nestjs/config'
 
 @Injectable()
@@ -415,7 +416,6 @@ export class CaesarService {
   //     })
   //   })
   // }
-
   async update(
     id: string,
     updateCaesarDto: UpdateCaesarDto & {
@@ -430,6 +430,22 @@ export class CaesarService {
       // ...(updateCaesarDto?.operator && { operator: updateCaesarDto.operator }),
       // ...(updateCaesarDto as Partial<Caesar>),
     })
+  }
+
+  @OnEvent('user-account.updated')
+  async updateWithCaesar({
+    ...user
+  }: UpdateCaesarDto & { has_loan?: boolean }) {
+    const caesar = await this.findOne(user.caesar_id)
+    const caesarUpdateSave: Partial<UpdateCaesarDto> = {
+      first_name: user.first_name,
+      last_name: user.last_name,
+      cp_number: user.cp_number,
+      email: user.email,
+      password: user.password,
+      account_type: user.account_type,
+    }
+    console.log(caesarUpdateSave)
   }
 
   async payCashTransferBalance(caesar: Caesar | Caesar['id'], amount: number) {

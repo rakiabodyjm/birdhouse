@@ -59,29 +59,13 @@ Content-Type: application/json
 ### GET USER BY ID
 GET http://localhost:6006/user/FCFF2287-04B7-EC11-8CCD-022002200220
 ### UPDATE USER BY ID
-PATCH http://localhost:6006/user/56A1D746-00B7-EC11-8CCD-022002200220
+PATCH http://localhost:6006/user/B2670630-81CB-EC11-AEEF-E86A64554969
 Content-Type: application/json
 
 {
-    # "password":"rakiabodyjm4690"
-    # "email":"rakiabodyjm@yahoo.com",
-    # "username": "rakiabodyjm"
-    # "dsp": null
-    # "email": "rakiabodyjm@gmail.com",
-    # "first_name": "Janeo Miguel"
-    # "admin":"684A19BB-9804-EC11-B661-00E18CEF5938"
-    # "dsp": "88A17787-EE06-EC11-B661-00E18CEF5938"
-    # "admin": null
-    # "dsp": {
-    #     "dsp_code": "A-123",
-    #     "area_id": 4, 
-    #     "e_bind_number": "639498460475"
-    # },
-    
-    # "email": "rakiabodyjm@gmail.com"
-    # "username": "rakiabodyjm"
-    "password": "rakiabodyjm4690"
-
+    "first_name": "jerry",
+    "email": "jerome49@gmail.com",
+    "password": "jerome29"
 }
 
 ### DISABLE/SUSPEND USER BY ID 

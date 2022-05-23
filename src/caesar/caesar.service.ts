@@ -433,19 +433,28 @@ export class CaesarService {
   }
 
   @OnEvent('user-account.updated')
-  async updateWithCaesar({
-    ...user
-  }: UpdateCaesarDto & { has_loan?: boolean }) {
-    const caesar = await this.findOne(user.caesar_id)
-    const caesarUpdateSave: Partial<UpdateCaesarDto> = {
+  async updateWithCaesar({ ...user }: User & { password: string }) {
+    const caesar = await this.findOne(user.caesar_wallet.id)
+    const caesarUserSave: Partial<UpdateCaesarDto> = {
       first_name: user.first_name,
       last_name: user.last_name,
-      cp_number: user.cp_number,
+      cp_number: user.phone_number,
       email: user.email,
       password: user.password,
-      account_type: user.account_type,
+      account_type: 'user',
     }
-    console.log(caesarUpdateSave)
+    const caesar_id$ = this.axiosService
+      .patch(`/external-caesar/${caesar.caesar_id}`, caesarUserSave)
+      .pipe(map((response) => response.data as string))
+    const caesar_id = await firstValueFrom(caesar_id$).catch(
+      (err: AxiosError) => {
+        throw new Error(err.response.data.message)
+      },
+    )
+    return this.caesarRepository.save({
+      ...caesar,
+      ...plainToInstance(Caesar, { ...caesarUserSave }),
+    })
   }
 
   async payCashTransferBalance(caesar: Caesar | Caesar['id'], amount: number) {

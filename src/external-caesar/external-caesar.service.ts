@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { plainToClass } from 'class-transformer'
+import { plainToClass, plainToInstance } from 'class-transformer'
 import { ExternalCaesar } from 'src/external-caesar/entities/external-caesar.entity'
 import { Repository } from 'typeorm'
+import { UpdateExternalCaesarDto } from './dto/update-external-caesar.dto'
 
 @Injectable()
 export class ExternalCaesarService {
@@ -42,9 +43,13 @@ export class ExternalCaesarService {
       })
   }
 
-  async update(updateCaesar: Partial<ExternalCaesar>) {
+  async update(id: string, updateCaesar: Partial<UpdateExternalCaesarDto>) {
+    const caesar = await this.findOne(id)
     return this.externalCaesarRepo
-      .save(this.externalCaesarRepo.create(updateCaesar))
+      .save({
+        ...caesar,
+        ...plainToInstance(ExternalCaesar, { ...updateCaesar }),
+      })
       .then((res) => {
         return res.wallet_id
       })

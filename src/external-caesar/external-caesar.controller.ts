@@ -29,7 +29,7 @@ import { UpdateExternalCaesarDto } from './dto/update-external-caesar.dto'
 @Controller('external-caesar')
 @ApiTags('External Caesar')
 @Public()
-@UseGuards(PayCaesarSecretGuard)
+// @UseGuards(PayCaesarSecretGuard)
 export class ExternalCaesarController {
   constructor(
     private readonly externalCaesarService: ExternalCaesarService,
@@ -51,16 +51,16 @@ export class ExternalCaesarController {
     return this.externalCaesarService.create(newExternalCaesar)
   }
 
-  @Patch()
-  update(@Body() updateExternalCaesarDto: UpdateExternalCaesarDto) {
+  @Patch(':id')
+  update(
+    @Param('id') id: string,
+    @Body() updateExternalCaesarDto: UpdateExternalCaesarDto,
+  ) {
     const editExternalCaesar: Partial<ExternalCaesar> = {
       ...updateExternalCaesarDto,
-      caesar_coin: 0,
-      // peso: 0,
-      // dollar: 0,
     }
 
-    return this.externalCaesarService.update(editExternalCaesar)
+    return this.externalCaesarService.update(id, editExternalCaesar)
   }
 
   @Get()

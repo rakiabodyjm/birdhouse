@@ -25,4 +25,7 @@ export class UpdateCaesarBankDto extends PartialType(CreateCaesarBankDto) {
   })
   @IsOptional()
   description?: string
+
+  @IsOptional()
+  balance: number
 }

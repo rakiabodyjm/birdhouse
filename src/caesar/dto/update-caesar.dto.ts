@@ -51,5 +51,5 @@ export class UpdateCaesarDto extends PartialType(CreateCaesarDto) {
   has_loan: boolean
 
   @IsOptional()
-  cash_transfer_balance: number
+  cash_transfer_balance?: number
 }

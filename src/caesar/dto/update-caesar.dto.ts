@@ -49,4 +49,7 @@ export class UpdateCaesarDto extends PartialType(CreateCaesarDto) {
 
   @IsOptional()
   has_loan: boolean
+
+  @IsOptional()
+  cash_transfer_balance: number
 }

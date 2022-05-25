@@ -92,33 +92,35 @@ export class SubdistributorService {
    * Search by subdistributor's name, area_name, user last_name first_name
    *
    */
-  async searchAll(searchQuery: SearchSubdistributorDto['searchQuery']) {
-    const likeSearchQuery = Like(`%${searchQuery}%`)
+  async searchAll(searchQuery?: SearchSubdistributorDto['searchQuery']) {
+    const likeSearchQuery = searchQuery ? Like(`%${searchQuery}%`) : undefined
 
     return await this.subdRepository.find({
-      where: [
-        {
-          id: likeSearchQuery,
-        },
-        {
-          name: likeSearchQuery,
-        },
-        {
-          area_id: {
-            area_name: likeSearchQuery,
+      ...(likeSearchQuery && {
+        where: [
+          {
+            id: likeSearchQuery,
           },
-        },
-        {
-          user: {
-            last_name: likeSearchQuery,
+          {
+            name: likeSearchQuery,
           },
-        },
-        {
-          user: {
-            first_name: likeSearchQuery,
+          {
+            area_id: {
+              area_name: likeSearchQuery,
+            },
           },
-        },
-      ],
+          {
+            user: {
+              last_name: likeSearchQuery,
+            },
+          },
+          {
+            user: {
+              first_name: likeSearchQuery,
+            },
+          },
+        ],
+      }),
       relations: ['area_id', 'user'],
       take: 100,
     })

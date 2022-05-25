@@ -1,6 +1,6 @@
-import { IsNotEmpty } from 'class-validator'
+import { IsNotEmpty, IsOptional } from 'class-validator'
 
 export class SearchSubdistributorDto {
-  @IsNotEmpty()
-  searchQuery: string
+  @IsOptional()
+  searchQuery?: string
 }

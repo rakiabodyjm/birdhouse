@@ -8,7 +8,6 @@ module.exports = {
       autorestart: false,
 
       env: {
-        HOST: 'http://localhost',
         REST_HOST: 'http://localhost:6006',
         CAESAR_HOST: 'http://localhost:6006',
         PORT: 6006,

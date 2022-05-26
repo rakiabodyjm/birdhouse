@@ -13,11 +13,17 @@ import {
 } from 'src/cash-transfer/entities/cash-transfer.entity'
 import { CaesarBankService } from 'src/cash-transfer/services/caesar-bank.service'
 import paginateFind from 'src/utils/paginate'
-import { FindOneOptions, LessThan, MoreThan, Repository } from 'typeorm'
+import {
+  FindOneOptions,
+  LessThanOrEqual,
+  MoreThanOrEqual,
+  Repository,
+} from 'typeorm'
 import { plainToInstance } from 'class-transformer'
 import { v4 } from 'uuid'
 import { CreateLoanPaymentDto } from 'src/cash-transfer/dto/cash-transfer/create-loan-payment.dto'
 import { CreateLoanTransferDto } from 'src/cash-transfer/dto/cash-transfer/create-loan-transfer.dto'
+import { SQLDateGenerator } from 'src/utils/SQLDateGenerator'
 
 @Injectable()
 export class CashTransferService {
@@ -57,10 +63,14 @@ export class CashTransferService {
     loan = typeof loan === 'string' ? await this.findOne(loan) : loan
     const commonQuery = {
       ...(date_from && {
-        created_at: MoreThan(getAllCashTransfer.date_from),
+        created_at: MoreThanOrEqual(
+          new SQLDateGenerator(getAllCashTransfer.date_from).getSQLDate(),
+        ),
       }),
       ...(date_to && {
-        created_at: LessThan(getAllCashTransfer.date_to),
+        created_at: LessThanOrEqual(
+          new SQLDateGenerator(getAllCashTransfer.date_to).getSQLDate(),
+        ),
       }),
       ...(as && {
         as,

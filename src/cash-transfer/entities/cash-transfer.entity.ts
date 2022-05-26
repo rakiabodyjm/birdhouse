@@ -194,15 +194,18 @@ export class CashTransfer extends IntersectionType(
     if (this.override_interest) {
       return this.override_interest
     }
-    let interestRate = 0
+    // let interestRate = 0
     const dateNow = new Date(Date.now())
     const dateLoan = new Date(this.created_at)
 
-    const whichShiftFrom: 'first' | 'second' =
-      dateLoan.getHours() > 0 && dateLoan.getHours() < 14 ? 'first' : 'second'
+    // const whichShiftFrom: 'first' | 'second' =
+    //   dateLoan.getHours() > 0 && dateLoan.getHours() < 14 ? 'first' : 'second'
 
-    const whichShiftTo: 'first' | 'second' =
-      dateNow.getHours() > 0 && dateNow.getHours() < 14 ? 'first' : 'second'
+    // const whichShiftTo: 'first' | 'second' =
+    //   dateNow.getHours() > 0 && dateNow.getHours() < 14 ? 'first' : 'second'
+
+    // const whichShiftTo: 'first' | 'second' =
+    //   dateNow.getHours() > 0 && dateNow.getHours() < 14 ? 'first' : 'second'
 
     const dayFrom = new Date(
       `${
@@ -218,26 +221,26 @@ export class CashTransfer extends IntersectionType(
     const dayDiff = (dayTo.getTime() - dayFrom.getTime()) / (1000 * 3600 * 24)
 
     // const firstDayCount = whichShiftFrom === 'second' ? 0.5 : 1
-    const firstDayCount = 1
+    // const firstDayCount = 1
 
-    const lastDayCount = whichShiftTo === 'second' ? 1 : 0.5
+    // const lastDayCount = whichShiftTo === 'second' ? 1 : 0.5
 
-    if (dayDiff === 0) {
-      // interestRate = whichShiftFrom === whichShiftTo ? 0.5 : 1
-      // return 1
-      return firstDayCount
-    }
-    if (dayDiff === 1) {
-      interestRate += firstDayCount + lastDayCount
-    }
-    if (dayDiff >= 2) {
-      const endCountInterests = firstDayCount + lastDayCount
-      interestRate += endCountInterests + 1 * (dayDiff - 1)
+    // if (dayDiff === 0) {
+    //   // interestRate = whichShiftFrom === whichShiftTo ? 0.5 : 1
+    //   // return 1
+    //   return firstDayCount
+    // }
+    // if (dayDiff === 1) {
+    //   interestRate += firstDayCount + lastDayCount
+    // }
+    // if (dayDiff >= 2) {
+    //   const endCountInterests = firstDayCount + lastDayCount
+    //   interestRate += endCountInterests + 1 * (dayDiff - 1)
 
-      // interestRate += dayDiff
-    }
+    //   // interestRate += dayDiff
+    // }
 
-    return Number(interestRate.toFixed(4))
+    return Number(dayDiff)
   }
 
   @Column({

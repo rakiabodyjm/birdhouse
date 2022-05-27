@@ -75,6 +75,8 @@ class WithAccountTypes {
 @Index(['id', 'caesar_id', 'dsp'])
 @Index(['id', 'caesar_id', 'retailer'])
 @Index(['id', 'caesar_id', 'admin'])
+@Index(['id', 'has_loan'])
+@Index(['id', 'cash_transfer_balance'])
 export class Caesar extends WithAccountTypes {
   @PrimaryGeneratedColumn('uuid')
   id: string

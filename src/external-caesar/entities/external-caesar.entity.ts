@@ -4,6 +4,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
@@ -14,6 +15,16 @@ const pesoExchangeRate = process.env.PESO_EXCHANGE_RATE || 1
 
 @Entity()
 @Unique(['email', 'role'])
+@Index([
+  'wallet_id',
+  'first_name',
+  'last_name',
+  'cp_number',
+  'email',
+  'caesar_coin',
+  'role',
+])
+@Index([''])
 export class ExternalCaesar {
   @PrimaryGeneratedColumn('increment')
   wallet_id: string

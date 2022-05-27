@@ -24,7 +24,6 @@ const pesoExchangeRate = process.env.PESO_EXCHANGE_RATE || 1
   'caesar_coin',
   'role',
 ])
-@Index([''])
 export class ExternalCaesar {
   @PrimaryGeneratedColumn('increment')
   wallet_id: string

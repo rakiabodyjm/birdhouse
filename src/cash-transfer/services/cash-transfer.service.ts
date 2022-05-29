@@ -374,6 +374,8 @@ export class CashTransferService {
         Cash Transfer must include one source and one destination account`)
       }
 
+      const bankFee = bank_fee || 0
+
       const caesarBankFrom = caesar_bank_from
         ? await this.caesarBankService.findOne(caesar_bank_from)
         : undefined
@@ -389,7 +391,7 @@ export class CashTransferService {
       const caesarTo = to ? await this.caesarService.findOne(to) : undefined
 
       const caesarBankFromUpdated = caesarBankFrom
-        ? await this.caesarBankService.pay(caesarBankFrom.id, -amount)
+        ? await this.caesarBankService.pay(caesarBankFrom.id, -amount - bankFee)
         : undefined
 
       const caesarFromUpdated = caesarFrom
@@ -442,6 +444,7 @@ export class CashTransferService {
     bank_fee,
     as,
   }: CreateLoanTransferDto) {
+    const bankFee = bank_fee || 0
     /**
      * find bank from and deduct amount + bank_fee
      * and deduct from ultimate caesar balance
@@ -468,11 +471,14 @@ export class CashTransferService {
     const caesarTo = to ? await this.caesarService.findOne(to) : undefined
 
     const caesarBankFromUpdated = caesarBankFrom
-      ? await this.caesarBankService.pay(caesarBankFrom.id, -amount)
+      ? await this.caesarBankService.pay(caesarBankFrom.id, -amount - bankFee)
       : undefined
 
     const caesarFromUpdated = caesarFrom
-      ? await this.caesarService.payCashTransferBalance(caesarFrom.id, -amount)
+      ? await this.caesarService.payCashTransferBalance(
+          caesarFrom.id,
+          -amount - bankFee,
+        )
       : undefined
 
     const caesarBankToUpdated = caesarBankTo
@@ -480,7 +486,10 @@ export class CashTransferService {
       : undefined
 
     const caesarToUpdated = caesarTo
-      ? await this.caesarService.payCashTransferBalance(caesarTo, amount)
+      ? await this.caesarService.payCashTransferBalance(
+          caesarTo,
+          amount - bankFee,
+        )
       : undefined
 
     await this.caesarService.update(caesarTo?.id || caesarBankTo?.caesar?.id, {

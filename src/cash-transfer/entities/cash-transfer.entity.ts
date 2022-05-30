@@ -8,6 +8,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   OneToMany,
@@ -61,6 +62,12 @@ export class CashTransferType {
 }
 
 @Entity()
+@Index(['id', 'ref_num'])
+@Index(['id', 'ref_num', 'from', 'to'])
+@Index(['id', 'ref_num', 'caesar_bank_from', 'to'])
+@Index(['id', 'ref_num', 'from', 'caesar_bank_to'])
+@Index(['id', 'ref_num', 'caesar_bank_from', 'caesar_bank_to'])
+@Index(['id', 'ref_num', 'from', 'to', 'caesar_bank_from', 'caesar_bank_to'])
 export class CashTransfer extends IntersectionType(
   IntersectionType(CashTransferWithDraw, CashTransferDeposit),
   CashTransferType,

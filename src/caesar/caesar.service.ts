@@ -493,6 +493,7 @@ export class CaesarService {
     } else {
       currentCaesar = caesar
     }
+
     return this.caesarRepository.save({
       ...currentCaesar,
       cash_transfer_balance: currentCaesar.cash_transfer_balance + amount,

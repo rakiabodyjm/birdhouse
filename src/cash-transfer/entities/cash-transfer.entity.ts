@@ -168,7 +168,9 @@ export class CashTransfer extends IntersectionType(
     name: 'loan_id',
     referencedColumnName: 'id',
   })
-  @ManyToOne(() => CashTransfer, (ct) => ct.payments)
+  @ManyToOne(() => CashTransfer, (ct) => ct.payments, {
+    createForeignKeyConstraints: false,
+  })
   loan: CashTransfer
 
   @Expose()

@@ -224,12 +224,15 @@ export class CashTransfer extends IntersectionType(
     // const firstDayCount = 1
 
     // const lastDayCount = whichShiftTo === 'second' ? 1 : 0.5
-
+    if (dateNow.getDay() - dateLoan.getDay() < 1) {
+      return dayDiff - 1
+    }
     if (dayDiff === 0) {
       // interestRate = whichShiftFrom === whichShiftTo ? 0.5 : 1
       // return 1
       return dayDiff + 1
     }
+
     // if (dayDiff === 1) {
     //   interestRate += firstDayCount + lastDayCount
     // }

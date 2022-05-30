@@ -199,6 +199,10 @@ export class CaesarService {
       .orWhere('user.last_name like :searchString')
       .orWhere('admin.name like :searchString')
       .orWhere('retailer.store_name like :searchString')
+      .orWhere('retailer.e_bind_number like :searchString')
+      .orWhere('subdistributor.e_bind_number like :searchString')
+      .orWhere('dsp.e_bind_number like :searchString')
+      .orWhere('user.cp_number like :searchString')
       .setParameters({
         searchString: `%${searchQuery}%`,
       })
@@ -266,13 +270,28 @@ export class CaesarService {
               },
             },
             {
+              subdistributor: {
+                e_bind_number: likeQuery,
+              },
+            },
+            {
               dsp: {
-                dsp_code: likeQuery,
+                e_bind_number: likeQuery,
               },
             },
             {
               retailer: {
                 store_name: likeQuery,
+              },
+            },
+            {
+              retailer: {
+                e_bind_number: likeQuery,
+              },
+            },
+            {
+              user: {
+                phone_number: likeQuery,
               },
             },
             {

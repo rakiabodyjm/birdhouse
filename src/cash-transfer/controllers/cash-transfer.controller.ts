@@ -1,3 +1,4 @@
+import { CashTransferOneSourceOneDestinationPipe } from '../../pipes/validation/CashTransferOneSourceOneDestinationPipe'
 import { CreateDepositTransferDto } from './../dto/cash-transfer/create-deposit-transfer.dto'
 import { CreateLoanTransferDto } from './../dto/cash-transfer/create-loan-transfer.dto'
 import { CreateLoanPaymentDto } from './../dto/cash-transfer/create-loan-payment.dto'
@@ -14,6 +15,7 @@ import {
   ClassSerializerInterceptor,
   HttpException,
   HttpStatus,
+  UsePipes,
 } from '@nestjs/common'
 import { CashTransferService } from 'src/cash-transfer/services/cash-transfer.service'
 import { UpdateCashTransferDto } from 'src/cash-transfer/dto/cash-transfer/update-cash-transfer.dto'
@@ -127,6 +129,7 @@ export class CashTransferController {
   }
 
   @Post('loan')
+  @UsePipes(CashTransferOneSourceOneDestinationPipe)
   async loan(@Body() createCashTransferDto: CreateLoanTransferDto) {
     try {
       const loan = await this.cashTransferService.loan({
@@ -142,6 +145,7 @@ export class CashTransferController {
   }
 
   @Post('loan-payment')
+  @UsePipes(CashTransferOneSourceOneDestinationPipe)
   async loanPayment(@Body() createLoanPayment: CreateLoanPaymentDto) {
     try {
       const loanPayment = await this.cashTransferService.loanPayment({

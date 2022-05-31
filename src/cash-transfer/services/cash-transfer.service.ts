@@ -456,13 +456,16 @@ export class CashTransferService {
     })
 
     const dateToday = new Date(Date.now())
-    const date = dateToday.setDate(dateToday.getDate() + 1)
-    const newDay = new Date(date)
-    const hour = newDay.setHours(6, 0, 0)
-    const newHour = new Date(hour)
+    let checkDate
+
     if (dateToday.getHours() > 22) {
+      const date = dateToday.setDate(dateToday.getDate() + 1)
+      const newDay = new Date(date)
+      const hour = newDay.setHours(6, 0, 0)
+      const newHour = new Date(hour)
       console.log(new Date(newDay).toLocaleString())
       console.log(new Date(newHour).toLocaleString())
+      checkDate = newHour
     }
 
     const newLoan: Partial<CashTransfer> = {
@@ -474,7 +477,7 @@ export class CashTransferService {
       description,
       bank_charge: bank_fee,
       as,
-      created_at: newHour,
+      created_at: checkDate,
       ref_num: await this.generateRefNum(as),
       // remaining_balance_from:
       //   caesarBankFromUpdated?.balance ||

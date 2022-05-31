@@ -69,7 +69,12 @@ class WithAccountTypes {
 }
 
 @Entity()
-@Index(['id', 'caesar_id', ...Object.values(Roles), 'user'])
+@Index(['id', 'caesar_id'])
+@Index(['id', 'caesar_id', 'user'])
+@Index(['id', 'caesar_id', 'subdistributor'])
+@Index(['id', 'caesar_id', 'dsp'])
+@Index(['id', 'caesar_id', 'retailer'])
+@Index(['id', 'caesar_id', 'admin'])
 export class Caesar extends WithAccountTypes {
   @PrimaryGeneratedColumn('uuid')
   id: string

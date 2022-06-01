@@ -159,7 +159,6 @@ export class CashTransferService {
             }),
             ...commonQuery,
           }
-
     return paginateFind(
       this.cashTransferRepository,
       {
@@ -171,7 +170,7 @@ export class CashTransferService {
         order: {
           created_at: 'DESC',
         },
-        relations: this.relations,
+        relations: [...this.relations],
         withDeleted: true,
       },
       (data) => {
@@ -458,7 +457,7 @@ export class CashTransferService {
     const dateToday = new Date(Date.now())
     let checkDate
 
-    if (dateToday.getHours() > 22) {
+    if (dateToday.getHours() > 22 || dateToday.getDay() === 0) {
       const date = dateToday.setDate(dateToday.getDate() + 1)
       const newDay = new Date(date)
       const hour = newDay.setHours(6, 0, 0)

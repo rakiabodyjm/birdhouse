@@ -1,6 +1,6 @@
 import { RevertCashTransfer } from './revert-cash-transfer.entity'
 import { IntersectionType } from '@nestjs/swagger'
-import { Expose } from 'class-transformer'
+import { Expose, Transform } from 'class-transformer'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { CaesarBank } from 'src/cash-transfer/entities/caesar-bank.entity'
 import {
@@ -90,6 +90,9 @@ export class CashTransfer extends IntersectionType(
   })
   as: CashTransferAs
 
+  // @Transform((value, key) => {
+  //   if()
+  // })
   @CreateDateColumn({
     type: 'datetime',
     default: () => 'CURRENT_TIMESTAMP',
@@ -202,56 +205,59 @@ export class CashTransfer extends IntersectionType(
     if (this.override_interest) {
       return this.override_interest
     }
+
     // let interestRate = 0
     const dateNow = new Date(Date.now())
     const dateLoan = new Date(this.created_at)
+    if (dateNow > dateLoan) {
+      // const whichShiftFrom: 'first' | 'second' =
+      //   dateLoan.getHours() > 0 && dateLoan.getHours() < 14 ? 'first' : 'second'
 
-    // const whichShiftFrom: 'first' | 'second' =
-    //   dateLoan.getHours() > 0 && dateLoan.getHours() < 14 ? 'first' : 'second'
+      // const whichShiftTo: 'first' | 'second' =
+      //   dateNow.getHours() > 0 && dateNow.getHours() < 14 ? 'first' : 'second'
 
-    // const whichShiftTo: 'first' | 'second' =
-    //   dateNow.getHours() > 0 && dateNow.getHours() < 14 ? 'first' : 'second'
+      // const whichShiftTo: 'first' | 'second' =
+      //   dateNow.getHours() > 0 && dateNow.getHours() < 14 ? 'first' : 'second'
 
-    // const whichShiftTo: 'first' | 'second' =
-    //   dateNow.getHours() > 0 && dateNow.getHours() < 14 ? 'first' : 'second'
+      const dayFrom = new Date(
+        `${
+          monthNames[dateLoan.getMonth()]
+        } ${dateLoan.getDate()}, ${dateLoan.getFullYear()}`,
+      )
+      const dayTo = new Date(
+        `${
+          monthNames[dateNow.getMonth()]
+        } ${dateNow.getDate()}, ${dateLoan.getFullYear()}`,
+      )
 
-    const dayFrom = new Date(
-      `${
-        monthNames[dateLoan.getMonth()]
-      } ${dateLoan.getDate()}, ${dateLoan.getFullYear()}`,
-    )
-    const dayTo = new Date(
-      `${
-        monthNames[dateNow.getMonth()]
-      } ${dateNow.getDate()}, ${dateLoan.getFullYear()}`,
-    )
+      const dayDiff = (dayTo.getTime() - dayFrom.getTime()) / (1000 * 3600 * 24)
 
-    const dayDiff = (dayTo.getTime() - dayFrom.getTime()) / (1000 * 3600 * 24)
+      // const firstDayCount = whichShiftFrom === 'second' ? 0.5 : 1
+      // const firstDayCount = 1
 
-    // const firstDayCount = whichShiftFrom === 'second' ? 0.5 : 1
-    // const firstDayCount = 1
+      // const lastDayCount = whichShiftTo === 'second' ? 1 : 0.5
+      if (dateNow.getDay() - dateLoan.getDay() < 0) {
+        return dayDiff - 1
+      }
+      if (dayDiff === 0) {
+        // interestRate = whichShiftFrom === whichShiftTo ? 0.5 : 1
+        // return 1
+        return dayDiff + 1
+      }
 
-    // const lastDayCount = whichShiftTo === 'second' ? 1 : 0.5
-    if (dateNow.getDay() - dateLoan.getDay() < 0) {
-      return dayDiff - 1
+      // if (dayDiff === 1) {
+      //   interestRate += firstDayCount + lastDayCount
+      // }
+      // if (dayDiff >= 2) {
+      //   const endCountInterests = firstDayCount + lastDayCount
+      //   interestRate += endCountInterests + 1 * (dayDiff - 1)
+
+      //   // interestRate += dayDiff
+      // }
+
+      return Number(dayDiff)
     }
-    if (dayDiff === 0) {
-      // interestRate = whichShiftFrom === whichShiftTo ? 0.5 : 1
-      // return 1
-      return dayDiff + 1
-    }
-
-    // if (dayDiff === 1) {
-    //   interestRate += firstDayCount + lastDayCount
-    // }
-    // if (dayDiff >= 2) {
-    //   const endCountInterests = firstDayCount + lastDayCount
-    //   interestRate += endCountInterests + 1 * (dayDiff - 1)
-
-    //   // interestRate += dayDiff
-    // }
-
-    return Number(dayDiff)
+    return Number(1)
   }
 
   @Column({

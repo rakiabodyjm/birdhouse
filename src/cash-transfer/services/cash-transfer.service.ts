@@ -455,6 +455,19 @@ export class CashTransferService {
       has_loan: true,
     })
 
+    const dateToday = new Date(Date.now())
+    let checkDate
+
+    if (dateToday.getHours() > 22) {
+      const date = dateToday.setDate(dateToday.getDate() + 1)
+      const newDay = new Date(date)
+      const hour = newDay.setHours(6, 0, 0)
+      const newHour = new Date(hour)
+      console.log(new Date(newDay).toLocaleString())
+      console.log(new Date(newHour).toLocaleString())
+      checkDate = newHour
+    }
+
     const newLoan: Partial<CashTransfer> = {
       amount,
       caesar_bank_from: caesarBankFrom,
@@ -464,6 +477,7 @@ export class CashTransferService {
       description,
       bank_charge: bank_fee,
       as,
+      created_at: checkDate,
       ref_num: await this.generateRefNum(as),
       // remaining_balance_from:
       //   caesarBankFromUpdated?.balance ||
@@ -478,7 +492,6 @@ export class CashTransferService {
         : caesarToUpdated.cash_transfer_balance,
       is_loan_paid: false,
     }
-    console.log(newLoan)
 
     return this.cashTransferRepository.save(newLoan)
   }

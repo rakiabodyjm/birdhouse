@@ -580,17 +580,13 @@ export class CashTransferService {
       ? await this.caesarBankService.findOne(caesar_bank_from)
       : null
 
-    const caesarFrom = await this.caesarService.findOne(
-      caesarBankFrom?.caesar?.id || from,
-    )
+    const caesarFrom = from ? await this.caesarService.findOne(from) : undefined
 
     const caesarBankTo = caesar_bank_to
       ? await this.caesarBankService.findOne(caesar_bank_to)
       : null
 
-    const caesarTo = await this.caesarService.findOne(
-      caesarBankTo?.caesar?.id || to,
-    )
+    const caesarTo = to ? await this.caesarService.findOne(to) : undefined
 
     /**
      * deduct from balance of caesarFrom and caesarBankFrom
@@ -700,6 +696,9 @@ export class CashTransferService {
         // this.caesarService.update(caesarFrom.id, {
         //   has_loan: false,
         // })
+        await this.caesarService.update(caesarFrom?.id, {
+          has_loan: false,
+        })
       }
       return res
     })

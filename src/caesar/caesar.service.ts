@@ -278,6 +278,12 @@ export class CaesarService {
                 e_bind_number: likeQuery,
               },
             },
+
+            {
+              dsp: {
+                dsp_code: likeQuery,
+              },
+            },
             {
               retailer: {
                 store_name: likeQuery,

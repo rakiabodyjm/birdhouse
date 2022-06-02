@@ -68,6 +68,7 @@ export class CashTransferType {
 @Index(['id', 'ref_num', 'from', 'caesar_bank_to'])
 @Index(['id', 'ref_num', 'caesar_bank_from', 'caesar_bank_to'])
 @Index(['id', 'ref_num', 'from', 'to', 'caesar_bank_from', 'caesar_bank_to'])
+@Index(['id', 'ref_num', 'loan', 'is_loan_paid'])
 export class CashTransfer extends IntersectionType(
   IntersectionType(CashTransferWithDraw, CashTransferDeposit),
   CashTransferType,

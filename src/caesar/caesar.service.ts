@@ -18,7 +18,6 @@ import { plainToClass, plainToInstance } from 'class-transformer'
 import createQueryBuilderAndIncludeRelations from 'src/utils/queryBuilderWithRelations'
 import { UpdateCaesarDto } from 'src/caesar/dto/update-caesar.dto'
 import { OnEvent } from '@nestjs/event-emitter'
-import e from 'express'
 // import { ConfigService } from '@nestjs/config'
 
 @Injectable()

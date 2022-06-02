@@ -200,6 +200,27 @@ export class CashTransferService {
       },
     )
   }
+  async findAllRetailersLoanOfThisCaesar(caesarId: Caesar['id']) {
+    const data = await this.caesarService.findOne(caesarId, {
+      relations: ['dsp.retailer'],
+    })
+
+    const caesar = data.dsp.retailer.map(async (ea) => {
+      const ret = await this.caesarService.findOne(ea.caesar_wallet.id)
+      return ret
+    })
+    const ct = Promise.all(
+      caesar.map(async (ea) => {
+        const res = await this.findAll({
+          caesar: (await ea).id,
+          caesar_bank: '',
+          as: CashTransferAs.LOAN,
+        })
+        return res
+      }),
+    )
+    return ct
+  }
 
   async findByCTID(ref_num: string): Promise<CashTransfer> {
     const id = await this.cashTransferRepository.findOne(

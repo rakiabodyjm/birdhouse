@@ -318,13 +318,18 @@ export class CaesarService {
     )
   }
   findOne<T = GetCaesarDto>(accountQuery: T): Promise<Caesar>
-  findOne<T = string>(caesarId: T): Promise<Caesar>
-  findOne(id: GetCaesarDto | string) {
+  findOne<T = string>(
+    caesarId: T,
+    options?: { relations: string[] },
+  ): Promise<Caesar>
+  findOne(id: GetCaesarDto | string, options?: { relations: string[] }) {
     if (typeof id === 'string') {
       const caesar = this.caesarRepository
         .findOneOrFail(id, {
           // relations: ['admin', 'dsp', 'retailer', 'subdistributor', 'user'],
-          relations: this.relations,
+          relations: options?.relations
+            ? [...this.relations, ...options.relations]
+            : this.relations,
         })
         .then(async (res) => {
           const withExternalCaesar = await this.injectExternalCaesar(res).catch(

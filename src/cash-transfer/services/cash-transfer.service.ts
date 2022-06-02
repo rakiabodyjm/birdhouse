@@ -118,6 +118,18 @@ export class CashTransferService {
             ...(caesar_bank
               ? [
                   {
+                    to: {
+                      id: caesar,
+                    },
+                    ...commonQuery,
+                  },
+                  {
+                    from: {
+                      id: caesar,
+                    },
+                    ...commonQuery,
+                  },
+                  {
                     caesar_bank_to: caesar_bank,
                     ...commonQuery,
                   },
@@ -181,6 +193,7 @@ export class CashTransferService {
               to: ea?.to && (await this.caesarService.findOne(ea.to.id)),
               from: ea?.from && (await this.caesarService.findOne(ea.from.id)),
             })
+
             return returnValue
           }),
         )

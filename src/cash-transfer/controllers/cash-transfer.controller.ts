@@ -40,6 +40,11 @@ export class CashTransferController {
     return this.cashTransferService.findAll(getAllCashTransfer)
   }
 
+  @Get('all/:id')
+  findAllRetailersLoanOfThisCaesar(@Param('id') id: string) {
+    return this.cashTransferService.findAllRetailersLoanOfThisCaesar(id)
+  }
+
   @Get('get-backup-files')
   getBackupFiles() {
     const pathLoc = path.resolve(process.cwd(), 'data', 'cash-transfer')

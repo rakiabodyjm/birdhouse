@@ -155,12 +155,14 @@ export class CashTransfer extends IntersectionType(
   @Column('decimal', {
     precision: 18,
     scale: 4,
+    default: 0,
   })
   remaining_balance_from?: number
 
   @Column('decimal', {
     precision: 18,
     scale: 4,
+    default: 0,
   })
   remaining_balance_to: number
 

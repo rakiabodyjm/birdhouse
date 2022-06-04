@@ -588,7 +588,7 @@ export class CashTransferService {
 
     const caesarTo = to ? await this.caesarService.findOne(to) : undefined
 
-    /**
+    /**¸
      * deduct from balance of caesarFrom and caesarBankFrom
      */
 
@@ -634,74 +634,86 @@ export class CashTransferService {
       )
     }
 
-    const newLoanPayment: Partial<CashTransfer> = {
-      loan: id,
-      amount,
-      caesar_bank_from: caesarBankFrom,
-      caesar_bank_to: caesarBankTo,
-      to: caesarTo,
-      from: caesarFrom,
-      ref_num: await this.generateRefNum(CashTransferAs['LOAN PAYMENT']),
-      as: CashTransferAs['LOAN PAYMENT'],
-      remaining_balance_from:
-        caesarBankFromUpdated?.balance ||
-        caesarFromUpdated?.cash_transfer_balance,
-      remaining_balance_to:
-        caesarBankToUpdated?.balance || caesarToUpdated?.cash_transfer_balance,
-    }
+    // console.log(
+    //   caesarBankFromUpdated,
+    //   caesarFromUpdated,
+    //   caesarBankToUpdated,
+    //   caesarToUpdated,
+    // )
 
-    this.cashTransferRepository.save(newLoanPayment).then(async (res) => {
-      /**
-       *
-       */
-      if (totalPayable <= amount) {
-        await this.cashTransferRepository.save({
-          ...loan,
-          is_loan_paid: true,
-        })
-      }
-      /**
-       * clear caesar of balance
-       */
+    const newLoanPayment: Partial<CashTransfer> =
+      this.cashTransferRepository.create({
+        loan: id,
+        amount,
+        caesar_bank_from: caesarBankFrom,
+        caesar_bank_to: caesarBankTo,
+        to: caesarTo,
+        from: caesarFrom,
+        ref_num: await this.generateRefNum(CashTransferAs['LOAN PAYMENT']),
+        as: CashTransferAs['LOAN PAYMENT'],
 
-      if (
-        (
-          await this.cashTransferRepository.find({
-            where: [
-              {
-                to: caesarFrom.id,
-                is_loan_paid: false,
-                as: CashTransferAs.LOAN,
-              },
-              {
-                caesar_bank_to: caesarBankFrom?.id,
-                is_loan_paid: false,
-                as: CashTransferAs.LOAN,
-              },
-              {
-                caesar_bank_to: caesarFrom.id,
-                is_loan_paid: false,
-                as: CashTransferAs.LOAN,
-              },
-              {
-                to: caesarTo?.id,
-                is_loan_paid: false,
-                as: CashTransferAs.LOAN,
-              },
-            ],
+        remaining_balance_from:
+          caesarBankFromUpdated?.balance ||
+          caesarFromUpdated?.cash_transfer_balance,
+        remaining_balance_to:
+          caesarBankToUpdated?.balance ||
+          caesarToUpdated?.cash_transfer_balance,
+      })
+
+    return this.cashTransferRepository
+      .save(newLoanPayment)
+      .then(async (res) => {
+        /**
+         *
+         */
+        if (totalPayable <= amount) {
+          await this.cashTransferRepository.save({
+            ...loan,
+            is_loan_paid: true,
           })
-        ).length === 0
-      ) {
-        // console.log('caesar no longer has loan')
-        // this.caesarService.update(caesarFrom.id, {
-        //   has_loan: false,
-        // })
-        await this.caesarService.update(caesarFrom?.id, {
-          has_loan: false,
-        })
-      }
-      return res
-    })
+        }
+        /**
+         * clear caesar of balance
+         */
+
+        if (
+          (
+            await this.cashTransferRepository.find({
+              where: [
+                {
+                  to: caesarFrom.id,
+                  is_loan_paid: false,
+                  as: CashTransferAs.LOAN,
+                },
+                {
+                  caesar_bank_to: caesarBankFrom?.id,
+                  is_loan_paid: false,
+                  as: CashTransferAs.LOAN,
+                },
+                {
+                  caesar_bank_to: caesarFrom.id,
+                  is_loan_paid: false,
+                  as: CashTransferAs.LOAN,
+                },
+                {
+                  to: caesarTo?.id,
+                  is_loan_paid: false,
+                  as: CashTransferAs.LOAN,
+                },
+              ],
+            })
+          ).length === 0
+        ) {
+          // console.log('caesar no longer has loan')
+          // this.caesarService.update(caesarFrom.id, {
+          //   has_loan: false,
+          // })
+          await this.caesarService.update(caesarFrom?.id, {
+            has_loan: false,
+          })
+        }
+        return res
+      })
   }
 
   /**

@@ -666,6 +666,8 @@ export class CashTransferService {
         /**
          *
          */
+        console.log('newLoanPayment', res)
+
         if (totalPayable <= amount) {
           await this.cashTransferRepository.save({
             ...loan,
@@ -681,7 +683,7 @@ export class CashTransferService {
             await this.cashTransferRepository.find({
               where: [
                 {
-                  to: caesarFrom.id,
+                  to: caesarFrom?.id,
                   is_loan_paid: false,
                   as: CashTransferAs.LOAN,
                 },
@@ -691,7 +693,7 @@ export class CashTransferService {
                   as: CashTransferAs.LOAN,
                 },
                 {
-                  caesar_bank_to: caesarFrom.id,
+                  caesar_bank_to: caesarFrom?.id,
                   is_loan_paid: false,
                   as: CashTransferAs.LOAN,
                 },

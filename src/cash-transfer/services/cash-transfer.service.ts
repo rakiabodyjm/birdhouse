@@ -583,13 +583,13 @@ export class CashTransferService {
      */
     const caesarBankFrom = caesar_bank_from
       ? await this.caesarBankService.findOne(caesar_bank_from)
-      : null
+      : undefined
 
     const caesarFrom = from ? await this.caesarService.findOne(from) : undefined
 
     const caesarBankTo = caesar_bank_to
       ? await this.caesarBankService.findOne(caesar_bank_to)
-      : null
+      : undefined
 
     const caesarTo = to ? await this.caesarService.findOne(to) : undefined
 
@@ -698,24 +698,10 @@ export class CashTransferService {
                   is_loan_paid: false,
                   as: CashTransferAs.LOAN,
                 },
-                {
-                  caesar_bank_to: caesarFrom?.id,
-                  is_loan_paid: false,
-                  as: CashTransferAs.LOAN,
-                },
-                {
-                  to: caesarBankFrom?.id,
-                  is_loan_paid: false,
-                  as: CashTransferAs.LOAN,
-                },
               ],
             })
           ).length === 0
         ) {
-          // console.log('caesar no longer has loan')
-          // this.caesarService.update(caesarFrom.id, {
-          //   has_loan: false,
-          // })
           await this.caesarService.update(
             caesarFrom?.id ? caesarFrom.id : caesarBankFrom.caesar.id,
             {

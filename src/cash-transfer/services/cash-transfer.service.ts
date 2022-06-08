@@ -585,17 +585,13 @@ export class CashTransferService {
       ? await this.caesarBankService.findOne(caesar_bank_from)
       : null
 
-    const caesarFrom = await this.caesarService.findOne(
-      caesarBankFrom?.caesar?.id || from,
-    )
+    const caesarFrom = from ? await this.caesarService.findOne(from) : undefined
 
     const caesarBankTo = caesar_bank_to
       ? await this.caesarBankService.findOne(caesar_bank_to)
       : null
 
-    const caesarTo = await this.caesarService.findOne(
-      caesarBankTo?.caesar?.id || to,
-    )
+    const caesarTo = to ? await this.caesarService.findOne(to) : undefined
 
     /**¸
      * deduct from balance of caesarFrom and caesarBankFrom
@@ -654,10 +650,10 @@ export class CashTransferService {
       this.cashTransferRepository.create({
         loan: id,
         amount,
-        caesar_bank_from: caesarBankFrom,
-        caesar_bank_to: caesarBankTo,
-        to: caesarTo,
-        from: caesarFrom,
+        caesar_bank_from: caesarBankFrom || null,
+        caesar_bank_to: caesarBankTo || null,
+        to: caesarTo || null,
+        from: caesarFrom || null,
         ref_num: await this.generateRefNum(CashTransferAs['LOAN PAYMENT']),
         as: CashTransferAs['LOAN PAYMENT'],
 

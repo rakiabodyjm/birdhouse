@@ -604,7 +604,7 @@ export class CashTransferService {
 
     if (caesarFrom) {
       caesarFromUpdated = await this.caesarService.payCashTransferBalance(
-        caesarFrom.id,
+        caesarFrom,
         caesarFrom.cash_transfer_balance >= amount
           ? -amount
           : -caesarFrom.cash_transfer_balance,
@@ -623,7 +623,7 @@ export class CashTransferService {
      */
     if (caesarTo) {
       caesarToUpdated = await this.caesarService.payCashTransferBalance(
-        caesarTo.id,
+        caesarTo,
         amount,
       )
     }
@@ -634,7 +634,7 @@ export class CashTransferService {
      */
     if (caesarBankTo) {
       caesarBankToUpdated = await this.caesarBankService.pay(
-        caesarBankTo.id,
+        caesarBankTo,
         amount,
       )
     }
@@ -664,6 +664,7 @@ export class CashTransferService {
           caesarBankToUpdated?.balance ||
           caesarToUpdated?.cash_transfer_balance,
       })
+    console.log(newLoanPayment)
 
     return this.cashTransferRepository
       .save(newLoanPayment)
@@ -703,7 +704,7 @@ export class CashTransferService {
                   as: CashTransferAs.LOAN,
                 },
                 {
-                  to: caesarTo?.id,
+                  to: caesarFrom?.id,
                   is_loan_paid: false,
                   as: CashTransferAs.LOAN,
                 },
@@ -715,9 +716,12 @@ export class CashTransferService {
           // this.caesarService.update(caesarFrom.id, {
           //   has_loan: false,
           // })
-          await this.caesarService.update(caesarFrom?.id, {
-            has_loan: false,
-          })
+          await this.caesarService.update(
+            caesarFrom?.id ? caesarFrom.id : caesarBankFrom.caesar.id,
+            {
+              has_loan: false,
+            },
+          )
         }
         return res
       })

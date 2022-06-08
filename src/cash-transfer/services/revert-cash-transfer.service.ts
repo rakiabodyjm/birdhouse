@@ -185,6 +185,10 @@ export class RevertCashTransferService {
       const loan = await this.findOne(id).then((res) => {
         return res
       })
+
+      /**
+       * get payments done to this loan
+       */
       const payments = (await this.getLoanPayments(loan)).reduce((acc, ea) => {
         return acc + ea?.amount || 0
       }, 0)
@@ -204,19 +208,17 @@ export class RevertCashTransferService {
         ? await this.caesarBankService.findOne(caesar_bank_from.id)
         : null
 
-      const caesarFrom = await this.caesarService.findOne(
-        caesarBankFrom?.caesar?.id || from.id,
-      )
+      const caesarFrom = from
+        ? await this.caesarService.findOne(from.id)
+        : undefined
 
       const caesarBankTo = caesar_bank_to
         ? await this.caesarBankService.findOne(caesar_bank_to.id)
         : null
 
-      const caesarTo = await this.caesarService.findOne(
-        caesarBankTo?.caesar?.id || to.id,
-      )
+      const caesarTo = to ? await this.caesarService.findOne(to.id) : undefined
 
-      /**
+      /**¸
        * deduct from balance of caesarFrom and caesarBankFrom
        */
 
@@ -228,7 +230,7 @@ export class RevertCashTransferService {
       if (caesarFrom) {
         caesarFromUpdated = await this.caesarService.payCashTransferBalance(
           caesarFrom.id,
-          caesarFrom.cash_transfer_balance >= amount
+          caesarFrom.cash_transfer_balance < amount
             ? amount
             : caesarFrom.cash_transfer_balance,
         )
@@ -261,6 +263,7 @@ export class RevertCashTransferService {
           -amount,
         )
       }
+
       await this.cashTransferService.findOne(id).then((res) =>
         this.cashTransferService.update(res.loan.id, {
           is_loan_paid: false,

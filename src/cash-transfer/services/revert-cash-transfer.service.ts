@@ -9,6 +9,7 @@ import { CreateLoanPaymentDto } from '../dto/cash-transfer/create-loan-payment.d
 import { CaesarBank } from '../entities/caesar-bank.entity'
 import { CashTransfer, CashTransferAs } from '../entities/cash-transfer.entity'
 import { CaesarBankService } from './caesar-bank.service'
+import { CashTransferService } from './cash-transfer.service'
 
 @Injectable()
 export class RevertCashTransferService {
@@ -16,7 +17,8 @@ export class RevertCashTransferService {
     @InjectRepository(CashTransfer)
     private cashTransferRepository: Repository<CashTransfer>,
     private caesarBankService: CaesarBankService,
-    private caesarService: CaesarService, // private actualCaesarService: ActualCaesarService,
+    private caesarService: CaesarService,
+    private cashTransferService: CashTransferService, // private actualCaesarService: ActualCaesarService,
     // @InjectRepository(TransferType)
     @InjectRepository(RevertCashTransfer)
     private revertCashTransferRepository: Repository<RevertCashTransfer>,
@@ -259,6 +261,11 @@ export class RevertCashTransferService {
           -amount,
         )
       }
+      await this.cashTransferService.findOne(id).then((res) =>
+        this.cashTransferService.update(res.loan.id, {
+          is_loan_paid: false,
+        }),
+      )
     }
 
     return this.cashTransferRepository.delete(id).then(async (res) => {

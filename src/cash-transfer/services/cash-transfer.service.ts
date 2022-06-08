@@ -58,6 +58,8 @@ export class CashTransferService {
       caesar_bank,
       account_type,
       as,
+      ref_num,
+      id,
     } = getAllCashTransfer
     let { loan } = getAllCashTransfer
     loan = typeof loan === 'string' ? await this.findOne(loan) : loan
@@ -78,6 +80,10 @@ export class CashTransferService {
       ...(loan && {
         loan,
       }),
+      ...(id && {
+        id,
+      }),
+      ...(ref_num && { ref_num }),
     }
 
     const finalQuery =
@@ -211,7 +217,6 @@ export class CashTransferService {
         const ret = (
           await this.findAll({
             caesar: (await ea).caesar_wallet.id,
-            caesar_bank: '',
             as: CashTransferAs.LOAN,
           })
         ).data

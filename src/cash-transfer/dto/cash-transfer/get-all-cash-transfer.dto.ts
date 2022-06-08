@@ -18,10 +18,16 @@ export class GetAllCashTransferDto extends PartialType(PaginateOptions) {
   caesar?: Caesar['id']
 
   @IsOptional()
+  @ExistsInDb(CashTransfer, 'id', {
+    message: `CashTransfer doesn't exist`,
+  })
+  id?: CashTransfer['id']
+
+  @IsOptional()
   @ExistsInDb(CaesarBank, 'id', {
     message: `Caesar Bank Entity doesn't exist`,
   })
-  caesar_bank: CaesarBank['id']
+  caesar_bank?: CaesarBank['id']
 
   // @ExistsInDb(TransferType, 'id', {
   //   message: `Transfer Type doesn't exist`,
@@ -59,6 +65,9 @@ export class GetAllCashTransferDto extends PartialType(PaginateOptions) {
 
   @IsOptional()
   date_from?: Date
+
+  @IsOptional()
+  ref_num?: CashTransfer['ref_num']
 
   @IsOptional()
   date_to?: Date

@@ -71,6 +71,7 @@ export class RevertCashTransferService {
     message,
     id,
   }: Partial<CashTransfer>) {
+    const bankFee = bank_charge || 0
     if (as === 'WITHDRAW') {
       const caesarTo = await this.caesarService.findOne(to.id)
       const caesarBankFrom = await this.caesarBankService.findOne(
@@ -119,7 +120,7 @@ export class RevertCashTransferService {
       const caesarTo = to ? await this.caesarService.findOne(to.id) : undefined
 
       const caesarBankFromUpdated = caesarBankFrom
-        ? await this.caesarBankService.pay(caesarBankFrom.id, amount)
+        ? await this.caesarBankService.pay(caesarBankFrom.id, amount + bankFee)
         : undefined
 
       const caesarFromUpdated = caesarFrom
@@ -150,11 +151,14 @@ export class RevertCashTransferService {
       const caesarTo = to ? await this.caesarService.findOne(to.id) : undefined
 
       const caesarBankFromUpdated = caesarBankFrom
-        ? await this.caesarBankService.pay(caesarBankFrom.id, amount)
+        ? await this.caesarBankService.pay(caesarBankFrom.id, amount + bankFee)
         : undefined
 
       const caesarFromUpdated = caesarFrom
-        ? await this.caesarService.payCashTransferBalance(caesarFrom.id, amount)
+        ? await this.caesarService.payCashTransferBalance(
+            caesarFrom.id,
+            amount + bankFee,
+          )
         : undefined
 
       const caesarBankToUpdated = caesarBankTo
@@ -162,13 +166,16 @@ export class RevertCashTransferService {
         : undefined
 
       const caesarToUpdated = caesarTo
-        ? await this.caesarService.payCashTransferBalance(caesarTo, -amount)
+        ? await this.caesarService.payCashTransferBalance(
+            caesarTo,
+            -amount + bankFee,
+          )
         : undefined
 
       await this.caesarService.update(
         caesarTo?.id || caesarBankTo?.caesar?.id,
         {
-          has_loan: true,
+          has_loan: false,
         },
       )
     }

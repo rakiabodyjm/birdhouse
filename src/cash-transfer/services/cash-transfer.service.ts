@@ -585,13 +585,17 @@ export class CashTransferService {
       ? await this.caesarBankService.findOne(caesar_bank_from)
       : null
 
-    const caesarFrom = from ? await this.caesarService.findOne(from) : undefined
+    const caesarFrom = await this.caesarService.findOne(
+      caesarBankFrom?.caesar?.id || from,
+    )
 
     const caesarBankTo = caesar_bank_to
       ? await this.caesarBankService.findOne(caesar_bank_to)
       : null
 
-    const caesarTo = to ? await this.caesarService.findOne(to) : undefined
+    const caesarTo = await this.caesarService.findOne(
+      caesarBankTo?.caesar?.id || to,
+    )
 
     /**¸
      * deduct from balance of caesarFrom and caesarBankFrom

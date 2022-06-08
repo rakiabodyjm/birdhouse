@@ -13,4 +13,7 @@ export class UpdateCashTransferDto {
 
   @IsOptional()
   description?: string
+
+  @IsOptional()
+  is_loan_paid?: boolean
 }

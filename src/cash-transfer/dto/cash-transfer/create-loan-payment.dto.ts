@@ -42,7 +42,7 @@ export class CreateLoanPaymentDto {
   })
   @ValidateIf((o) => !o.from || o.caesar_bank_from)
   @IsOptional()
-  caesar_bank_from?: any
+  caesar_bank_from?: CaesarBank['id']
 
   @ExistsInDb(Caesar, 'id', {
     message: `Caesar Account FROM not found`,

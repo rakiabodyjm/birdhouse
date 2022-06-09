@@ -704,7 +704,7 @@ export class CashTransferService {
                   as: CashTransferAs.LOAN,
                 },
                 {
-                  to: caesarFrom?.id,
+                  to: caesarBankFrom?.id,
                   is_loan_paid: false,
                   as: CashTransferAs.LOAN,
                 },

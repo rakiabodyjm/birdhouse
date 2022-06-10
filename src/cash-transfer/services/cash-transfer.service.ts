@@ -541,7 +541,74 @@ export class CashTransferService {
 
     return this.cashTransferRepository.save(newLoan)
   }
+  async reloan({
+    caesar_bank_from,
+    from,
+    caesar_bank_to,
+    to,
+    amount,
+    description,
+    bank_fee,
+    as,
+  }: CreateLoanTransferDto) {
+    /**
+     * find bank from and deduct amount + bank_fee
+     * and deduct from ultimate caesar balance
+     */
+    if ((caesar_bank_to && to) || (caesar_bank_from && from)) {
+      throw new Error(`Loan must only include one source and one destination`)
+    }
+    if (!(from || caesar_bank_from) || !(to || caesar_bank_to)) {
+      throw new Error(
+        `Must have one source account and one destination account`,
+      )
+    }
 
+    const caesarBankFrom = caesar_bank_from
+      ? await this.caesarBankService.findOne(caesar_bank_from)
+      : undefined
+
+    const caesarFrom = from ? await this.caesarService.findOne(from) : undefined
+
+    const caesarBankTo = caesar_bank_to
+      ? await this.caesarBankService.findOne(caesar_bank_to)
+      : undefined
+
+    const caesarTo = to ? await this.caesarService.findOne(to) : undefined
+
+    await this.caesarService.update(caesarTo?.id || caesarBankTo?.caesar?.id, {
+      has_loan: true,
+    })
+
+    const dateToday = new Date(Date.now())
+    let checkDate
+
+    if (dateToday.getHours() > 22 || dateToday.getDay() === 0) {
+      const date = dateToday.setDate(dateToday.getDate() + 1)
+      const newDay = new Date(date)
+      const hour = newDay.setHours(6, 0, 0)
+      const newHour = new Date(hour)
+      console.log(new Date(newDay).toLocaleString())
+      console.log(new Date(newHour).toLocaleString())
+      checkDate = newHour
+    }
+
+    const newLoan: Partial<CashTransfer> = {
+      amount,
+      caesar_bank_from: caesarBankFrom,
+      caesar_bank_to: caesarBankTo,
+      to: caesarTo,
+      from: caesarFrom,
+      description,
+      bank_charge: bank_fee,
+      as,
+      created_at: checkDate,
+      ref_num: await this.generateRefNum(as),
+      is_loan_paid: false,
+    }
+
+    return this.cashTransferRepository.save(newLoan)
+  }
   async loanPayment({
     id,
     amount,
@@ -673,6 +740,21 @@ export class CashTransferService {
          *
          */
         console.log('newLoanPayment', res)
+
+        if (loan.total_amount() > amount) {
+          const newAmount = loan.total_amount() - amount
+          const compoundedLoan: CreateLoanTransferDto = {
+            caesar_bank_from: caesar_bank_to,
+            amount: newAmount,
+            caesar_bank_to: caesar_bank_from,
+            description: loan.description,
+            as: CashTransferAs['LOAN'],
+            to: from,
+            from: to,
+            bank_fee: 0,
+          }
+          this.reloan(compoundedLoan)
+        }
 
         if (totalPayable <= amount) {
           await this.cashTransferRepository.save({

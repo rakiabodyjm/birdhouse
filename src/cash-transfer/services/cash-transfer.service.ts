@@ -753,6 +753,10 @@ export class CashTransferService {
             from: to,
             bank_fee: 0,
           }
+          await this.cashTransferRepository.save({
+            ...loan,
+            is_loan_paid: true,
+          })
           this.reloan(compoundedLoan)
         }
 

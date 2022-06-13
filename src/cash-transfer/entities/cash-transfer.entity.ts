@@ -23,6 +23,7 @@ export enum CashTransferAs {
   TRANSFER = 'TRANSFER',
   WITHDRAW = 'WITHDRAW',
   LOAN = 'LOAN',
+  LOAD = 'LOAD',
   'LOAN PAYMENT' = 'LOAN PAYMENT',
   // INTEREST = 'INTEREST',
   // 'BANK FEES' = 'BANK FEES',

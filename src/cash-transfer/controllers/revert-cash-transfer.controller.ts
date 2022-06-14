@@ -28,65 +28,11 @@ export class RevertCashTransferController {
     return this.findAll(getAllRevertCashTransfer)
   }
 
-  @Post('transfer/:id')
-  async transfer(@Param('id') cashTransferId: string) {
-    return this.revertCashTransferService
-      .transfer({
-        // ...createCashTransferDto,
-        ...(await this.cashTransferService.findOne(cashTransferId)),
-      })
-      .catch((err) => {
-        throw new BadRequestException(err.message)
-      })
-  }
-
   @Post('/:id')
   async revert(@Param('id') id: string) {
     console.log(this.cashTransferService.findOne(id))
     return this.revertCashTransferService
       .revert({ ...(await this.cashTransferService.findOne(id)) })
-      .catch((err) => {
-        throw new BadRequestException(err.message)
-      })
-  }
-
-  @Post('withdraw/:id')
-  async withdraw(@Param('id') cashTransferId: string) {
-    return this.revertCashTransferService
-      .withdraw({ ...(await this.cashTransferService.findOne(cashTransferId)) })
-      .catch((err) => {
-        throw new BadRequestException(err.message)
-      })
-  }
-
-  @Post('deposit/:id')
-  async deposit(@Param('id') cashTransferId: string) {
-    return this.revertCashTransferService
-      .deposit({
-        ...(await this.cashTransferService.findOne(cashTransferId)),
-      })
-      .catch((err) => {
-        throw new BadRequestException(err.message)
-      })
-  }
-
-  @Post('loan/:id')
-  async loan(@Param('id') cashTransferId: string) {
-    return this.revertCashTransferService
-      .loan({
-        ...(await this.cashTransferService.findOne(cashTransferId)),
-      })
-      .catch((err) => {
-        throw new BadRequestException(err.message)
-      })
-  }
-
-  @Post('loan-payment/:id')
-  async loanPayment(@Param('id') cashTransferId: string) {
-    return this.revertCashTransferService
-      .loanPayment({
-        ...(await this.cashTransferService.findOne(cashTransferId)),
-      })
       .catch((err) => {
         throw new BadRequestException(err.message)
       })

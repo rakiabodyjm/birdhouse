@@ -439,6 +439,54 @@ export class CashTransferService {
     }
   }
 
+  async load({
+    caesar_bank_from,
+    caesar_bank_to,
+    amount,
+    description,
+    as,
+    message,
+  }: CreateCashTransferDto) {
+    try {
+      if (!caesar_bank_to || !caesar_bank_from) {
+        throw new Error(`
+        Load must include one source and one destination account`)
+      }
+
+      const caesarBankFrom = caesar_bank_from
+        ? await this.caesarBankService.findOne(caesar_bank_from)
+        : undefined
+
+      const caesarBankTo = caesar_bank_to
+        ? await this.caesarBankService.findOne(caesar_bank_to)
+        : undefined
+
+      const caesarBankFromUpdated = caesarBankFrom
+        ? await this.caesarBankService.pay(caesarBankFrom.id, -amount)
+        : undefined
+
+      const caesarBankToUpdated = caesarBankTo
+        ? await this.caesarBankService.pay(caesarBankTo, amount)
+        : undefined
+
+      const newCashTransfer: Partial<CashTransfer> = {
+        amount,
+        as,
+        ref_num: await this.generateRefNum(as),
+        caesar_bank_from: caesarBankFrom,
+        caesar_bank_to: caesarBankTo,
+        remaining_balance_from: caesarBankFromUpdated?.balance,
+        remaining_balance_to: caesarBankToUpdated?.balance,
+        description,
+        message,
+      }
+
+      return this.cashTransferRepository.save(newCashTransfer)
+    } catch (err) {
+      throw err
+    }
+  }
+
   async loan({
     caesar_bank_from,
     from,
@@ -857,6 +905,7 @@ export class CashTransferService {
       LOAN: '-LN-',
       TRANSFER: '-TF-',
       WITHDRAW: '-WD-',
+      LOAD: '-LD-',
       'LOAN PAYMENT': '-LP-',
     }
     let ref_num: string

@@ -93,6 +93,21 @@ export class CashTransferController {
     }
   }
 
+  @Post('load')
+  async load(@Body() createCashTransferDto: CreateCashTransferDto) {
+    try {
+      const load = await this.cashTransferService.load({
+        ...createCashTransferDto,
+      })
+      return {
+        message: 'Load Successful',
+        transfer: load,
+      }
+    } catch (err) {
+      throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
+    }
+  }
+
   @Post('withdraw')
   async withdraw(@Body() createCashTransferDto: CreateCashTransferDto) {
     // return this.cashTransferService.withdraw({

@@ -167,7 +167,7 @@ export class CashTransferController {
         ...createLoanPayment,
       })
       return {
-        message: 'Loan Payment Successful',
+        message: 'Payment Successful',
         loanPayment: loanPayment,
       }
     } catch (err) {

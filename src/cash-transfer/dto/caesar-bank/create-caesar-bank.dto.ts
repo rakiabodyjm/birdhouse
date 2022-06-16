@@ -24,4 +24,7 @@ export class CreateCaesarBankDto {
 
   @IsOptional()
   account_number: string
+
+  @IsOptional()
+  balance: number
 }

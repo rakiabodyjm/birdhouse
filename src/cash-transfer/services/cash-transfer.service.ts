@@ -672,7 +672,7 @@ export class CashTransferService {
     }
 
     const loan = await this.findOne(id).then((res) => {
-      if (res.as !== CashTransferAs.LOAN || CashTransferAs.LOAD) {
+      if (res.as !== CashTransferAs.LOAN && res.as !== CashTransferAs.LOAD) {
         throw new Error(`Cash Transfer is not of type Loan || Load, cannot pay`)
       }
       return res

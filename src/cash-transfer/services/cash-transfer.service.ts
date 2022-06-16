@@ -217,7 +217,7 @@ export class CashTransferService {
         const ret = (
           await this.findAll({
             caesar: (await ea).caesar_wallet.id,
-            as: CashTransferAs.LOAN,
+            as: CashTransferAs.LOAN || CashTransferAs.LOAD,
           })
         ).data
         return ret

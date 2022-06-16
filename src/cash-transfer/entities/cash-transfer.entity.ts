@@ -201,6 +201,9 @@ export class CashTransfer extends IntersectionType(
 
   @Expose()
   interest() {
+    if (this.as === CashTransferAs.LOAD) {
+      return 0
+    }
     if (this.as !== CashTransferAs.LOAN) {
       return null
     }

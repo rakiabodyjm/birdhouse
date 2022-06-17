@@ -217,7 +217,26 @@ export class CashTransferService {
         const ret = (
           await this.findAll({
             caesar: (await ea).caesar_wallet.id,
-            as: CashTransferAs.LOAN || CashTransferAs.LOAD,
+            as: CashTransferAs.LOAN,
+          })
+        ).data
+        return ret
+      }),
+    )
+    return caesar.flatMap((ea) => ea)
+  }
+
+  async findAllRetailersLoadOfThisCaesar(caesarId: Caesar['id']) {
+    const data = await this.caesarService.findOne(caesarId, {
+      relations: ['dsp.retailer'],
+    })
+
+    const caesar = await Promise.all(
+      data.dsp.retailer.map(async (ea) => {
+        const ret = (
+          await this.findAll({
+            caesar: (await ea).caesar_wallet.id,
+            as: CashTransferAs.LOAD,
           })
         ).data
         return ret
@@ -692,6 +711,12 @@ export class CashTransferService {
     // if (amount > totalPayable) {
     //   throw new Error(`Payment exceeds total loan payable`)
     // }
+
+    let commission_company
+    let commission_dsp
+
+    const commission = loan.interest()
+    console.log(commission)
 
     /**
      * if caesar_bank_from only

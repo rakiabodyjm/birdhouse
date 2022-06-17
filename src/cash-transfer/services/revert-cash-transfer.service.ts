@@ -247,7 +247,7 @@ export class RevertCashTransferService {
 
       if (caesarFrom) {
         caesarFromUpdated = await this.caesarService.payCashTransferBalance(
-          caesarFrom.id,
+          caesarFrom,
           caesarFrom.cash_transfer_balance < amount
             ? amount
             : caesarFrom.cash_transfer_balance,
@@ -257,7 +257,7 @@ export class RevertCashTransferService {
       if (caesarBankFrom) {
         caesarBankFromUpdated = await this.caesarBankService.pay(
           caesarBankFrom,
-          caesarBankFrom.balance >= amount ? amount : caesarBankFrom.balance,
+          caesarBankFrom.balance < amount ? amount : caesarBankFrom.balance,
         )
       }
 
@@ -266,7 +266,7 @@ export class RevertCashTransferService {
        */
       if (caesarTo) {
         caesarToUpdated = await this.caesarService.payCashTransferBalance(
-          caesarTo.id,
+          caesarTo,
           -amount,
         )
       }
@@ -277,7 +277,7 @@ export class RevertCashTransferService {
        */
       if (caesarBankTo) {
         caesarBankToUpdated = await this.caesarBankService.pay(
-          caesarBankTo.id,
+          caesarBankTo,
           -amount,
         )
       }

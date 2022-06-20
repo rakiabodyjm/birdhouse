@@ -244,29 +244,29 @@ export class CashTransfer extends IntersectionType(
     //   // const firstDayCount = 1
     if (dateNow > dateLoan) {
       //   // const lastDayCount = whichShiftTo === 'second' ? 1 : 0.5
-      if (dateNow.getDay() - dateLoan.getDay() < 0) {
+      if (dateLoan.getDay() - dateNow.getDay() > 0) {
         return dayDiff - 1
       }
+
+      if (dayDiff === 0) {
+        //     // interestRate = whichShiftFrom === whichShiftTo ? 0.5 : 1
+        //     // return 1
+        return dayDiff + 1
+      }
+
+      //   // if (dayDiff === 1) {
+      //   //   interestRate += firstDayCount + lastDayCount
+      //   // }
+      //   // if (dayDiff >= 2) {
+      //   //   const endCountInterests = firstDayCount + lastDayCount
+      //   //   interestRate += endCountInterests + 1 * (dayDiff - 1)
+
+      //   //   // interestRate += dayDiff
+      //   // }
+
+      return Number(dayDiff)
     }
-    if (dayDiff === 0) {
-      //     // interestRate = whichShiftFrom === whichShiftTo ? 0.5 : 1
-      //     // return 1
-      return dayDiff + 1
-    }
-
-    //   // if (dayDiff === 1) {
-    //   //   interestRate += firstDayCount + lastDayCount
-    //   // }
-    //   // if (dayDiff >= 2) {
-    //   //   const endCountInterests = firstDayCount + lastDayCount
-    //   //   interestRate += endCountInterests + 1 * (dayDiff - 1)
-
-    //   //   // interestRate += dayDiff
-    //   // }
-
-    return Number(dayDiff)
-
-    // return Number(1)
+    return Number(1)
   }
 
   @Column({

@@ -712,12 +712,6 @@ export class CashTransferService {
     //   throw new Error(`Payment exceeds total loan payable`)
     // }
 
-    let commission_company
-    let commission_dsp
-
-    const commission = loan.interest()
-    console.log(commission)
-
     /**
      * if caesar_bank_from only
      */
@@ -785,6 +779,10 @@ export class CashTransferService {
     //   caesarBankToUpdated,
     //   caesarToUpdated,
     // )
+    const commission =
+      loan.amount >= 100000 && loan.total_amount() <= amount
+        ? await this.commissionSpecial(loan)
+        : await this.commissionDefault(loan)
 
     const newLoanPayment: Partial<CashTransfer> =
       this.cashTransferRepository.create({
@@ -796,6 +794,7 @@ export class CashTransferService {
         from: caesarFrom || null,
         ref_num: await this.generateRefNum(CashTransferAs['LOAN PAYMENT']),
         as: CashTransferAs['LOAN PAYMENT'],
+        commmision: commission,
 
         remaining_balance_from:
           caesarBankFromUpdated?.balance ||
@@ -924,6 +923,160 @@ export class CashTransferService {
     })
   }
 
+  private async commissionDefault(loan: CashTransfer) {
+    const interestAmount = loan.total_amount() - loan.amount
+    let commission_company: number
+    let commission_loaner: number
+
+    const dateNow = new Date(Date.now())
+    const dateLoan = new Date(loan.created_at)
+    const dateInterval = dateNow.getDate() - dateLoan.getDate()
+
+    let interestCompany = 0.4
+    let interestLoaner = 0.6
+
+    if (dateNow.getDay() === 0) {
+      interestCompany = interestCompany - 0.1
+      interestLoaner = interestLoaner + 0.1
+    }
+    if (dateInterval === 0) {
+      commission_company = interestAmount * interestCompany
+      commission_loaner = interestAmount * interestLoaner
+    }
+    if (dateInterval >= 1) {
+      commission_company = interestAmount * 0.5
+      commission_loaner = interestAmount * 0.5
+    }
+
+    const caesarBankFromC = loan.caesar_bank_from
+      ? await this.caesarBankService.findOne(
+          'E28663C9-4ED7-EC11-8CE8-00155D1CD40B',
+        )
+      : undefined
+
+    const caesarFromC = loan.from
+      ? await this.caesarService.findOne('2AD8779A-4ED7-EC11-8CE8-00155D1CD40B')
+      : undefined
+
+    const caesarBankFrom = loan.caesar_bank_from
+      ? await this.caesarBankService.findOne(loan.caesar_bank_from.id)
+      : undefined
+
+    const caesarFrom = loan.from
+      ? await this.caesarService.findOne(loan.from.id)
+      : undefined
+
+    let caesarFromUpdatedC
+    let caesarBankFromUpdatedC
+    let caesarFromUpdated
+    let caesarBankFromUpdated
+
+    if (caesarFromC) {
+      caesarFromUpdatedC = await this.caesarService.payCashTransferBalance(
+        caesarFromC,
+        commission_company,
+      )
+    }
+
+    if (caesarBankFromC) {
+      caesarBankFromUpdatedC = await this.caesarBankService.pay(
+        caesarBankFromC,
+        commission_company,
+      )
+    }
+    if (caesarFrom) {
+      caesarFromUpdated = await this.caesarService.payCashTransferBalance(
+        caesarFrom,
+        commission_loaner,
+      )
+    }
+
+    if (caesarBankFrom) {
+      caesarBankFromUpdated = await this.caesarBankService.pay(
+        caesarBankFrom,
+        commission_loaner,
+      )
+    }
+
+    return interestAmount
+  }
+
+  private async commissionSpecial(loan: CashTransfer) {
+    const interestAmount = loan.total_amount() - loan.amount
+    let commission_company: number
+    let commission_loaner: number
+
+    const dateNow = new Date(Date.now())
+    const dateLoan = new Date(loan.created_at)
+    const dateInterval = dateNow.getDate() - dateLoan.getDate()
+    let interestCompany = 0.6
+    let interestLoaner = 0.4
+
+    if (dateNow.getDay() === 0) {
+      interestCompany = interestCompany - 0.1
+      interestLoaner = interestLoaner + 0.1
+    }
+    if (dateInterval === 0) {
+      commission_company = interestAmount * interestCompany
+      commission_loaner = interestAmount * interestLoaner
+    }
+    if (dateInterval >= 1) {
+      commission_company = interestAmount * (interestCompany - 0.1)
+      commission_loaner = interestAmount * (interestLoaner + 0.1)
+    }
+
+    const caesarBankFromC = loan.caesar_bank_from
+      ? await this.caesarBankService.findOne(
+          'E28663C9-4ED7-EC11-8CE8-00155D1CD40B',
+        )
+      : undefined
+
+    const caesarFromC = loan.from
+      ? await this.caesarService.findOne('2AD8779A-4ED7-EC11-8CE8-00155D1CD40B')
+      : undefined
+
+    const caesarBankFrom = loan.caesar_bank_from
+      ? await this.caesarBankService.findOne(loan.caesar_bank_from.id)
+      : undefined
+
+    const caesarFrom = loan.from
+      ? await this.caesarService.findOne(loan.from.id)
+      : undefined
+
+    let caesarFromUpdatedC
+    let caesarBankFromUpdatedC
+    let caesarFromUpdated
+    let caesarBankFromUpdated
+
+    if (caesarFromC) {
+      caesarFromUpdatedC = await this.caesarService.payCashTransferBalance(
+        caesarFromC,
+        commission_company,
+      )
+    }
+
+    if (caesarBankFromC) {
+      caesarBankFromUpdatedC = await this.caesarBankService.pay(
+        caesarBankFromC,
+        commission_company,
+      )
+    }
+    if (caesarFrom) {
+      caesarFromUpdated = await this.caesarService.payCashTransferBalance(
+        caesarFrom,
+        commission_loaner,
+      )
+    }
+
+    if (caesarBankFrom) {
+      caesarBankFromUpdated = await this.caesarBankService.pay(
+        caesarBankFrom,
+        commission_loaner,
+      )
+    }
+
+    return interestAmount
+  }
   private async generateRefNum(as: CashTransferAs) {
     const keysRecord: Record<CashTransferAs, string> = {
       DEPOSIT: '-DP-',

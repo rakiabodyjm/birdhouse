@@ -244,7 +244,7 @@ export class CashTransfer extends IntersectionType(
     //   // const firstDayCount = 1
     if (dateNow > dateLoan) {
       //   // const lastDayCount = whichShiftTo === 'second' ? 1 : 0.5
-      if (dateNow.getDay() - dateLoan.getDay() > 0) {
+      if (dateLoan.getDay() - dateNow.getDay() > 0) {
         return dayDiff - 1
       }
 

@@ -210,7 +210,7 @@ export class CashTransfer extends IntersectionType(
     if (this.loan_paid) {
       return null
     }
-    if (this.override_interest) {
+    if (this.override_interest || this.override_interest === 0) {
       return this.override_interest
     }
 

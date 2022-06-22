@@ -779,10 +779,10 @@ export class CashTransferService {
     //   caesarBankToUpdated,
     //   caesarToUpdated,
     // )
-    const commission =
-      loan.amount >= 100000 && loan.total_amount() <= amount
-        ? await this.commissionSpecial(loan)
-        : await this.commissionDefault(loan)
+    // const commission =
+    //   loan.amount >= 100000 && loan.total_amount() <= amount
+    //     ? await this.commissionSpecial(loan)
+    //     : await this.commissionDefault(loan)
 
     const newLoanPayment: Partial<CashTransfer> =
       this.cashTransferRepository.create({
@@ -794,7 +794,7 @@ export class CashTransferService {
         from: caesarFrom || null,
         ref_num: await this.generateRefNum(CashTransferAs['LOAN PAYMENT']),
         as: CashTransferAs['LOAN PAYMENT'],
-        commmision: commission,
+        // commmision: commission,
 
         remaining_balance_from:
           caesarBankFromUpdated?.balance ||

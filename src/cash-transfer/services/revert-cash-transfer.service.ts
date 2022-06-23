@@ -72,6 +72,7 @@ export class RevertCashTransferService {
     from,
     message,
     id,
+    commmision,
   }: Partial<CashTransfer>) {
     const bankFee = bank_charge || 0
     if (as === 'WITHDRAW') {
@@ -199,7 +200,7 @@ export class RevertCashTransferService {
         },
       )
     }
-    if (as === 'LOAN PAYMENT') {
+    if (as === 'LOAD PAYMENT') {
       const loan = await this.findOne(id).then((res) => {
         return res
       })
@@ -282,6 +283,70 @@ export class RevertCashTransferService {
         )
       }
 
+      await this.cashTransferService.findOne(id).then((res) =>
+        this.cashTransferService.update(res.loan.id, {
+          is_loan_paid: false,
+        }),
+      )
+    }
+    if (as === 'LOAN PAYMENT') {
+      const loan = await this.findOne(id).then((res) => {
+        return res
+      })
+      const caesarBankFromC = await this.caesarBankService.findOne(
+        '1e12b708-c6f1-ec11-8cf8-00155d1cd40b',
+      )
+      const caesarBankFrom = caesar_bank_from
+        ? await this.caesarBankService.findOne(caesar_bank_from.id)
+        : undefined
+      const caesarBankTo = caesar_bank_to
+        ? await this.caesarBankService.findOne(caesar_bank_to.id)
+        : undefined
+      const caesarTo = to ? await this.caesarService.findOne(to.id) : undefined
+      const caesarFrom = from
+        ? await this.caesarService.findOne(from.id)
+        : undefined
+
+      let caesarBankFromUpdatedC
+      let caesarFromUpdated
+      let caesarBankFromUpdated
+      let caesarToUpdated
+      let caesarBankToUpdated
+
+      if (caesarBankFromC) {
+        caesarBankFromUpdatedC = await this.caesarBankService.pay(
+          caesarBankFromC,
+          -commmision,
+        )
+      }
+      if (caesarFrom) {
+        caesarFromUpdated = await this.caesarService.payCashTransferBalance(
+          caesarFrom,
+          caesarFrom.cash_transfer_balance < amount
+            ? amount
+            : caesarFrom.cash_transfer_balance,
+        )
+      }
+
+      if (caesarBankFrom) {
+        caesarBankFromUpdated = await this.caesarBankService.pay(
+          caesarBankFrom,
+          caesarBankFrom.balance < amount ? amount : caesarBankFrom.balance,
+        )
+      }
+      if (caesarTo) {
+        caesarToUpdated = await this.caesarService.payCashTransferBalance(
+          caesarTo,
+          -amount + commmision,
+        )
+      }
+
+      if (caesarBankTo) {
+        caesarBankToUpdated = await this.caesarBankService.pay(
+          caesarBankTo,
+          -amount + commmision,
+        )
+      }
       await this.cashTransferService.findOne(id).then((res) =>
         this.cashTransferService.update(res.loan.id, {
           is_loan_paid: false,

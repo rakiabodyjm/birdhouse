@@ -199,7 +199,7 @@ export class RevertCashTransferService {
         },
       )
     }
-    if (as === 'LOAN PAYMENT') {
+    if (as === 'LOAD PAYMENT') {
       const loan = await this.findOne(id).then((res) => {
         return res
       })

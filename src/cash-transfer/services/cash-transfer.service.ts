@@ -815,8 +815,14 @@ export class CashTransferService {
         caesar_bank_to: caesarBankTo || null,
         to: caesarTo || null,
         from: caesarFrom || null,
-        ref_num: await this.generateRefNum(CashTransferAs['LOAN PAYMENT']),
-        as: CashTransferAs['LOAN PAYMENT'],
+        ref_num:
+          loan.as === CashTransferAs.LOAN
+            ? await this.generateRefNum(CashTransferAs['LOAN PAYMENT'])
+            : await this.generateRefNum(CashTransferAs['LOAD PAYMENT']),
+        as:
+          loan.as === CashTransferAs.LOAN
+            ? CashTransferAs['LOAN PAYMENT']
+            : CashTransferAs['LOAD PAYMENT'],
         commmision: commission,
 
         remaining_balance_from:
@@ -1132,6 +1138,7 @@ export class CashTransferService {
       WITHDRAW: '-WD-',
       LOAD: '-LD-',
       'LOAN PAYMENT': '-LP-',
+      'LOAD PAYMENT': '-PM-',
     }
     let ref_num: string
     const date = new Date()

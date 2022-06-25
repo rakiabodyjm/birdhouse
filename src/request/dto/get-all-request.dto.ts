@@ -14,10 +14,16 @@ export class GetAllRequestDto extends PartialType(PaginateOptions) {
   id?: CashTransfer['id']
 
   @IsOptional()
+  description: string
+
+  @IsOptional()
   @ExistsInDb(CaesarBank, 'id', {
     message: `Caesar Bank Entity doesn't exist`,
   })
   caesar_bank?: CaesarBank['id']
+
+  @IsOptional()
+  amount: number
 
   @IsEnum(CashTransferAs)
   @IsOptional()
@@ -27,9 +33,9 @@ export class GetAllRequestDto extends PartialType(PaginateOptions) {
   @IsOptional()
   status: Status
 
-  @ExistsInDb(CashTransfer, 'id', {
-    message: `Loan doesn't exist`,
+  @ExistsInDb(CashTransfer, 'ref_num', {
+    message: `Cash Transfer doesn't exist`,
   })
   @IsOptional()
-  loan?: any
+  ct_ref?: any
 }

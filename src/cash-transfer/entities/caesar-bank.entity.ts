@@ -1,7 +1,6 @@
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { Bank } from 'src/cash-transfer/entities/bank.entity'
 import { CashTransfer } from 'src/cash-transfer/entities/cash-transfer.entity'
-import { Request } from 'src/request/entities/request.entity'
 import {
   Column,
   CreateDateColumn,
@@ -55,9 +54,6 @@ export class CaesarBank {
     (cashTransfer) => cashTransfer.caesar_bank_from,
   )
   cash_transfer_to: CashTransfer[]
-
-  @OneToMany((type) => Request, (request) => request.caesar_bank)
-  request: Request[]
 
   @Column('decimal', {
     precision: 18,

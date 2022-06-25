@@ -1,14 +1,9 @@
-import { Expose } from 'class-transformer'
-import { CaesarBank } from 'src/cash-transfer/entities/caesar-bank.entity'
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
   Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
@@ -25,6 +20,7 @@ export enum CashTransferAs {
 export enum Status {
   PENDING = 'PENDING',
   APPROVED = 'APPROVED',
+  DECLINED = 'DECLINED',
 }
 
 @Entity()
@@ -39,11 +35,8 @@ export class Request {
   })
   description?: string
 
-  @JoinColumn({
-    name: 'caesar_bank',
-  })
-  @ManyToOne(() => CaesarBank, (caesarBank) => caesarBank.request)
-  caesar_bank: CaesarBank
+  @Column()
+  caesar_bank: string
 
   @Column('decimal', {
     precision: 18,
@@ -61,18 +54,10 @@ export class Request {
   })
   status: Status
 
-  @JoinColumn({
-    name: 'bill_id',
-    referencedColumnName: 'id',
+  @Column({
+    nullable: true,
   })
-  @ManyToOne(() => Request, (req) => req.payments, {
-    createForeignKeyConstraints: false,
-  })
-  bill: Request
-
-  @Expose()
-  @OneToMany(() => Request, (req) => req.bill, {})
-  payments: Request[]
+  ct_ref: string
 
   @CreateDateColumn({
     type: 'datetime',

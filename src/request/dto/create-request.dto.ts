@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional } from 'class-validator'
+import { IsEnum, IsNotEmpty, IsNumber } from 'class-validator'
 import { CaesarBank } from 'src/cash-transfer/entities/caesar-bank.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
 import { CashTransferAs } from '../entities/request.entity'
@@ -9,9 +9,6 @@ export class CreateRequestDto {
   })
   @IsNumber()
   amount: number
-
-  @IsOptional()
-  description: string
 
   @IsEnum(CashTransferAs, {
     message: `Transaction Type AS required`,

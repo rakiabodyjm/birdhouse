@@ -15,6 +15,8 @@ export class RequestService {
     private requestRepo: Repository<Request>,
   ) {}
 
+  relations = ['caesar_bank']
+
   async create(createRequest: CreateRequestDto) {
     const newRequest = this.requestRepo.create(createRequest)
     return this.requestRepo.save(newRequest)
@@ -67,6 +69,7 @@ export class RequestService {
       },
       {
         where: commonQuery,
+        relations: [...this.relations],
         withDeleted: true,
       },
       (data) => {

@@ -1,9 +1,12 @@
+import { CaesarBank } from 'src/cash-transfer/entities/caesar-bank.entity'
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
   Index,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
@@ -35,8 +38,11 @@ export class Request {
   })
   description?: string
 
-  @Column()
-  caesar_bank: string
+  @JoinColumn({
+    name: 'caesar_bank',
+  })
+  @ManyToOne(() => CaesarBank, (caesarBank) => caesarBank.request)
+  caesar_bank: CaesarBank
 
   @Column('decimal', {
     precision: 18,

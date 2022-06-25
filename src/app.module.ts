@@ -22,6 +22,7 @@ import SQLConfig from 'root/ormconfig'
 import { SiteAccessGuard } from 'src/guards/site-access.guard'
 import { CashTransferModule } from './cash-transfer/cash-transfer.module'
 import { EventEmitterModule } from '@nestjs/event-emitter'
+import { RequestModule } from './request/request.module'
 @Module({
   imports: [
     EventEmitterModule.forRoot(),
@@ -62,6 +63,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter'
       inject: [ConfigService],
     }),
     CashTransferModule,
+    RequestModule,
   ],
   controllers: [AppController],
   providers: [

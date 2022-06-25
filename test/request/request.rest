@@ -1,0 +1,26 @@
+###POST
+POST http://localhost:6006/request
+Content-Type: application/json
+
+{
+    "amount": 4000,
+    "as": "LOAD",
+    "caesar_bank": "948C4361-53D7-EC11-8CE8-00155D1CD40B"
+}
+
+###UPDATE
+PATCH  http://localhost:6006/request/F39E8C2A-41F4-EC11-89A8-7085C26D3021
+Content-Type: application/json
+
+{
+   "status": "APPROVED"
+}
+
+###GET BY ID
+GET http://localhost:6006/request/AD019AF5-38F4-EC11-89A8-7085C26D3021
+
+###GET ALL
+http://localhost:6006/request
+
+###GET QUERY
+http://localhost:6006/request

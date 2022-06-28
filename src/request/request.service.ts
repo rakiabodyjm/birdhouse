@@ -38,7 +38,7 @@ export class RequestService {
   }
 
   async findAll(getAllRequest: GetAllRequestDto) {
-    const { amount, as, status, caesar_bank, ct_ref, id } = getAllRequest
+    const { amount, as, caesar_bank, ct_ref, id } = getAllRequest
 
     const commonQuery = {
       ...(as && {
@@ -46,9 +46,6 @@ export class RequestService {
       }),
       ...(amount && {
         amount,
-      }),
-      ...(status && {
-        status,
       }),
       ...(caesar_bank && {
         caesar_bank,

@@ -3,8 +3,8 @@ POST http://localhost:6006/request
 Content-Type: application/json
 
 {
-    "amount": 1000,
-    "as": "LOAD",
+    "amount": 5000,
+    "as": "LOAN",
     "caesar_bank": "B13D3555-24D8-EC11-8CEA-00155D1CD40B"
 }
 

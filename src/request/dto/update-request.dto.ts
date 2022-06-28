@@ -11,13 +11,7 @@ export class UpdateRequestDto extends PartialType(CreateRequestDto) {
   description?: string
 
   @IsOptional()
-  is_paid?: boolean
-
-  @IsEnum(Status, {
-    message: `Status should be PENDING or APPROVED`,
-  })
-  @IsOptional()
-  status?: Status
+  is_declined?: boolean
 
   @IsOptional()
   @IsEnum(CashTransferAs, {

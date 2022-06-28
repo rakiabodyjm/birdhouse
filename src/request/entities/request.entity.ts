@@ -1,3 +1,4 @@
+import { Expose } from 'class-transformer'
 import { CaesarBank } from 'src/cash-transfer/entities/caesar-bank.entity'
 import {
   Column,
@@ -27,7 +28,7 @@ export enum Status {
 }
 
 @Entity()
-@Index(['id'])
+@Index(['id', 'caesar_bank', 'ct_ref'])
 export class Request {
   @PrimaryGeneratedColumn('uuid')
   id: string
@@ -56,14 +57,25 @@ export class Request {
   as: CashTransferAs
 
   @Column({
-    default: Status.PENDING,
+    default: false,
   })
-  status: Status
+  is_declined: boolean
 
   @Column({
     nullable: true,
   })
   ct_ref: string
+
+  @Expose()
+  status() {
+    if (this.ct_ref) {
+      return Status.APPROVED
+    }
+    if (this.is_declined) {
+      return Status.PENDING
+    }
+    return Status.PENDING
+  }
 
   @CreateDateColumn({
     type: 'datetime',

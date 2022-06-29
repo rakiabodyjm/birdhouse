@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { plainToInstance } from 'class-transformer'
 import paginateFind from 'src/utils/paginate'
-import { Repository } from 'typeorm'
+import createQueryBuilderAndIncludeRelations from 'src/utils/queryBuilderWithRelations'
+import { Like, Repository } from 'typeorm'
 import { CreateRequestDto } from './dto/create-request.dto'
 import { GetAllRequestDto } from './dto/get-all-request.dto'
 import { UpdateRequestDto } from './dto/update-request.dto'
@@ -35,6 +36,34 @@ export class RequestService {
       ...request,
       ...updateRequest,
     })
+  }
+
+  search(params: GetAllRequestDto) {
+    const likeQuery = params?.searchQuery
+      ? Like(`%${params.searchQuery}%`)
+      : undefined
+
+    return paginateFind(
+      this.requestRepo,
+      {
+        ...params,
+      },
+      {
+        relations: [...this.relations],
+        ...(likeQuery && {
+          order: {
+            created_at: 'DESC',
+          },
+          where: [
+            {
+              amount: likeQuery,
+            },
+          ].map((ea) => ({
+            ...ea,
+          })),
+        }),
+      },
+    )
   }
 
   async findAll(getAllRequest: GetAllRequestDto) {

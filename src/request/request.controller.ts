@@ -46,4 +46,9 @@ export class RequestController {
   findAll(@Query() getAllRequest: GetAllRequestDto) {
     return this.requestService.findAll(getAllRequest)
   }
+
+  @Get('search')
+  search(@Query() getAllRequest: GetAllRequestDto) {
+    return this.requestService.search(getAllRequest)
+  }
 }

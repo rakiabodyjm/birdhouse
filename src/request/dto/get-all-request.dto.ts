@@ -8,10 +8,13 @@ import { CashTransferAs, Request, Status } from '../entities/request.entity'
 
 export class GetAllRequestDto extends PartialType(PaginateOptions) {
   @IsOptional()
+  searchQuery: string
+
+  @IsOptional()
   @ExistsInDb(Request, 'id', {
     message: `Request ID doesn't exist`,
   })
-  id?: CashTransfer['id']
+  id?: Request['id']
 
   @IsOptional()
   description: string
@@ -28,10 +31,6 @@ export class GetAllRequestDto extends PartialType(PaginateOptions) {
   @IsEnum(CashTransferAs)
   @IsOptional()
   as: CashTransferAs
-
-  @IsEnum(Status)
-  @IsOptional()
-  status: Status
 
   @ExistsInDb(CashTransfer, 'ref_num', {
     message: `Cash Transfer doesn't exist`,

@@ -77,7 +77,7 @@ export class Request {
       return Status.APPROVED
     }
     if (this.is_declined) {
-      return Status.PENDING
+      return Status.DECLINED
     }
     return Status.PENDING
   }

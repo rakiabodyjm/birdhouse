@@ -23,6 +23,7 @@ import { SiteAccessGuard } from 'src/guards/site-access.guard'
 import { CashTransferModule } from './cash-transfer/cash-transfer.module'
 import { EventEmitterModule } from '@nestjs/event-emitter'
 import { RequestModule } from './request/request.module'
+import { OtpModule } from './otp/otp.module'
 @Module({
   imports: [
     EventEmitterModule.forRoot(),
@@ -64,6 +65,7 @@ import { RequestModule } from './request/request.module'
     }),
     CashTransferModule,
     RequestModule,
+    OtpModule,
   ],
   controllers: [AppController],
   providers: [

@@ -1,0 +1,12 @@
+###POST
+POST http://localhost:6006/otp
+Content-Type: application/json
+
+{
+    "code_length": "6",
+    "pin_expire": "9000",
+    "from": "REALM1000",
+    "to": "+639454067666",
+    "request":"CBEA561F-ABF6-EC11-89A9-7085C26D3021",
+    "caesar_bank": "B13D3555-24D8-EC11-8CEA-00155D1CD40B"
+}

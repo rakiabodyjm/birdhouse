@@ -47,7 +47,7 @@ export class Request {
   @ManyToOne(() => CaesarBank, (caesarBank) => caesarBank.request)
   caesar_bank: CaesarBank
 
-  @OneToMany((type) => OTP, (otp) => otp.req_ref)
+  @OneToMany((type) => OTP, (otp) => otp.request)
   otp: OTP[]
 
   @Column('decimal', {

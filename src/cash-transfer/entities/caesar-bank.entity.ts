@@ -1,6 +1,7 @@
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { Bank } from 'src/cash-transfer/entities/bank.entity'
 import { CashTransfer } from 'src/cash-transfer/entities/cash-transfer.entity'
+import { OTP } from 'src/otp/entities/otp.entity'
 import { Request } from 'src/request/entities/request.entity'
 import {
   Column,
@@ -58,6 +59,9 @@ export class CaesarBank {
 
   @OneToMany((type) => Request, (request) => request.caesar_bank)
   request: Request[]
+
+  @OneToMany((type) => OTP, (otp) => otp.caesar_bank)
+  otp: OTP[]
 
   @Column('decimal', {
     precision: 18,

@@ -1,7 +1,9 @@
 import { IsNotEmpty, IsPhoneNumber } from 'class-validator'
+import { CaesarBank } from 'src/cash-transfer/entities/caesar-bank.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
 import { NoDuplicateInDb } from 'src/pipes/validation/NoDuplicateInDb'
 import { Request } from 'src/request/entities/request.entity'
+import { OTP } from '../entities/otp.entity'
 
 export class CreateOTPDto {
   @IsNotEmpty({
@@ -28,8 +30,16 @@ export class CreateOTPDto {
   @ExistsInDb(Request, 'id', {
     message: 'Request not found',
   })
-  @NoDuplicateInDb(Request, 'id', {
-    message: 'Request Id already used',
+  // @NoDuplicateInDb(OTP, 'request', {
+  //   message: 'Request Id already used',
+  // })
+  request: any
+
+  @IsNotEmpty({
+    message: `Caesar bank should not be empty`,
   })
-  req_ref: any
+  @ExistsInDb(CaesarBank, 'id', {
+    message: `Caesar bank from doesn't exist `,
+  })
+  caesar_bank: any
 }

@@ -1,3 +1,4 @@
+import { CaesarBank } from 'src/cash-transfer/entities/caesar-bank.entity'
 import { Request } from 'src/request/entities/request.entity'
 import {
   Column,
@@ -15,7 +16,7 @@ import {
 @Index(['id'])
 @Index(['id', 'to', 'from'])
 @Index(['id', 'request_id'])
-@Index(['id', 'req_ref'])
+@Index(['id', 'request'])
 export class OTP {
   @PrimaryGeneratedColumn('uuid')
   id: string
@@ -43,10 +44,16 @@ export class OTP {
   request_id: string
 
   @JoinColumn({
-    name: 'req_ref',
+    name: 'request',
   })
   @ManyToOne(() => Request, (request) => request.otp)
-  req_ref: Request
+  request: Request
+
+  @JoinColumn({
+    name: 'caesar_bank',
+  })
+  @ManyToOne(() => CaesarBank, (caesarBank) => caesarBank.otp)
+  caesar_bank: CaesarBank
 
   @Column({ default: false })
   verified: boolean

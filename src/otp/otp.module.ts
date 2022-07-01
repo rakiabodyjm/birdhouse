@@ -13,7 +13,9 @@ import { OtpService } from './otp.service'
         name: 'OTP_SERVICE',
         transport: Transport.REDIS,
         options: {
-          url: 'redis://localhost:6379',
+          url: 'redis://localhost:55000',
+          auth_pass: 'redispw',
+          no_ready_check: true,
         },
       },
     ]),

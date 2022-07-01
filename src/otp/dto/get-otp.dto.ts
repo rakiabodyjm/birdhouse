@@ -1,10 +1,10 @@
 import { PartialType } from '@nestjs/swagger'
 import { IsOptional } from 'class-validator'
 import { CaesarBank } from 'src/cash-transfer/entities/caesar-bank.entity'
+import { OTP } from 'src/otp/entities/otp.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
 import { Request } from 'src/request/entities/request.entity'
 import { PaginateOptions } from 'src/types/Paginated'
-import { OTP } from '../entities/otp.entity'
 
 export class GetAllOTPDto extends PartialType(PaginateOptions) {
   @IsOptional()

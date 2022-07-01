@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional } from 'class-validator'
+import { IsOptional } from 'class-validator'
 
 export class UpdateOTPDto {
   @IsOptional()
@@ -10,6 +10,6 @@ export class UpdateOTPDto {
   @IsOptional()
   code?: string
 
-  @IsNotEmpty()
+  @IsOptional()
   verified: boolean
 }

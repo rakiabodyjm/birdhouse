@@ -29,20 +29,15 @@ export class OtpService {
       request: request,
       caesar_bank: caesar_bank,
     }
-    const otp: Partial<OTP> = {
-      code_length: '6',
-      from: 'REALM1000',
-      pin_expire: '9000',
-      to: to,
-    }
     const saveOtp = this.otpRepository.create(newOtp)
-    console.log(otp)
     return await this.otpRepository.save(saveOtp).then(
-      await firstValueFrom(this.client.send({ cmd: 'send_otp' }, otp)).then(
-        async (res) => {
-          return res
-        },
-      ),
+      async (res) =>
+        await firstValueFrom(this.client.send({ cmd: 'send_otp' }, res)).then(
+          async (res) => {
+            console.log(res)
+            return res
+          },
+        ),
     )
   }
 
@@ -52,6 +47,24 @@ export class OtpService {
     } catch (err) {
       throw new Error(err.message)
     }
+  }
+
+  async verify(id: string, updateOTP: UpdateOTPDto) {
+    const request = await this.findOne(id)
+    return this.otpRepository
+      .save({
+        ...request,
+        ...updateOTP,
+      })
+      .then(
+        async (res) =>
+          await firstValueFrom(
+            this.client.send({ cmd: 'verify_otp' }, res),
+          ).then(async (res) => {
+            console.log(res)
+            return res
+          }),
+      )
   }
 
   async findAll(getAllOTP: GetAllOTPDto) {

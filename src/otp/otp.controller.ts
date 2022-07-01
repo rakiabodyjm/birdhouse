@@ -39,6 +39,11 @@ export class OtpController {
     }
   }
 
+  @Patch('/verify/:id')
+  verify(@Param('id') id: string, @Body() updateOTP: UpdateOTPDto) {
+    return this.otpService.verify(id, updateOTP)
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateOTP: UpdateOTPDto) {
     return this.otpService.update(id, updateOTP)

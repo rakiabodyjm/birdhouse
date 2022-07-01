@@ -1,5 +1,6 @@
 import { PartialType } from '@nestjs/swagger'
 import { IsOptional, IsEnum } from 'class-validator'
+import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { CaesarBank } from 'src/cash-transfer/entities/caesar-bank.entity'
 import { CashTransfer } from 'src/cash-transfer/entities/cash-transfer.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
@@ -20,10 +21,10 @@ export class GetAllRequestDto extends PartialType(PaginateOptions) {
   description: string
 
   @IsOptional()
-  @ExistsInDb(CaesarBank, 'id', {
-    message: `Caesar Bank Entity doesn't exist`,
+  @ExistsInDb(Caesar, 'id', {
+    message: `Caesar Entity doesn't exist`,
   })
-  caesar_bank?: CaesarBank['id']
+  caesar_bank?: Caesar['id']
 
   @IsOptional()
   amount: number

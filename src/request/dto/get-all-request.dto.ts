@@ -32,6 +32,9 @@ export class GetAllRequestDto extends PartialType(PaginateOptions) {
   @IsOptional()
   as: CashTransferAs
 
+  @IsOptional()
+  is_declined: boolean
+
   @ExistsInDb(CashTransfer, 'ref_num', {
     message: `Cash Transfer doesn't exist`,
   })

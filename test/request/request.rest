@@ -9,11 +9,11 @@ Content-Type: application/json
 }
 
 ###UPDATE
-PATCH  http://localhost:6006/request/ad019af5-38f4-ec11-89a8-7085c26d3021
+PATCH  http://localhost:6006/request/CCEA561F-ABF6-EC11-89A9-7085C26D3021
 Content-Type: application/json
 
 {
-    "caesar_bank": "B13D3555-24D8-EC11-8CEA-00155D1CD40B"
+    "is_declined": true
 }
 
 ###GET BY ID

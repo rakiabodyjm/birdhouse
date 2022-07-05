@@ -35,6 +35,7 @@ export class CaesarService {
     'user',
     'bank_accounts',
   ]
+  relationsAccount = ['subdistributor', 'dsp', 'retailer']
 
   @OnEvent('telco-account.created')
   async createFromAccount({
@@ -233,6 +234,15 @@ export class CaesarService {
       })
 
     return query
+  }
+
+  async subdToDsp(id: string) {
+    const subd = 'subdistributor'
+    const data = await this.findOne(id, {
+      relations: [`${subd}.dsp`],
+    })
+
+    return await Promise.all(data.subdistributor.dsp)
   }
 
   searchV2(params: SearchCaesarDto) {

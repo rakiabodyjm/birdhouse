@@ -63,6 +63,9 @@ export class CashTransferService {
     } = getAllCashTransfer
     let { loan } = getAllCashTransfer
     loan = typeof loan === 'string' ? await this.findOne(loan) : loan
+    const dateTo = new Date(getAllCashTransfer.date_to)
+    const date = dateTo.setDate(dateTo.getDate() + 1)
+    const newDay = new Date(date)
     const commonQuery = {
       ...(date_from && {
         created_at: MoreThanOrEqual(
@@ -70,9 +73,7 @@ export class CashTransferService {
         ),
       }),
       ...(date_to && {
-        created_at: LessThanOrEqual(
-          new SQLDateGenerator(getAllCashTransfer.date_to).getSQLDate(),
-        ),
+        created_at: LessThanOrEqual(new SQLDateGenerator(newDay).getSQLDate()),
       }),
       ...(as && {
         as,

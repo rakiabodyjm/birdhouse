@@ -14,6 +14,7 @@ import {
 import { CaesarBankService } from 'src/cash-transfer/services/caesar-bank.service'
 import paginateFind from 'src/utils/paginate'
 import {
+  Between,
   FindOneOptions,
   LessThanOrEqual,
   MoreThanOrEqual,
@@ -64,17 +65,29 @@ export class CashTransferService {
     let { loan } = getAllCashTransfer
     loan = typeof loan === 'string' ? await this.findOne(loan) : loan
     const dateTo = new Date(getAllCashTransfer.date_to)
-    const date = dateTo.setDate(dateTo.getDate() + 1)
-    const newDay = new Date(date)
+    const dateT = dateTo.setDate(dateTo.getDate() + 1)
+    const newDayTo = new Date(dateT)
+    const dateFrom = new Date(getAllCashTransfer.date_from)
+    const dateF = dateFrom.setDate(dateFrom.getDate() + 0)
+    const newDayFrom = new Date(dateF)
+    console.log('from', newDayFrom, 'sql', MoreThanOrEqual(newDayFrom))
     const commonQuery = {
-      ...(date_from && {
-        created_at: MoreThanOrEqual(
-          new SQLDateGenerator(getAllCashTransfer.date_from).getSQLDate(),
-        ),
-      }),
-      ...(date_to && {
-        created_at: LessThanOrEqual(new SQLDateGenerator(newDay).getSQLDate()),
-      }),
+      ...(date_from &&
+        !date_to && {
+          created_at: MoreThanOrEqual(
+            new SQLDateGenerator(newDayFrom).getSQLDate(),
+          ),
+        }),
+      ...(date_to &&
+        !date_from && {
+          created_at: LessThanOrEqual(
+            new SQLDateGenerator(newDayTo).getSQLDate(),
+          ),
+        }),
+      ...(date_to &&
+        date_from && {
+          created_at: Between(newDayFrom, newDayTo),
+        }),
       ...(as && {
         as,
       }),

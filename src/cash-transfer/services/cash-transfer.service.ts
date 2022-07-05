@@ -70,7 +70,7 @@ export class CashTransferService {
     const dateFrom = new Date(getAllCashTransfer.date_from)
     const dateF = dateFrom.setDate(dateFrom.getDate() + 0)
     const newDayFrom = new Date(dateF)
-    console.log('from', newDayFrom, 'sql', MoreThanOrEqual(newDayFrom))
+   
     const commonQuery = {
       ...(date_from &&
         !date_to && {

@@ -63,6 +63,9 @@ export class CashTransferService {
     } = getAllCashTransfer
     let { loan } = getAllCashTransfer
     loan = typeof loan === 'string' ? await this.findOne(loan) : loan
+    const dateTo = new Date(getAllCashTransfer.date_to)
+    const date = dateTo.setDate(dateTo.getDate() + 1)
+    const newDay = new Date(date)
     const commonQuery = {
       ...(date_from && {
         created_at: MoreThanOrEqual(
@@ -70,9 +73,7 @@ export class CashTransferService {
         ),
       }),
       ...(date_to && {
-        created_at: LessThanOrEqual(
-          new SQLDateGenerator(getAllCashTransfer.date_to).getSQLDate(),
-        ),
+        created_at: LessThanOrEqual(new SQLDateGenerator(newDay).getSQLDate()),
       }),
       ...(as && {
         as,
@@ -743,62 +744,63 @@ export class CashTransferService {
     const from_lp = from ? from : undefined
     const bankFrom_lp = caesar_bank_from ? caesar_bank_from : undefined
     const bankTo_lp = caesar_bank_to ? caesar_bank_to : undefined
-    const commission =
-      loan.amount >= 100000
-        ? await this.commissionSpecial(
-            loan,
-            to_lp,
-            from_lp,
-            bankFrom_lp,
-            bankTo_lp,
-            pay,
-          )
-        : await this.commissionDefault(
-            loan,
-            to_lp,
-            from_lp,
-            bankFrom_lp,
-            bankTo_lp,
-            pay,
-          )
-    // } else {
-    //   if (caesarFrom) {
-    //     caesarFromUpdated = await this.caesarService.payCashTransferBalance(
-    //       caesarFrom,
-    //       caesarFrom.cash_transfer_balance >= amount
-    //         ? -amount
-    //         : -caesarFrom.cash_transfer_balance,
-    //     )
-    //   }
-
-    //   if (caesarBankFrom) {
-    //     caesarBankFromUpdated = await this.caesarBankService.pay(
-    //       caesarBankFrom,
-    //       caesarBankFrom.balance >= amount ? -amount : -caesarBankFrom.balance,
-    //     )
-    //   }
-
-    //   /**
-    //    * add balance to caesarTo
-    //    */
-    //   if (caesarTo) {
-    //     caesarToUpdated = await this.caesarService.payCashTransferBalance(
-    //       caesarTo,
-    //       amount,
-    //     )
-    //   }
-
-    //   /**
-    //    * if destination is caesarBankTo
-    //    * add balance to caesarBankTo
-    //    */
-    //   if (caesarBankTo) {
-    //     caesarBankToUpdated = await this.caesarBankService.pay(
-    //       caesarBankTo,
-    //       amount,
-    //     )
-    //   }
+    // const commission =
+    //   loan.amount >= 100000
+    //     ? await this.commissionSpecial(
+    //         loan,
+    //         to_lp,
+    //         from_lp,
+    //         bankFrom_lp,
+    //         bankTo_lp,
+    //         pay,
+    //       )
+    //     : await this.commissionDefault(
+    //         loan,
+    //         to_lp,
+    //         from_lp,
+    //         bankFrom_lp,
+    //         bankTo_lp,
+    //         pay,
+    //       )
     // }
+    // else {
+    if (caesarFrom) {
+      caesarFromUpdated = await this.caesarService.payCashTransferBalance(
+        caesarFrom,
+        caesarFrom.cash_transfer_balance >= amount
+          ? -amount
+          : -caesarFrom.cash_transfer_balance,
+      )
+    }
+
+    if (caesarBankFrom) {
+      caesarBankFromUpdated = await this.caesarBankService.pay(
+        caesarBankFrom,
+        caesarBankFrom.balance >= amount ? -amount : -caesarBankFrom.balance,
+      )
+    }
+
+    /**
+     * add balance to caesarTo
+     */
+    if (caesarTo) {
+      caesarToUpdated = await this.caesarService.payCashTransferBalance(
+        caesarTo,
+        amount,
+      )
+    }
+
+    /**
+     * if destination is caesarBankTo
+     * add balance to caesarBankTo
+     */
+    if (caesarBankTo) {
+      caesarBankToUpdated = await this.caesarBankService.pay(
+        caesarBankTo,
+        amount,
+      )
+    }
+    //}
 
     // console.log(
     //   caesarBankFromUpdated,
@@ -823,7 +825,7 @@ export class CashTransferService {
           loan.as === CashTransferAs.LOAN
             ? CashTransferAs['LOAN PAYMENT']
             : CashTransferAs['LOAD PAYMENT'],
-        commmision: commission,
+        //commmision: commission,
 
         remaining_balance_from:
           caesarBankFromUpdated?.balance ||

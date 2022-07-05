@@ -94,8 +94,23 @@ export class CaesarController {
     })
   }
 
+  @Get('subdistributor/:id/:get')
+  subdToDSP(
+    @Param('id') id: string,
+    @Param('get') get: string,
+    @Query() searchCaesarDto: SearchCaesarDto,
+  ) {
+    if (get === 'search') {
+      return this.caesarService.searchV2(searchCaesarDto)
+    }
+    if (get === 'dsp') {
+      return this.caesarService.subdToDsp(id)
+    }
+  }
+
   @Get('search-v2')
   searchV2(@Query() searchCaesarDto: SearchCaesarDto) {
+    console.log(searchCaesarDto)
     return this.caesarService.searchV2(searchCaesarDto)
   }
 

@@ -301,13 +301,6 @@ export class CaesarService {
             },
             {
               retailer: {
-                dsp: {
-                  id: likeQuery,
-                },
-              },
-            },
-            {
-              retailer: {
                 e_bind_number: likeQuery,
               },
             },

@@ -76,7 +76,7 @@ export class RequestService {
         amount,
       }),
       ...(caesar_bank && {
-        caesar_bank,
+        caesar_bank: { caesar: caesar_bank },
       }),
       ...(ct_ref && {
         ct_ref,

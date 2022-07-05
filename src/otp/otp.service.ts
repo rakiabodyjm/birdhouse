@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs'
 import paginateFind from 'src/utils/paginate'
 import { Repository } from 'typeorm'
 import { CreateOTPDto } from './dto/create-otp.dto'
+import { CreateSMSDto } from './dto/create-sms.dto'
 import { GetAllOTPDto } from './dto/get-otp.dto'
 import { UpdateOTPDto } from './dto/update-otp.dto'
 import { OTP } from './entities/otp.entity'
@@ -39,6 +40,21 @@ export class OtpService {
           },
         ),
     )
+  }
+
+  async createSMS({ to, request, ct_ref }: CreateSMSDto) {
+    const sms = {
+      from: 'REALM1000',
+      to: to,
+      request: request,
+      ct_ref: ct_ref,
+    }
+    return await firstValueFrom(
+      this.client.send({ cmd: 'send_sms' }, sms),
+    ).then(async (res) => {
+      console.log(res)
+      return res
+    })
   }
 
   async findOne(id: string) {

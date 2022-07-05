@@ -15,6 +15,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { ErrorsInterceptor } from 'src/interceptors/error.interceptor'
 import { Repository } from 'typeorm'
 import { CreateOTPDto } from './dto/create-otp.dto'
+import { CreateSMSDto } from './dto/create-sms.dto'
 import { GetAllOTPDto } from './dto/get-otp.dto'
 import { UpdateOTPDto } from './dto/update-otp.dto'
 import { OTP } from './entities/otp.entity'
@@ -34,6 +35,16 @@ export class OtpController {
     try {
       const otp = await this.otpService.create({ ...createOTP })
       return otp
+    } catch (err) {
+      throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
+    }
+  }
+
+  @Post('sms')
+  async createSMS(@Body() createSMS: CreateSMSDto) {
+    try {
+      const sms = await this.otpService.createSMS({ ...createSMS })
+      return sms
     } catch (err) {
       throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
     }

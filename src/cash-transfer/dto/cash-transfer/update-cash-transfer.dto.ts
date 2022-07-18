@@ -1,4 +1,5 @@
 import { IsNumber, IsOptional } from 'class-validator'
+import { CashTransferAs } from 'src/cash-transfer/entities/cash-transfer.entity'
 
 export class UpdateCashTransferDto {
   @IsOptional()
@@ -16,4 +17,7 @@ export class UpdateCashTransferDto {
 
   @IsOptional()
   is_loan_paid?: boolean
+
+  @IsOptional()
+  as?: CashTransferAs
 }

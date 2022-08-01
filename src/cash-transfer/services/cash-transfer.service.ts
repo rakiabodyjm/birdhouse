@@ -70,7 +70,7 @@ export class CashTransferService {
     const dateFrom = new Date(getAllCashTransfer.date_from)
     const dateF = dateFrom.setDate(dateFrom.getDate() + 0)
     const newDayFrom = new Date(dateF)
-   
+
     const commonQuery = {
       ...(date_from &&
         !date_to && {
@@ -221,15 +221,20 @@ export class CashTransferService {
     )
   }
 
-  async findAllRetailersLoanOfThisCaesar(caesarId: Caesar['id']) {
-    const data = await this.caesarService.findOne(caesarId, {
+  async findAllRetailersLoanOfThisCaesar(
+    getAllCashTransfer: GetAllCashTransferDto,
+  ) {
+    const { caesar, date_from, date_to } = getAllCashTransfer
+    const data = await this.caesarService.findOne(caesar, {
       relations: ['dsp.retailer'],
     })
 
-    const caesar = await Promise.all(
+    const caesarData = await Promise.all(
       data.dsp.retailer.map(async (ea) => {
         const ret = (
           await this.findAll({
+            date_from: date_from,
+            date_to: date_to,
             caesar: (await ea).caesar_wallet.id,
             as: CashTransferAs.LOAN,
           })
@@ -237,18 +242,23 @@ export class CashTransferService {
         return ret
       }),
     )
-    return caesar.flatMap((ea) => ea)
+    return caesarData.flatMap((ea) => ea)
   }
 
-  async findAllRetailersLoadOfThisCaesar(caesarId: Caesar['id']) {
-    const data = await this.caesarService.findOne(caesarId, {
+  async findAllRetailersLoadOfThisCaesar(
+    getAllCashTransfer: GetAllCashTransferDto,
+  ) {
+    const { date_from, date_to, caesar } = getAllCashTransfer
+    const data = await this.caesarService.findOne(caesar, {
       relations: ['dsp.retailer'],
     })
 
-    const caesar = await Promise.all(
+    const caesarData = await Promise.all(
       data.dsp.retailer.map(async (ea) => {
         const ret = (
           await this.findAll({
+            date_from: date_from,
+            date_to: date_to,
             caesar: (await ea).caesar_wallet.id,
             as: CashTransferAs.LOAD,
           })
@@ -256,7 +266,7 @@ export class CashTransferService {
         return ret
       }),
     )
-    return caesar.flatMap((ea) => ea)
+    return caesarData.flatMap((ea) => ea)
   }
 
   async findByCTID(ref_num: string): Promise<CashTransfer> {
@@ -752,11 +762,6 @@ export class CashTransferService {
     // let commission
 
     // if (amount >= loan.total_amount()) {
-    const pay = amount ? amount : undefined
-    const to_lp = to ? to : undefined
-    const from_lp = from ? from : undefined
-    const bankFrom_lp = caesar_bank_from ? caesar_bank_from : undefined
-    const bankTo_lp = caesar_bank_to ? caesar_bank_to : undefined
     // const commission =
     //   loan.amount >= 100000
     //     ? await this.commissionSpecial(
@@ -967,184 +972,6 @@ export class CashTransferService {
     })
   }
 
-  private async commissionDefault(
-    loan: CashTransfer,
-    to_lp?,
-    from_lp?,
-    bankFrom_lp?,
-    bankTo_lp?,
-    pay?,
-  ) {
-    const interestAmount = loan.total_amount() - loan.amount
-    let commission_company: number
-    let commission_loaner: number
-
-    const dateNow = new Date(Date.now())
-    const dateLoan = new Date(loan.created_at)
-    const dateInterval = dateNow.getDate() - dateLoan.getDate()
-
-    let interestCompany = 0.4
-    let interestLoaner = 0.6
-
-    if (dateNow.getDay() === 0) {
-      interestCompany = interestCompany - 0.1
-      interestLoaner = interestLoaner + 0.1
-    }
-    if (dateInterval === 0) {
-      commission_company = interestAmount * interestCompany
-      commission_loaner = interestAmount * interestLoaner
-    }
-    if (dateInterval >= 1) {
-      commission_company = interestAmount * 0.5
-      commission_loaner = interestAmount * 0.5
-    }
-
-    const caesarBankFromC = await this.caesarBankService.findOne(
-      '1e12b708-c6f1-ec11-8cf8-00155d1cd40b',
-    )
-    const caesarBankFrom = bankFrom_lp
-      ? await this.caesarBankService.findOne(bankFrom_lp)
-      : undefined
-    const caesarBankTo = bankTo_lp
-      ? await this.caesarBankService.findOne(bankTo_lp)
-      : undefined
-    const caesarTo = to_lp ? await this.caesarService.findOne(to_lp) : undefined
-    const caesarFrom = from_lp
-      ? await this.caesarService.findOne(from_lp)
-      : undefined
-
-    let caesarBankFromUpdatedC
-    let caesarFromUpdated
-    let caesarBankFromUpdated
-    let caesarToUpdated
-    let caesarBankToUpdated
-
-    if (caesarBankFromC) {
-      caesarBankFromUpdatedC = await this.caesarBankService.pay(
-        caesarBankFromC,
-        commission_company,
-      )
-    }
-    if (caesarFrom) {
-      caesarFromUpdated = await this.caesarService.payCashTransferBalance(
-        caesarFrom,
-        caesarFrom.cash_transfer_balance >= pay
-          ? -pay
-          : -caesarFrom.cash_transfer_balance,
-      )
-    }
-
-    if (caesarBankFrom) {
-      caesarBankFromUpdated = await this.caesarBankService.pay(
-        caesarBankFrom,
-        caesarBankFrom.balance >= pay ? -pay : -caesarBankFrom.balance,
-      )
-    }
-    if (caesarTo) {
-      caesarToUpdated = await this.caesarService.payCashTransferBalance(
-        caesarTo,
-        pay - commission_company,
-      )
-    }
-
-    if (caesarBankTo) {
-      caesarBankToUpdated = await this.caesarBankService.pay(
-        caesarBankTo,
-        pay - commission_company,
-      )
-    }
-
-    return commission_company
-  }
-
-  private async commissionSpecial(
-    loan: CashTransfer,
-    to_lp?,
-    from_lp?,
-    bankFrom_lp?,
-    bankTo_lp?,
-    pay?,
-  ) {
-    const interestAmount = loan.total_amount() - loan.amount
-    let commission_company: number
-    let commission_loaner: number
-
-    const dateNow = new Date(Date.now())
-    const dateLoan = new Date(loan.created_at)
-    const dateInterval = dateNow.getDate() - dateLoan.getDate()
-    let interestCompany = 0.6
-    let interestLoaner = 0.4
-
-    if (dateNow.getDay() === 0) {
-      interestCompany = interestCompany - 0.1
-      interestLoaner = interestLoaner + 0.1
-    }
-    if (dateInterval === 0) {
-      commission_company = interestAmount * interestCompany
-      commission_loaner = interestAmount * interestLoaner
-    }
-    if (dateInterval >= 1) {
-      commission_company = interestAmount * 0.5
-      commission_loaner = interestAmount * 0.5
-    }
-
-    const caesarBankFromC = await this.caesarBankService.findOne(
-      '1e12b708-c6f1-ec11-8cf8-00155d1cd40b',
-    )
-    const caesarBankFrom = bankFrom_lp
-      ? await this.caesarBankService.findOne(bankFrom_lp)
-      : undefined
-    const caesarBankTo = bankTo_lp
-      ? await this.caesarBankService.findOne(bankTo_lp)
-      : undefined
-    const caesarTo = to_lp ? await this.caesarService.findOne(to_lp) : undefined
-    const caesarFrom = from_lp
-      ? await this.caesarService.findOne(from_lp)
-      : undefined
-
-    let caesarBankFromUpdatedC
-    let caesarFromUpdated
-    let caesarBankFromUpdated
-    let caesarToUpdated
-    let caesarBankToUpdated
-
-    if (caesarBankFromC) {
-      caesarBankFromUpdatedC = await this.caesarBankService.pay(
-        caesarBankFromC,
-        commission_company,
-      )
-    }
-    if (caesarFrom) {
-      caesarFromUpdated = await this.caesarService.payCashTransferBalance(
-        caesarFrom,
-        caesarFrom.cash_transfer_balance >= pay
-          ? -pay
-          : -caesarFrom.cash_transfer_balance,
-      )
-    }
-
-    if (caesarBankFrom) {
-      caesarBankFromUpdated = await this.caesarBankService.pay(
-        caesarBankFrom,
-        caesarBankFrom.balance >= pay ? -pay : -caesarBankFrom.balance,
-      )
-    }
-    if (caesarTo) {
-      caesarToUpdated = await this.caesarService.payCashTransferBalance(
-        caesarTo,
-        pay - commission_company,
-      )
-    }
-
-    if (caesarBankTo) {
-      caesarBankToUpdated = await this.caesarBankService.pay(
-        caesarBankTo,
-        pay - commission_company,
-      )
-    }
-
-    return commission_company
-  }
   private async generateRefNum(as: CashTransferAs) {
     const keysRecord: Record<CashTransferAs, string> = {
       DEPOSIT: '-DP-',

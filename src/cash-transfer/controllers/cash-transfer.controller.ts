@@ -42,20 +42,24 @@ export class CashTransferController {
     return this.cashTransferService.findAll(getAllCashTransfer)
   }
 
-  @Get('get-retailer-loan')
+  @Get('get-retailer-loan/:id/search')
   findAllRetailersLoanOfThisCaesar(
+    @Param('id') id: string,
     @Query() getAllCashTransfer: GetAllCashTransferDto,
   ) {
     return this.cashTransferService.findAllRetailersLoanOfThisCaesar(
+      id,
       getAllCashTransfer,
     )
   }
 
-  @Get('get-retailer-load')
+  @Get('get-retailer-load/:id/search')
   findAllRetailersLoadOfThisCaesar(
+    @Param('id') id: string,
     @Query() getAllCashTransfer: GetAllCashTransferDto,
   ) {
     return this.cashTransferService.findAllRetailersLoadOfThisCaesar(
+      id,
       getAllCashTransfer,
     )
   }

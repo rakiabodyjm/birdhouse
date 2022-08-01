@@ -222,10 +222,11 @@ export class CashTransferService {
   }
 
   async findAllRetailersLoanOfThisCaesar(
+    id: string,
     getAllCashTransfer: GetAllCashTransferDto,
   ) {
-    const { caesar, date_from, date_to } = getAllCashTransfer
-    const data = await this.caesarService.findOne(caesar, {
+    const { date_from, date_to } = getAllCashTransfer
+    const data = await this.caesarService.findOne(id, {
       relations: ['dsp.retailer'],
     })
 
@@ -233,10 +234,10 @@ export class CashTransferService {
       data.dsp.retailer.map(async (ea) => {
         const ret = (
           await this.findAll({
+            caesar: ea.caesar_wallet.id,
+            as: CashTransferAs.LOAN,
             date_from: date_from,
             date_to: date_to,
-            caesar: (await ea).caesar_wallet.id,
-            as: CashTransferAs.LOAN,
           })
         ).data
         return ret
@@ -246,10 +247,11 @@ export class CashTransferService {
   }
 
   async findAllRetailersLoadOfThisCaesar(
+    id: string,
     getAllCashTransfer: GetAllCashTransferDto,
   ) {
-    const { date_from, date_to, caesar } = getAllCashTransfer
-    const data = await this.caesarService.findOne(caesar, {
+    const { date_from, date_to } = getAllCashTransfer
+    const data = await this.caesarService.findOne(id, {
       relations: ['dsp.retailer'],
     })
 
@@ -257,10 +259,10 @@ export class CashTransferService {
       data.dsp.retailer.map(async (ea) => {
         const ret = (
           await this.findAll({
+            caesar: ea.caesar_wallet.id,
+            as: CashTransferAs.LOAD,
             date_from: date_from,
             date_to: date_to,
-            caesar: (await ea).caesar_wallet.id,
-            as: CashTransferAs.LOAD,
           })
         ).data
         return ret

@@ -180,4 +180,9 @@ export class CaesarController {
     console.log(updateCaesarDto)
     return this.caesarService.update(id, updateCaesarDto)
   }
+
+  @Get('get-retailer-caesar/:id')
+  findAllRetailersLoanOfThisCaesar(@Param('id') id: string) {
+    return this.caesarService.findAllRetailersCaesar(id)
+  }
 }

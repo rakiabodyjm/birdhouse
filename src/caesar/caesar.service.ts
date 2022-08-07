@@ -513,4 +513,18 @@ export class CaesarService {
   async deleteOne(id: string) {
     return this.caesarRepository.delete(id)
   }
+
+  async findAllRetailersCaesar(id: string) {
+    const data = await this.findOne(id, {
+      relations: ['dsp.retailer'],
+    })
+
+    const caesarData = await Promise.all(
+      data.dsp.retailer.map(async (ea) => {
+        //const ret = (await this.findAll({})).data
+        return ea
+      }),
+    )
+    return caesarData.flatMap((ea) => ea)
+  }
 }

@@ -40,15 +40,15 @@ export class OtpController {
     }
   }
 
-  @Post('sms')
-  async createSMS(@Body() createSMS: CreateSMSDto) {
-    try {
-      const sms = await this.otpService.createSMS({ ...createSMS })
-      return sms
-    } catch (err) {
-      throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
-    }
-  }
+  // @Post('sms')
+  // async createSMS(@Body() createSMS: CreateSMSDto) {
+  //   try {
+  //     const sms = await this.otpService.createSMS({ ...createSMS })
+  //     return sms
+  //   } catch (err) {
+  //     throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
+  //   }
+  // }
 
   @Patch('/verify/:id')
   verify(@Param('id') id: string, @Body() updateOTP: UpdateOTPDto) {

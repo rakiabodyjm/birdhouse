@@ -17,6 +17,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 import { SQLDateGenerator } from 'src/utils/SQLDateGenerator'
+import { OTP } from 'src/otp/entities/otp.entity'
 
 export enum CashTransferAs {
   DEPOSIT = 'DEPOSIT',
@@ -297,6 +298,9 @@ export class CashTransfer extends IntersectionType(
     default: () => 'CURRENT_TIMESTAMP',
   })
   original_created_at: Date
+
+  @OneToMany((type) => OTP, (otp) => otp.cash_transfer)
+  otp: OTP[]
 }
 
 const monthNames = [

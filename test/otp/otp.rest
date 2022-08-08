@@ -3,12 +3,7 @@ POST http://localhost:6006/otp
 Content-Type: application/json
 
 {
-    "code_length": "6",
-    "pin_expire": "600",
-    "from": "REALM1000",
-    "to": "+639454067666",
-    "request":"1C6CE1A8-F1F8-EC11-89B6-60F677E1F6FA",
-    "caesar_bank": "B13D3555-24D8-EC11-8CEA-00155D1CD40B"
+    "to": "+639286016803"
 }
 
 ###POST SMS
@@ -40,4 +35,4 @@ Content-Type: application/json
 }
 
 ### GET
-GET http://localhost:6006/otp/06C7073E-F0F8-EC11-89B6-60F677E1F6FA
+GET http://localhost:6006/otp

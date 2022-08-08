@@ -1,4 +1,5 @@
 import { CaesarBank } from 'src/cash-transfer/entities/caesar-bank.entity'
+import { CashTransfer } from 'src/cash-transfer/entities/cash-transfer.entity'
 import { Request } from 'src/request/entities/request.entity'
 import {
   Column,
@@ -21,13 +22,17 @@ export class OTP {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   code_length: string
 
   @Column()
   from: string
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   pin_expire: string
 
   @Column()
@@ -46,13 +51,25 @@ export class OTP {
   @JoinColumn({
     name: 'request',
   })
-  @ManyToOne(() => Request, (request) => request.otp)
+  @ManyToOne(() => Request, (request) => request.otp, {
+    nullable: true,
+  })
   request: Request
+
+  @JoinColumn({
+    name: 'cash_transfer',
+  })
+  @ManyToOne(() => CashTransfer, (cash_transfer) => cash_transfer.otp, {
+    nullable: true,
+  })
+  cash_transfer: CashTransfer
 
   @JoinColumn({
     name: 'caesar_bank',
   })
-  @ManyToOne(() => CaesarBank, (caesarBank) => caesarBank.otp)
+  @ManyToOne(() => CaesarBank, (caesarBank) => caesarBank.otp, {
+    nullable: true,
+  })
   caesar_bank: CaesarBank
 
   @Column({ default: false })

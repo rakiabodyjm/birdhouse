@@ -28,9 +28,9 @@ export class CreateOTPDto {
   @ExistsInDb(Request, 'id', {
     message: 'Request not found',
   })
-  // @NoDuplicateInDb(OTP, 'request', {
-  //   message: 'Request Id already used',
-  // })
+  @NoDuplicateInDb(OTP, 'request', {
+    message: 'Request Id already used',
+  })
   request?: any
 
   @IsOptional()

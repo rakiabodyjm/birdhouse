@@ -3,7 +3,8 @@ POST http://localhost:6006/otp
 Content-Type: application/json
 
 {
-    "to": "+639286016803"
+    "to": "+639286016803",
+    "cash_transfer": "AA711346-7114-ED11-8CFA-00155D1CD40B"
 }
 
 ###POST SMS
@@ -27,11 +28,11 @@ Content-Type: application/json
 }
 
 ### VERIFY
-PATCH http://localhost:6006/otp/verify/1D6CE1A8-F1F8-EC11-89B6-60F677E1F6FA
+PATCH http://localhost:6006/otp/verify/A7DB0266-CC16-ED11-AF0E-E86A64554969
 Content-Type: application/json
 
 {
-    "code":"756198"
+    "code":"721967"
 }
 
 ### GET

@@ -787,16 +787,19 @@ export class CashTransferService {
     if (caesarFrom) {
       caesarFromUpdated = await this.caesarService.payCashTransferBalance(
         caesarFrom,
-        caesarFrom.cash_transfer_balance >= amount
-          ? -amount
-          : -caesarFrom.cash_transfer_balance,
+        caesarFrom.cash_transfer_balance >= amount &&
+          amount === loan.total_amount()
+          ? -(amount - (amount - loan.amount))
+          : -amount,
       )
     }
 
     if (caesarBankFrom) {
       caesarBankFromUpdated = await this.caesarBankService.pay(
         caesarBankFrom,
-        caesarBankFrom.balance >= amount ? -amount : -caesarBankFrom.balance,
+        caesarBankFrom.balance >= amount && amount === loan.total_amount()
+          ? -(amount - (amount - loan.amount))
+          : -amount,
       )
     }
 

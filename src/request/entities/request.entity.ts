@@ -1,5 +1,6 @@
 import { Expose } from 'class-transformer'
 import { CaesarBank } from 'src/cash-transfer/entities/caesar-bank.entity'
+import { OTP } from 'src/otp/entities/otp.entity'
 import {
   Column,
   CreateDateColumn,
@@ -8,6 +9,7 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
@@ -44,6 +46,9 @@ export class Request {
   })
   @ManyToOne(() => CaesarBank, (caesarBank) => caesarBank.request)
   caesar_bank: CaesarBank
+
+  @OneToMany((type) => OTP, (otp) => otp.request)
+  otp: OTP[]
 
   @Column('decimal', {
     precision: 18,

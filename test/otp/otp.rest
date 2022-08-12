@@ -1,0 +1,39 @@
+###POST OTP
+POST http://localhost:6006/otp
+Content-Type: application/json
+
+{
+    "to": "+639286016803",
+    "cash_transfer": "AA711346-7114-ED11-8CFA-00155D1CD40B"
+}
+
+###POST SMS
+POST http://localhost:6006/otp/sms
+Content-Type: application/json
+
+{
+   
+    "from": "REALM1000",
+    "to": "+639487086674",
+    "request":"1C6CE1A8-F1F8-EC11-89B6-60F677E1F6FA",
+    "ct_ref": "220617-LN-8F592E9854E5"
+}
+
+### PATCH
+PATCH http://localhost:6006/otp/88989D66-EFF8-EC11-89B6-60F677E1F6FA
+Content-Type: application/json
+
+{
+    "verified": true
+}
+
+### VERIFY
+PATCH http://localhost:6006/otp/verify/A7DB0266-CC16-ED11-AF0E-E86A64554969
+Content-Type: application/json
+
+{
+    "code":"721967"
+}
+
+### GET
+GET http://localhost:6006/otp

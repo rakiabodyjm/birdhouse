@@ -34,7 +34,10 @@ export class OtpController {
   async create(@Body() createOTP: CreateOTPDto) {
     try {
       const otp = await this.otpService.create({ ...createOTP })
-      return otp
+      return {
+        message: 'OTP Sent',
+        otp: otp,
+      }
     } catch (err) {
       throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
     }
@@ -51,8 +54,16 @@ export class OtpController {
   // }
 
   @Patch('/verify/:id')
-  verify(@Param('id') id: string, @Body() updateOTP: UpdateOTPDto) {
-    return this.otpService.verify(id, updateOTP)
+  async verify(@Param('id') id: string, @Body() updateOTP: UpdateOTPDto) {
+    try {
+      const otp = await this.otpService.verify(id, updateOTP)
+      return {
+        message: 'OTP Verified',
+        otp: otp,
+      }
+    } catch (err) {
+      throw new HttpException(err.message, HttpStatus.BAD_REQUEST)
+    }
   }
 
   @Patch(':id')

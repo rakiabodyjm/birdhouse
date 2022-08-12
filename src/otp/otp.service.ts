@@ -41,6 +41,7 @@ export class OtpService {
       encodedParams.set('to', to)
 
       let res: any
+      let err: any
       if (to) {
         await axios({
           method: 'POST',
@@ -51,28 +52,29 @@ export class OtpService {
           },
           data: encodedParams,
         })
-          .then(function (response) {
-            res = response.data
+          .then(async function (response) {
+            res = await response.data
           })
-          .catch(function (error) {
-            console.error(error)
+          .catch(async function (error) {
+            err = error.response.data.error.description
           })
+      }
+      if (err) {
+        return { message: err }
       }
 
       if (res) {
-        const { request_id } = res
-        console.log(request_id)
-
         const params = {
           request_id: res.request_id,
           verified: false,
         }
         await axios
           .patch(`http://localhost:6006/otp/${id}`, params)
-          .then((res) => console.log(res.data))
+          .then((res) => {
+            return res
+          })
+        return { message: 'OTP SENT', otp }
       }
-
-      return otp
     })
   }
 
@@ -86,19 +88,20 @@ export class OtpService {
 
   async verify(id: string, updateOTP: UpdateOTPDto) {
     const request = await this.findOne(id)
+    let msg: any
     return this.otpRepository
       .save({
         ...request,
         ...updateOTP,
       })
       .then(async (otp) => {
+        console.log('1')
         const { id, request_id, code } = otp
         const encodedParams = new URLSearchParams()
         encodedParams.set('api_key', 'Gj_FQsupzdGQoAvQjwhTRVN6YArFor')
         encodedParams.set('api_secret', 'NIaGJYCQflUg7xTwbAtU5YmFUFp4CT')
         encodedParams.set('request_id', request_id)
         encodedParams.set('code', code)
-        console.log('otp', otp)
         axios({
           method: 'POST',
           url: 'https://api.movider.co/v1/verify/acknowledge',
@@ -108,22 +111,21 @@ export class OtpService {
           },
           data: encodedParams,
         })
-          .then(async function (response) {
-            console.log('VERIFIED')
-            console.log(response.data)
+          .then(function (response) {
             const params = {
               verified: true,
             }
-            await axios
-              .patch(`http://localhost:6006/otp/${id}`, params)
-              .then((res) => console.log('updated', res.data))
-              .catch((err) => console.log('error', err))
+            console.log('2')
+            axios.patch(`http://localhost:6006/otp/${id}`, params)
+            msg = { message: 'OTP Verified', response }
           })
           .catch(function (error) {
-            console.error(error)
+            msg = { message: error.response.data.error.description }
           })
-
-        return otp
+      })
+      .finally(() => {
+        console.log(msg)
+        return msg
       })
   }
 

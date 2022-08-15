@@ -33,8 +33,8 @@ export class OtpService {
     return await this.otpRepository.save(saveOtp).then(async (otp) => {
       const { to, from, id, code_length, pin_expire } = otp
       const encodedParams = new URLSearchParams()
-      encodedParams.set('api_key', 'Gj_FQsupzdGQoAvQjwhTRVN6YArFor')
-      encodedParams.set('api_secret', 'NIaGJYCQflUg7xTwbAtU5YmFUFp4CT')
+      encodedParams.set('api_key', process.env.OTP_API_KEY)
+      encodedParams.set('api_secret', process.env.OTP_API_SECRET)
       encodedParams.set('code_length', code_length)
       encodedParams.set('from', from)
       encodedParams.set('pin_expire', pin_expire)
@@ -98,8 +98,8 @@ export class OtpService {
         console.log('1')
         const { id, request_id, code } = otp
         const encodedParams = new URLSearchParams()
-        encodedParams.set('api_key', 'Gj_FQsupzdGQoAvQjwhTRVN6YArFor')
-        encodedParams.set('api_secret', 'NIaGJYCQflUg7xTwbAtU5YmFUFp4CT')
+        encodedParams.set('api_key', process.env.OTP_API_KEY)
+        encodedParams.set('api_secret', process.env.OTP_API_SECRET)
         encodedParams.set('request_id', request_id)
         encodedParams.set('code', code)
         axios({
@@ -130,6 +130,8 @@ export class OtpService {
   }
 
   async findAll(getAllOTP: GetAllOTPDto) {
+    console.log(process.env.OTP_API_KEY)
+    console.log(process.env.OTP_API_SECRET)
     const { to, from, id, request_id, request } = getAllOTP
 
     const commonQuery = {

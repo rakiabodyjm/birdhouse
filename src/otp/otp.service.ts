@@ -40,22 +40,54 @@ export class OtpService {
       encodedParams.set('pin_expire', pin_expire)
       encodedParams.set('to', to)
 
+      const ct = await axios.get(
+        `http://localhost:6006/cash-transfer/${cash_transfer}`,
+      )
+      let text: any
+      if (ct.data) {
+        text = `You will pay ${ct.data.total_amount} to ${ct.data.caesar_bank_from.description}. Please wait for the OTP.`
+      } else {
+        text = 'Please pay amount with 1% interest. Please wait for OTP'
+      }
+
+      const encodedParamSMS = new URLSearchParams()
+      encodedParamSMS.set('api_key', process.env.OTP_API_KEY)
+      encodedParamSMS.set('api_secret', process.env.OTP_API_SECRET)
+      encodedParamSMS.set('from', from)
+      encodedParamSMS.set('text', text)
+      encodedParamSMS.set('to', to)
       let res: any
       let err: any
-      if (to) {
+
+      if (to && ct.data) {
         await axios({
           method: 'POST',
-          url: 'https://api.movider.co/v1/verify',
+          url: 'https://api.movider.co/v1/sms',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/x-www-form-urlencoded',
           },
-          data: encodedParams,
+          data: encodedParamSMS,
         })
-          .then(async function (response) {
-            res = await response.data
+          .then(async function () {
+            console.log(text)
+            // await axios({
+            //   method: 'POST',
+            //   url: 'https://api.movider.co/v1/verify',
+            //   headers: {
+            //     Accept: 'application/json',
+            //     'Content-Type': 'application/x-www-form-urlencoded',
+            //   },
+            //   data: encodedParams,
+            // })
+            //   .then(async function (response) {
+            //     res = await response.data
+            //   })
+            //   .catch(async function (error) {
+            //     err = error.response.data.error.description
+            //   })
           })
-          .catch(async function (error) {
+          .catch(function (error) {
             err = error.response.data.error.description
           })
       }
@@ -98,8 +130,8 @@ export class OtpService {
         console.log('1')
         const { id, request_id, code } = otp
         const encodedParams = new URLSearchParams()
-        encodedParams.set('api_key', process.env.OTP_API_KEY)
-        encodedParams.set('api_secret', process.env.OTP_API_SECRET)
+        encodedParams.set('api_key', 'b0-bwhObcEMH4IJRGwTkpZMWjWqvSq')
+        encodedParams.set('api_secret', 'DQ3MF4h43GSP3a02RrP6xZR5_JSpsg')
         encodedParams.set('request_id', request_id)
         encodedParams.set('code', code)
         axios({
@@ -130,8 +162,6 @@ export class OtpService {
   }
 
   async findAll(getAllOTP: GetAllOTPDto) {
-    console.log(process.env.OTP_API_KEY)
-    console.log(process.env.OTP_API_SECRET)
     const { to, from, id, request_id, request } = getAllOTP
 
     const commonQuery = {

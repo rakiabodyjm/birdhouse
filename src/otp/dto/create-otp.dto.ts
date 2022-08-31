@@ -19,9 +19,9 @@ export class CreateOTPDto {
   @ExistsInDb(CashTransfer, 'id', {
     message: 'Transaction not found',
   })
-  @NoDuplicateInDb(OTP, 'cash_transfer', {
-    message: 'Transaction Id already used',
-  })
+  // @NoDuplicateInDb(OTP, 'cash_transfer', {
+  //   message: 'Transaction Id already used',
+  // })
   cash_transfer?: any
 
   @IsOptional()

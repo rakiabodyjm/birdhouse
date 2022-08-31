@@ -71,21 +71,21 @@ export class OtpService {
         })
           .then(async function () {
             console.log(text)
-            // await axios({
-            //   method: 'POST',
-            //   url: 'https://api.movider.co/v1/verify',
-            //   headers: {
-            //     Accept: 'application/json',
-            //     'Content-Type': 'application/x-www-form-urlencoded',
-            //   },
-            //   data: encodedParams,
-            // })
-            //   .then(async function (response) {
-            //     res = await response.data
-            //   })
-            //   .catch(async function (error) {
-            //     err = error.response.data.error.description
-            //   })
+            await axios({
+              method: 'POST',
+              url: 'https://api.movider.co/v1/verify',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
+              },
+              data: encodedParams,
+            })
+              .then(async function (response) {
+                res = await response.data
+              })
+              .catch(async function (error) {
+                err = error.response.data.error.description
+              })
           })
           .catch(function (error) {
             err = error.response.data.error.description

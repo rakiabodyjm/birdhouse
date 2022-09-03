@@ -43,7 +43,7 @@ async function bootstrap() {
     const topRight = `${chalk.blueBright(cliBoxes.double.topRight)}`
     const line = `${chalk
       .blueBright(cliBoxes.double.top)
-      .repeat(process.stdout.columns - 2)}`
+      .repeat(process.stdout.columns ? process.stdout.columns - 2 : 24)}`
     const topBorder = `${topLeft}${line}${topRight}`
     const bottomBorder = `${chalk.blueBright(
       cliBoxes.double.bottomLeft,

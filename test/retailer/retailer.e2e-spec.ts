@@ -1,17 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { INestApplication } from '@nestjs/common'
-import {
-  getConnectionToken,
-  getRepositoryToken,
-  TypeOrmModule,
-} from '@nestjs/typeorm'
-import SQLConfig from '../../ormconfig'
+import { TypeOrmModule } from '@nestjs/typeorm'
 import { RetailersModule } from '../../src/retailers/retailers.module'
 import { Repository } from 'typeorm'
 import { Retailer } from '../../src/retailers/entities/retailer.entity'
 import { RetailersService } from '../../src/retailers/retailers.service'
 import * as request from 'supertest'
-import { UserService } from 'src/user/user.service'
 import { AppModule } from 'src/app.module'
 
 describe('RetailersController (e2e)', () => {

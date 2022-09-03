@@ -2,7 +2,6 @@ import {
   BadRequestException,
   ClassSerializerInterceptor,
   Controller,
-  Delete,
   Get,
   InternalServerErrorException,
   Param,
@@ -34,7 +33,6 @@ export default class PendingTransactionController {
 
   @Get()
   findAll(@Query() getAllPendingTransactionDto: GetAllPendingTransactionDto) {
-    console.log('getAllPendingTransactionDto', getAllPendingTransactionDto)
     return this.pendingTransactionService.findAll(getAllPendingTransactionDto)
   }
 
@@ -56,7 +54,6 @@ export default class PendingTransactionController {
           return createEntityMessage(response, `Pending Transaction Approved`)
         })
         .catch((err) => {
-          console.log(err)
           throw new InternalServerErrorException(err)
         })
       return returner
@@ -80,8 +77,6 @@ export default class PendingTransactionController {
         ),
       )
       .catch((err) => {
-        console.log(err)
-
         throw new BadRequestException(err.message)
       })
   }
@@ -101,8 +96,6 @@ export default class PendingTransactionController {
         ),
       )
       .catch((err) => {
-        console.log(err)
-
         throw new BadRequestException(err.message)
       })
   }

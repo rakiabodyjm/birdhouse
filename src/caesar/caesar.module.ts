@@ -7,7 +7,6 @@ import { UserModule } from 'src/user/user.module'
 import { HttpModule } from '@nestjs/axios'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { CaesarApiService } from 'src/caesar/ceasar-api.service'
-import { CaesarApiController } from 'src/caesar/caesar-api.controller'
 @Module({
   imports: [
     // CacheModule.register(),
@@ -17,11 +16,6 @@ import { CaesarApiController } from 'src/caesar/caesar-api.controller'
     HttpModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
-        console.log(
-          'configService',
-          configService.get('REST_HOST'),
-          configService.get('SECRET_KEY'),
-        )
         return {
           baseURL: configService.get('REST_HOST'),
           headers: {
@@ -32,7 +26,7 @@ import { CaesarApiController } from 'src/caesar/caesar-api.controller'
       inject: [ConfigService],
     }),
   ],
-  controllers: [CaesarController, CaesarApiController],
+  controllers: [CaesarController],
   providers: [CaesarService, CaesarApiService],
   exports: [CaesarService],
 })

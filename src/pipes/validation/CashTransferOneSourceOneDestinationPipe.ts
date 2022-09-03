@@ -2,7 +2,6 @@ import { instanceToPlain } from 'class-transformer'
 import { ArgumentMetadata, PipeTransform } from '@nestjs/common'
 export class CashTransferOneSourceOneDestinationPipe implements PipeTransform {
   transform(value: any, data: ArgumentMetadata) {
-    // console.log(instanceToPlain(value), metadata)
     const obj = instanceToPlain(value)
     /**
      * only one source

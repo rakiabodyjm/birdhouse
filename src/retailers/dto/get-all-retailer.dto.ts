@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus } from '@nestjs/common'
 import { PartialType } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
-import { IsBooleanString, IsOptional, IsUUID } from 'class-validator'
+import { IsOptional, IsUUID } from 'class-validator'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
 import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'

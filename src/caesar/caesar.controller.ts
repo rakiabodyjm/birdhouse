@@ -77,7 +77,6 @@ export class CaesarController {
           password,
         })
         .catch((err) => {
-          // console.log('errmessage', err)
           throw new InternalServerErrorException(err.message)
         })
     } catch (err) {
@@ -110,7 +109,7 @@ export class CaesarController {
 
   @Get('search-v2')
   searchV2(@Query() searchCaesarDto: SearchCaesarDto) {
-    console.log(searchCaesarDto)
+    searchCaesarDto
     return this.caesarService.searchV2(searchCaesarDto)
   }
 
@@ -177,7 +176,7 @@ export class CaesarController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCaesarDto: UpdateCaesarDto) {
-    console.log(updateCaesarDto)
+    updateCaesarDto
     return this.caesarService.update(id, updateCaesarDto)
   }
 

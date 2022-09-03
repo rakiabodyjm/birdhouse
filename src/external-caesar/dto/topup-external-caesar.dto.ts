@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer'
-import { IsNotEmpty, IsNumber, IsNumberString } from 'class-validator'
+import { IsNotEmpty, IsNumber } from 'class-validator'
 import { ExternalCaesar } from 'src/external-caesar/entities/external-caesar.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
 

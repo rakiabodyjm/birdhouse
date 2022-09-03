@@ -168,7 +168,7 @@ export class UserController {
   addCustomRole(
     @Param('id') id: string,
     @Param('param') param: string,
-   ): Promise<User> {
+  ): Promise<User> {
     return this.userService
       .addCustomRole(id, param)
       .then((res) => {
@@ -183,7 +183,7 @@ export class UserController {
   removeCustomRole(
     @Param('id') id: string,
     @Param('param') param: string,
-   ): Promise<User> {
+  ): Promise<User> {
     return this.userService
       .removeCustomRole(id, param)
       .then((res) => {

@@ -42,7 +42,7 @@ describe('RetailersService', () => {
     }
     expect(
       await service.create({
-        ...retailer,
+        ...(retailer as CreateRetailerDto),
       }),
     ).toEqual({
       id: expect.any(Number),

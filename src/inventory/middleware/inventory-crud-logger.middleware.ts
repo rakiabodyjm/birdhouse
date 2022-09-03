@@ -15,11 +15,6 @@ export class InventoryCrudLoggerMiddleware implements NestMiddleware {
     private userService: UserService,
   ) {}
   async use(req: Request, res: Response, next: NextFunction) {
-    console.log('InventoryRequest...')
-    console.log(req.method)
-    console.log(JSON.stringify(req.body))
-    console.log(req?.headers)
-
     try {
       if (!req.headers.authorization) {
         throw new UnauthorizedException(`User not logged in`)
@@ -35,7 +30,6 @@ export class InventoryCrudLoggerMiddleware implements NestMiddleware {
       let user: User
       try {
         const userTokenData = this.authService.decode(bareToken)
-        console.log('userTokenData', userTokenData)
         user = await this.userService.findOne(
           (userTokenData as { user_id: string }).user_id,
         )

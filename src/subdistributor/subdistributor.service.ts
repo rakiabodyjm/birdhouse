@@ -37,8 +37,6 @@ export class SubdistributorService {
       ...newSubdistributor,
       area_id,
     })
-
-    console.log(subdistributor)
     const subdSave = await this.subdRepository.save(subdistributor)
 
     const userAccount = (await this.findOne(subdSave.id)).user
@@ -52,7 +50,6 @@ export class SubdistributorService {
   async findAll(
     params?: GetAllSubdistributor,
   ): Promise<Subdistributor[] | Paginated<Subdistributor>> {
-    // console.log(Object.keys(this.caesarService))
     if (!isNotEmptyObject(params)) {
       return await this.subdRepository
         .find({
@@ -158,7 +155,6 @@ export class SubdistributorService {
     try {
       const subd = await this.findOne(id)
       const deleteResult = await this.subdRepository.delete(subd.id)
-      console.log(deleteResult)
       return subd
     } catch (err) {
       throw new Error(err.message)

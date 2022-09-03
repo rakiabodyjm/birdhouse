@@ -1,6 +1,6 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
-import { IsArray, IsOptional } from 'class-validator'
+import { IsOptional } from 'class-validator'
 import { CreateAssetDto } from './create-asset.dto'
 
 export class UpdateAssetDto extends PartialType(CreateAssetDto) {

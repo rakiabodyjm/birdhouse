@@ -118,7 +118,6 @@ export class DspService {
     const dspToBeUpdated = await this.findOne(id)
       .then((res) => ({ ...res, ...updateDspDto } as Dsp))
       .catch((err) => {
-        console.log(err)
         throw err
       })
 

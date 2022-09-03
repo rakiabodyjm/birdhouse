@@ -10,7 +10,6 @@ import {
   Param,
   HttpException,
   HttpStatus,
-  UseGuards,
   Patch,
 } from '@nestjs/common'
 import { ExternalCaesarService } from './external-caesar.service'
@@ -21,7 +20,6 @@ import {
   TopUpExternalCaesarBodyDto,
   TopUpExternalCaesarParamDto,
 } from 'src/external-caesar/dto/topup-external-caesar.dto'
-import { PayCaesarSecretGuard } from 'src/external-caesar/guards/pay-caesar-secret.guard'
 import { ConfigService } from '@nestjs/config'
 import { UpdateExternalCaesarDto } from './dto/update-external-caesar.dto'
 

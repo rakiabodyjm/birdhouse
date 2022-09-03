@@ -23,9 +23,7 @@ export class AuthService {
        * Email credentials to be used
        */
       user = await this.usersService.findByEmail(email)
-      // console.log('user from email', user)
     } else {
-      // console.log('user from username', user)
       user = await this.usersService.findByUsername(email)
     }
 

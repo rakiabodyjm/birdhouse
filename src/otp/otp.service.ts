@@ -70,7 +70,6 @@ export class OtpService {
           data: encodedParamSMS,
         })
           .then(async function () {
-            console.log(text)
             await axios({
               method: 'POST',
               url: 'https://api.movider.co/v1/verify',
@@ -127,7 +126,6 @@ export class OtpService {
         ...updateOTP,
       })
       .then(async (otp) => {
-        console.log('1')
         const { id, request_id, code } = otp
         const encodedParams = new URLSearchParams()
         encodedParams.set('api_key', 'b0-bwhObcEMH4IJRGwTkpZMWjWqvSq')
@@ -147,7 +145,6 @@ export class OtpService {
             const params = {
               verified: true,
             }
-            console.log('2')
             axios.patch(`http://localhost:6006/otp/${id}`, params)
             msg = { message: 'OTP Verified', response }
           })
@@ -156,7 +153,6 @@ export class OtpService {
           })
       })
       .finally(() => {
-        console.log(msg)
         return msg
       })
   }

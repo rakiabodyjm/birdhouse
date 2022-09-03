@@ -18,7 +18,7 @@ module.exports = {
         SQL_SERVER_USERNAME: 'realm1000',
         SQL_SERVER_PASSWORD: 'Oasis2089$',
 
-        SQL_SERVER_DATABASE: 'alpha_db_staging',
+        SQL_SERVER_DATABASE: 'alpha_db',
         CLIENT_URL:
           'https://telco.ap.ngrok.io;http://telco.ap.ngrok.io;https://caesarcoin.ph;http://caesarcoin.ph;https://telco.caesarcoin.ph',
 

@@ -1,14 +1,11 @@
-import { Controller, Get, UseGuards } from '@nestjs/common'
+import { Controller, Get } from '@nestjs/common'
 import { AppService } from './app.service'
-import { AuthGuard } from '@nestjs/passport'
-import { Post, Req } from '@nestjs/common'
-import { Request } from 'express'
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  // @Get()
-  // getHello(): string {
-  //   return this.appService.getHello()
-  // }
+  @Get('')
+  sendWelcome() {
+    return `Welcome to REALM1000 Project Alpha`
+  }
 }

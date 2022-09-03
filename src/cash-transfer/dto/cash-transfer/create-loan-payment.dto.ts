@@ -1,17 +1,8 @@
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { CaesarBank } from 'src/cash-transfer/entities/caesar-bank.entity'
-import { Transform } from 'class-transformer'
-import {
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  Min,
-  Validate,
-  ValidateIf,
-} from 'class-validator'
+import { IsNotEmpty, IsNumber, IsOptional, ValidateIf } from 'class-validator'
 import { CashTransfer } from 'src/cash-transfer/entities/cash-transfer.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
-import { NoDuplicateInDb } from 'src/pipes/validation/NoDuplicateInDb'
 
 export class CreateLoanPaymentDto {
   @ExistsInDb(CashTransfer, 'id', {

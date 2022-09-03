@@ -158,7 +158,6 @@ export class TransactionService {
            * make payment to seller after successfully adding to buyer's
            * inventory
            */
-          console.log('reached payment')
           const payment1 = await this.caesarService.pay(
             sellerCaesar,
             costPriceBuyer * quantity,
@@ -167,7 +166,6 @@ export class TransactionService {
             buyerCaesar,
             -(costPriceBuyer * quantity),
           )
-          console.log('payment made', payment1.peso, ' to ', payment2.peso)
           return res
         })
         .then(async (res) => {
@@ -183,20 +181,18 @@ export class TransactionService {
               /**
                * reverse payment
                */
-              console.log(err)
+              err
 
               await this.caesarService
                 .pay(sellerCaesar, -(costPriceBuyer * quantity))
                 .catch((err) => {
-                  console.log(err)
-                  console.log('Payment Reversal to seller failed to Execute')
+                  err('Payment Reversal to seller failed to Execute')
                 })
                 .then(() => {
                   this.caesarService
                     .pay(buyerCaesar, costPriceBuyer * quantity)
                     .catch((err) => {
-                      console.log(err)
-                      console.log('Payment Reversal to buyer failed to Execute')
+                      throw err
                     })
                 })
               throw new Error(`Error Updating Inventory`)
@@ -274,12 +270,7 @@ export class TransactionService {
   //   caesarBuyerParam: Caesar | Caesar['id'],
   // ): Promise<false | Partial<Record<UserTypesAndUser, Caesar['id']>>> {
   //   try {
-  //     console.log(
-  //       'inventoryParam',
-  //       inventoryParam,
-  //       'caesarBuyerParam',
-  //       caesarBuyerParam,
-  //     )
+  //
   //     const inventory =
   //       typeof inventoryParam === 'string'
   //         ? await this.inventoryService.findOne(inventoryParam)
@@ -298,7 +289,7 @@ export class TransactionService {
   //       account_type,
   //       JSON.parse(inventory.asset.approval),
   //     ) as UserTypesAndUser[]
-  //     console.log(accountPermissions)
+  //     (accountPermissions)
   //     const caesarSeller = await this.caesarService.findOne(inventory.caesar.id)
   //     if (
   //       accountPermissions.length > 0 &&
@@ -315,7 +306,6 @@ export class TransactionService {
   //             account_type === 'retailer' &&
   //             caesarSeller.dsp
   //           ) {
-  //             console.log('I ran fro retailer dsp transact')
   //             returnResult['subdistributor'] = await this.dspService
   //               .findOne(caesarSeller.dsp.id)
   //               .then((res: Dsp): Subdistributor['id'] => {
@@ -331,13 +321,11 @@ export class TransactionService {
   //                 throw new Error(err)
   //               })
   //           } else if (currentAccountType === caesarSeller.account_type) {
-  //             console.log('I ran at ', currentAccountType)
   //             returnResult[currentAccountType] = caesarSeller.id
   //           }
   //         }),
   //       )
 
-  //       console.log('return result', returnResult)
   //       return isNotEmptyObject(returnResult) ? returnResult : false
   //     }
   //     return false
@@ -368,15 +356,7 @@ export class TransactionService {
 
     const accountPermissionCaesars: Partial<Record<UserTypesAndUser, Caesar>> =
       {}
-    console.log(
-      'permissions expected',
-      permissions,
-      ' since the buyer is of ',
-      caesar_buyer.account_type,
-      ' value ',
-      ' and the seller is a ',
-      caesarOwner.account_type,
-    )
+
     if (permissions.length > 0) {
       await Promise.all(
         permissions.map(async (accountPermission) => {
@@ -384,9 +364,6 @@ export class TransactionService {
             accountPermission === 'subdistributor' &&
             caesarOwner.account_type === 'dsp'
           ) {
-            console.log(
-              'Detected subdistributor in accountPermissions while account_type is dsp',
-            )
             accountPermissionCaesars['subdistributor'] = await this.dspService
               .findOne(caesarOwner.dsp.id)
               .then((res) => {
@@ -404,7 +381,6 @@ export class TransactionService {
       const returnObject = isNotEmptyObject(accountPermissionCaesars)
         ? accountPermissionCaesars
         : false
-      console.log('returnObject', returnObject)
       return returnObject
     } else {
       return false
@@ -429,7 +405,7 @@ export class TransactionService {
       indexOfAccountInHierarchy,
     )
 
-    // console.log(
+    // (
     //   'bosses',
     //   bosses,
     //   'indexOfAccountInHierarchy',

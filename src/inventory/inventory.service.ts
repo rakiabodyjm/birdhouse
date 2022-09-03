@@ -46,13 +46,10 @@ export class InventoryService {
       asset_id: asset.id,
       caesar_id: caesar.id,
     }).catch((err) => {
-      console.log('duplicateInventoryFonud ', err)
       return null
     })
 
     if (duplicateInventory) {
-      console.log('duplicateInventory found', duplicateInventory)
-
       return this.update(duplicateInventory.id, {
         ...duplicateInventory,
         quantity: duplicateInventory.quantity + quantity,

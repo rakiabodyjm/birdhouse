@@ -602,8 +602,6 @@ export class CashTransferService {
       const newDay = new Date(date)
       const hour = newDay.setHours(6, 0, 0)
       const newHour = new Date(hour)
-      console.log(new Date(newDay).toLocaleString())
-      console.log(new Date(newHour).toLocaleString())
       checkDate = newHour
     }
 
@@ -681,8 +679,6 @@ export class CashTransferService {
       const newDay = new Date(date)
       const hour = newDay.setHours(6, 0, 0)
       const newHour = new Date(hour)
-      console.log(new Date(newDay).toLocaleString())
-      console.log(new Date(newHour).toLocaleString())
       checkDate = newHour
     }
 
@@ -822,7 +818,7 @@ export class CashTransferService {
     }
     //}
 
-    // console.log(
+    // (
     //   caesarBankFromUpdated,
     //   caesarFromUpdated,
     //   caesarBankToUpdated,
@@ -854,7 +850,6 @@ export class CashTransferService {
           caesarBankToUpdated?.balance ||
           caesarToUpdated?.cash_transfer_balance,
       })
-    console.log(newLoanPayment)
 
     return this.cashTransferRepository
       .save(newLoanPayment)
@@ -862,7 +857,6 @@ export class CashTransferService {
         /**
          *
          */
-        console.log('newLoanPayment', res)
 
         if (loan.total_amount() > amount) {
           const newAmount = loan.total_amount() - amount

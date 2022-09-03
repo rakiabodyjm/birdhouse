@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common'
-import { EventEmitter2, OnEvent } from '@nestjs/event-emitter'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 import { InjectRepository } from '@nestjs/typeorm'
 import { isNotEmptyObject } from 'class-validator'
-import { Dsp } from 'src/dsp/entities/dsp.entity'
 import { GetAllRetailerDto } from 'src/retailers/dto/get-all-retailer.dto'
 import SearchRetailerDto from 'src/retailers/dto/search-retailer.dto'
 import { Retailer } from 'src/retailers/entities/retailer.entity'
@@ -77,7 +76,6 @@ export class RetailersService {
     // const newRetailer = this.retailerRepository.create(createRetailerOnlyDto)
     // const newRetailerSave = await this.retailerRepository.save(newRetailer)
     const retailerSave = await this.retailerRepository.save(newRetailer)
-    console.log(retailerSave)
     const userAccount = (await this.findOne(retailerSave.id)).user
     this.eventEmitter.emit('telco-account.created', {
       ...userAccount,
@@ -134,7 +132,6 @@ export class RetailersService {
         return res
       })
       .catch((err) => {
-        // console.log(err)
         // return undefined
         throw new Error(err.message)
       })

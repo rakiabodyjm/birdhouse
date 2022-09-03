@@ -1,10 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsEmail, IsNotEmpty, IsPhoneNumber, IsUUID } from 'class-validator'
+import { IsNotEmpty, IsPhoneNumber } from 'class-validator'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
 import { NoDuplicateInDb } from 'src/pipes/validation/NoDuplicateInDb'
 import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
-import { User } from 'src/user/entities/user.entity'
 import { Column } from 'typeorm'
 import { Retailer } from '../entities/retailer.entity'
 

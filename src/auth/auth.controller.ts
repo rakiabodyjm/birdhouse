@@ -47,7 +47,6 @@ export class AuthController {
   ) {
     const { email, remember_me } = loginBody
     const user = req.user
-    // console.log(req.user)
     try {
       const userRole = await this.userService.getRole(user.id)
 
@@ -111,7 +110,6 @@ export class AuthController {
         access_token_contents: this.jwtService.decode(access_token),
       }
     } catch (err) {
-      console.log(err)
       throw new HttpException(err.message, 401)
     }
   }

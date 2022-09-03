@@ -44,7 +44,6 @@ export class CaesarService {
     account_type: UserTypesAndUser
   }) {
     // const account = ['subdistribuor', 'retailer', 'dsp', 'admin', ].reduce(()=> , {} )
-    // console.log(userAccount, account)
     // const account_type = Object?.keys(
     //   userAccount?.user_type,
     // )[0] as UserTypesAndUser
@@ -91,7 +90,6 @@ export class CaesarService {
   } & Partial<Record<UserTypesAndUser, AccountTypes>> & {
       password: string
     }) {
-    console.log(userAccount, account)
     const account_type = Object.keys(account)[0] as UserTypesAndUser
 
     /**
@@ -435,9 +433,7 @@ export class CaesarService {
   }
 
   // update(id: string, updateCaesar: UpdateCaesarDto) {
-  //   console.log(updateCaesar)
   //   return this.findOne(id).then(async (res) => {
-  //     console.log(res)
   //     if (updateCaesar.banks) {
   //       updateCaesar.banks = [
   //         ...(await Promise.all(

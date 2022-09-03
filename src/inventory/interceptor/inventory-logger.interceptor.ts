@@ -56,26 +56,22 @@ export class InventoryLoggerInterceptor implements NestInterceptor {
     //   })
     //   next.handle().subscribe({
     //     error: async (err) => {
-    //       console.log('error handler')
     //       inventoryLog.remarks = err.message
     //       inventoryLog.created_at = new Date()
     //       await this.inventoryLogsRepository.save(inventoryLog)
     //       return throwError(() => err)
     //     },
     //     complete: async () => {
-    //       console.log('success  handler')
 
     //       inventoryLog.remarks = JSON.stringify('SUCCESS')
     //       inventoryLog.created_at = new Date()
     //       await this.inventoryLogsRepository.save(inventoryLog)
     //     },
     //   })
-    //   // console.log('handle1')
     //   // return next.handle()
     // }
-    // console.log('handle2')
     // return next.handle()
-    // // .pipe(tap(() => console.log(`After ... ${Date.now() - now}ms`)))
+    // // .pipe(tap(() => {}))
 
     const role = this.reflector.getAllAndOverride<Roles[]>(ROLES_KEY, [
       context.getHandler(),

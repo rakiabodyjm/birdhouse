@@ -24,10 +24,8 @@ async function bootstrap() {
       credentials: true,
       // origin: function (origin, callback) {
       //   if (process.env.CLIENT_URL.split(';').indexOf(origin) !== -1) {
-      //     // console.log('allowed cors for:', origin)
       //     callback(null, true)
       //   } else {
-      //     // console.log('blocked cors for:', origin)
       //     callback(new Error('Not allowed by CORS'))
       //   }
       // },
@@ -50,7 +48,6 @@ async function bootstrap() {
     const bottomBorder = `${chalk.blueBright(
       cliBoxes.double.bottomLeft,
     )}${line}${chalk.blueBright(cliBoxes.double.bottomRight)}`
-
     /**
      * Output
      */

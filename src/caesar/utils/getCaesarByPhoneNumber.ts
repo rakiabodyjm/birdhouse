@@ -1,5 +1,5 @@
 import { Caesar } from 'src/caesar/entities/caesar.entity'
-import { FindManyOptions, FindOneOptions, FindOperator } from 'typeorm'
+import { FindManyOptions, FindOperator } from 'typeorm'
 
 export const caesarPhoneNumberQuery = (
   searchString: FindOperator<string>,

@@ -1,11 +1,5 @@
 import { PartialType } from '@nestjs/swagger'
-import {
-  IsEmail,
-  IsIn,
-  IsNotEmpty,
-  IsOptional,
-  IsPhoneNumber,
-} from 'class-validator'
+import { IsEmail, IsIn, IsOptional, IsPhoneNumber } from 'class-validator'
 import { RolesArray, UserTypesAndUser } from 'src/types/Roles'
 import { CreateExternalCaesarDto } from './create-external-caesar.dto'
 

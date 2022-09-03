@@ -27,7 +27,6 @@ export class PendingTransactionService {
 
   // onModuleInit() {
   //   this.transactionService = this.moduleRef.get(TransactionService)
-  //   console.log(this.transactionService)
   // }
   relations: (keyof PendingTransaction)[] = [
     'inventory',
@@ -239,14 +238,12 @@ export class PendingTransactionService {
                 return res
               })
               .catch((err) => {
-                console.log('Failed updating all pendingTransactionPeers')
                 throw err
               })
 
             // return res
           })
           .catch((err) => {
-            console.log(err)
             throw err
           })
 

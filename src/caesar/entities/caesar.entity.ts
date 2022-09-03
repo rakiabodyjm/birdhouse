@@ -8,7 +8,7 @@ import { Retailer } from 'src/retailers/entities/retailer.entity'
 import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
 import { PendingTransaction } from 'src/transaction/entities/pending-transaction.entity'
 import { Transaction } from 'src/transaction/entities/transaction.entity'
-import { Roles, UserTypesAndUser } from 'src/types/Roles'
+import { UserTypesAndUser } from 'src/types/Roles'
 import { User } from 'src/user/entities/user.entity'
 import {
   Column,

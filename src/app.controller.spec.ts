@@ -15,8 +15,10 @@ describe('AppController', () => {
   })
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!')
+    it('should return "Welcome to REALM1000 Project Alpha"', () => {
+      expect(appController.sendWelcome()).toBe(
+        'Welcome to REALM1000 Project Alpha',
+      )
     })
   })
 })

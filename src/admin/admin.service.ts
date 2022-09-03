@@ -1,4 +1,4 @@
-import { Injectable, Query } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
 import { InjectRepository } from '@nestjs/typeorm'
 import { isNotEmptyObject } from 'class-validator'
@@ -84,7 +84,6 @@ export class AdminService {
   async remove(id: string) {
     const admin = await this.adminRepository.findOneOrFail(id)
     const deleteResult = await this.adminRepository.delete(id)
-    console.log('admin delete result', deleteResult)
     return admin
   }
 

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
-import { IsNotEmpty, IsOptional, IsUUID, MinLength } from 'class-validator'
+import { IsOptional, MinLength } from 'class-validator'
 import { Admin } from 'src/admin/entities/admin.entity'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { Dsp } from 'src/dsp/entities/dsp.entity'

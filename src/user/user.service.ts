@@ -232,7 +232,6 @@ export class UserService {
       // })
       return userQuery
     } catch (err) {
-      console.log(err)
       throw new Error(err.message)
     }
 
@@ -243,8 +242,6 @@ export class UserService {
 
   async delete(id: string): Promise<User> {
     const user = await this.userRepository.findOneOrFail(id)
-    const deleteResult = await this.userRepository.delete(id)
-    console.log(deleteResult)
     return user
   }
 

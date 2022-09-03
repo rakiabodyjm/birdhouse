@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator'
+import { IsNotEmpty, IsOptional, IsUUID } from 'class-validator'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
 import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'

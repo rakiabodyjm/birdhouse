@@ -22,7 +22,6 @@ import { createEntityMessage } from 'src/types/EntityMessage'
 import { Paginated } from 'src/types/Paginated'
 import Inventory from 'src/inventory/entities/inventory.entity'
 import { GetAllInventoryDto } from 'src/inventory/dto/get-all-inventory.dto'
-import { InventoryLoggerInterceptor } from 'src/inventory/interceptor/inventory-logger.interceptor'
 import { CreateInventoryDto } from 'src/inventory/dto/create-inventory.dto'
 import { ApiTags } from '@nestjs/swagger'
 import { AssetService } from 'src/asset/asset.service'
@@ -129,7 +128,6 @@ export class InventoryController {
       })
       .then((res) => createEntityMessage(res, `Inventory Updated`))
       .catch((err) => {
-        console.log(err)
         throw new BadRequestException(err.message)
       })
 

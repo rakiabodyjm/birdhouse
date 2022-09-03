@@ -1,4 +1,3 @@
-import { Transform } from 'class-transformer'
 import { IsNotEmpty, IsNumber, IsPositive, IsUUID } from 'class-validator'
 import Asset from 'src/asset/entities/asset.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'

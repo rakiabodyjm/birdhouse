@@ -30,7 +30,6 @@ export class RevertCashTransferController {
 
   @Post('/:id')
   async revert(@Param('id') id: string) {
-    console.log(this.cashTransferService.findOne(id))
     return this.revertCashTransferService
       .revert({ ...(await this.cashTransferService.findOne(id)) })
       .catch((err) => {

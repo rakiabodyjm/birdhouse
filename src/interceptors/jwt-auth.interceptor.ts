@@ -1,20 +1,17 @@
 import { JwtService } from '@nestjs/jwt'
-import { ExtractJwt } from 'passport-jwt'
 import { IS_PUBLIC_KEY } from '../auth/decorators/public.decorator'
 import {
   BadGatewayException,
   CallHandler,
   ExecutionContext,
-  Inject,
   Injectable,
   NestInterceptor,
   UnauthorizedException,
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { AuthGuard } from '@nestjs/passport'
 import { UserService } from 'src/user/user.service'
 import { User } from 'src/user/entities/user.entity'
-import { catchError, Observable, throwError } from 'rxjs'
+import { catchError, throwError } from 'rxjs'
 import { Request } from 'express'
 
 /**
@@ -36,7 +33,6 @@ export class JwtAuthInterceptor implements NestInterceptor {
   async intercept(context: ExecutionContext, next: CallHandler<any>) {
     try {
       const request: Request = context.switchToHttp().getRequest()
-      console.log('is this public', this.isPublic(context))
       if (this.isPublic(context)) {
         return next.handle()
       }
@@ -65,7 +61,6 @@ export class JwtAuthInterceptor implements NestInterceptor {
         throw new Error(`No Authorization`)
       }
     } catch (err) {
-      console.log('error', err.message)
       throw new UnauthorizedException(`Unauthorized`)
     }
   }

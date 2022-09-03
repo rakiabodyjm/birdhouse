@@ -1,11 +1,10 @@
 import { PartialType } from '@nestjs/swagger'
 import { IsOptional, IsEnum } from 'class-validator'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
-import { CaesarBank } from 'src/cash-transfer/entities/caesar-bank.entity'
 import { CashTransfer } from 'src/cash-transfer/entities/cash-transfer.entity'
 import { ExistsInDb } from 'src/pipes/validation/ExistsInDb'
 import { PaginateOptions } from 'src/types/Paginated'
-import { CashTransferAs, Request, Status } from '../entities/request.entity'
+import { CashTransferAs, Request } from '../entities/request.entity'
 
 export class GetAllRequestDto extends PartialType(PaginateOptions) {
   @IsOptional()

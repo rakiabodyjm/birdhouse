@@ -3,7 +3,6 @@ import { DspService } from './dsp.service'
 import { DspController } from './dsp.controller'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
-import { UserModule } from 'src/user/user.module'
 import { MapIdsModule } from 'src/map-ids/map-ids.module'
 
 @Module({

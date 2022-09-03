@@ -4,8 +4,6 @@ import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { Request } from 'express'
 import { User } from 'src/user/entities/user.entity'
-import { AuthGuard } from '@nestjs/passport'
-import { ExtractJwt } from 'passport-jwt'
 import { JwtService } from '@nestjs/jwt'
 
 /**
@@ -32,10 +30,6 @@ export class SiteAccessGuard implements CanActivate {
 
     const cookie = request.signedCookies.ra
     if (!cookie) {
-      // console.log(
-      //   'no Cookie found but are we allowing?: ',
-      //   !!user?.admin || this.isException(),
-      // )
       return !!user?.admin || this.isException() || this.isPublic()
     }
 

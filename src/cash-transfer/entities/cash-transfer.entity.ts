@@ -1,6 +1,6 @@
 import { RevertCashTransfer } from './revert-cash-transfer.entity'
 import { IntersectionType } from '@nestjs/swagger'
-import { Expose, Transform } from 'class-transformer'
+import { Expose } from 'class-transformer'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { CaesarBank } from 'src/cash-transfer/entities/caesar-bank.entity'
 import {
@@ -16,7 +16,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
-import { SQLDateGenerator } from 'src/utils/SQLDateGenerator'
 import { OTP } from 'src/otp/entities/otp.entity'
 
 export enum CashTransferAs {

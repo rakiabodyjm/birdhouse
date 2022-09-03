@@ -35,7 +35,6 @@ export class AssetController {
 
   @Post()
   create(@Body() createAssetDto: CreateAssetDto) {
-    console.log(createAssetDto)
     return this.assetsService
       .create(createAssetDto)
       .then((res) => createEntityMessage(res, 'Asset Created'))
@@ -72,7 +71,6 @@ export class AssetController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateAssetDto: UpdateAssetDto) {
-    console.log(updateAssetDto)
     return this.assetsService
       .update(id, updateAssetDto)
       .then((res) =>

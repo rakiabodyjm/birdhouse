@@ -4,7 +4,6 @@ import { ConfigService } from '@nestjs/config'
 import { AxiosResponse } from 'axios'
 import { plainToClass } from 'class-transformer'
 import { map } from 'rxjs'
-import { CreateWalletDto } from 'src/caesar/caesar-api.controller'
 
 @Injectable()
 export class CaesarApiService {
@@ -14,12 +13,9 @@ export class CaesarApiService {
   ) {
     // axiosService.axiosRef.defaults.baseURL =
     //   this.configService.get('CAESAR_HOST')
-    // console.log(axiosService.axiosRef.defaults.baseURL)
   }
 
-  createWallet(createWalletDto: CreateWalletDto) {
-    console.log('creating wallet', this.axiosService.axiosRef.defaults.baseURL)
-
+  createWallet(createWalletDto) {
     const {
       lastname,
       contact_no,

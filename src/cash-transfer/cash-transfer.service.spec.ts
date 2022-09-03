@@ -215,7 +215,7 @@ describe.only('\n[Withdraw]', () => {
       to: caesarTo?.id,
       description: `${caesarTo?.id} withdraw ${amount}`,
       caesar_bank_from: caesarBankFrom.id,
-      ref_num: `wt-1`,
+      bank_fee: 0,
     })
   })
   it('Should withdraw correct amount [caesar_bank -> caesar]', async () => {

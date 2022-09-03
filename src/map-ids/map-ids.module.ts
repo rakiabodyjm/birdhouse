@@ -1,9 +1,8 @@
-import { forwardRef, Module } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { MapIdsService } from './map-ids.service'
 import { MapIdsController } from './map-ids.controller'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { MapId } from 'src/map-ids/entities/map-id.entity'
-import { DspModule } from 'src/dsp/dsp.module'
 
 @Module({
   imports: [TypeOrmModule.forFeature([MapId])],

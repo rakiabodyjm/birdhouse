@@ -1,4 +1,4 @@
-import { Test, TestingModule } from '@nestjs/testing'
+import { TestingModule } from '@nestjs/testing'
 import { isNotEmptyObject } from 'class-validator'
 import SQLConfig from 'root/ormconfig'
 import { Admin } from 'src/admin/entities/admin.entity'
@@ -7,28 +7,22 @@ import { Caesar } from 'src/caesar/entities/caesar.entity'
 import { Dsp } from 'src/dsp/entities/dsp.entity'
 import { InventoryLog } from 'src/inventorylog/entities/inventory-logs.entity'
 import Inventory from 'src/inventory/entities/inventory.entity'
-import { InventoryModule } from 'src/inventory/inventory.module'
 import { MapId } from 'src/map-ids/entities/map-id.entity'
 import { Retailer } from 'src/retailers/entities/retailer.entity'
 import { Subdistributor } from 'src/subdistributor/entities/subdistributor.entity'
-import { SubdistributorModule } from 'src/subdistributor/subdistributor.module'
 import { PendingTransaction } from 'src/transaction/entities/pending-transaction.entity'
 import {
   Transaction,
   transactionAccountApprovals,
 } from 'src/transaction/entities/transaction.entity'
-import { TransactionService } from 'src/transaction/transaction.service'
 import { UserTypesAndUser } from 'src/types/Roles'
 import { User } from 'src/user/entities/user.entity'
 import {
   Connection,
-  ConnectionManager,
   ConnectionOptions,
   FindConditions,
-  Repository,
   createConnection,
 } from 'typeorm'
-import { SqlServerConnectionOptions } from 'typeorm/driver/sqlserver/SqlServerConnectionOptions'
 
 class MockTransactionService {
   constructor(
@@ -132,7 +126,6 @@ class MockTransactionService {
             account_type === 'retailer' &&
             caesarSeller.dsp
           ) {
-            console.log('I ran fro retailer dsp transact')
             returnResult['subdistributor'] = await this.dspService
               .findOne(caesarSeller.dsp.id)
               .then((res: Dsp): Subdistributor['id'] => {
@@ -148,7 +141,6 @@ class MockTransactionService {
                 throw err
               })
           } else if (currentAccountType === caesarSeller.account_type) {
-            console.log('I ran at ', currentAccountType)
             returnResult[currentAccountType] = caesarSeller.id
           }
         }),
@@ -160,7 +152,6 @@ class MockTransactionService {
 }
 
 describe('TransactionService testing', () => {
-  let module: TestingModule
   let transactionService: MockTransactionService
   let dbConnection: Connection
 
@@ -478,7 +469,6 @@ describe('TransactionService testing', () => {
 //               return res.subdistributor.id
 //             })
 //             .then(async (res: Subdistributor['id']) => {
-//               console.log('received subdsitributorId', res)
 //               return (
 //                 await this.caesarService.findOne({
 //                   subdistributor: res,
@@ -486,7 +476,6 @@ describe('TransactionService testing', () => {
 //               ).id
 //             })
 //         } else if (currentAccountType === caesarSeller.account_type) {
-//           console.log('I ran at ', currentAccountType)
 //           returnResult[currentAccountType] = caesarSeller.id
 //         }
 //       })
@@ -699,7 +688,6 @@ describe('TransactionService testing', () => {
 //         inventoryToBeBought.caesar.subdistributor.id,
 //       )
 
-//       // console.log(buyerCaesar)
 //       const result = await service.verifyIfApprovalNeeded(
 //         inventoryToBeBought,
 //         buyerCaesar,
@@ -740,7 +728,6 @@ describe('TransactionService testing', () => {
 //       expect(result['subdistributor']).toBeDefined()
 //       expect(result['dsp']).not.toBeDefined()
 
-//       console.log(result['subdistributor'])
 //       expect(result['subdistributor']).toEqual(inventoryItem.caesar.id)
 
 //       done()
@@ -800,7 +787,6 @@ describe('TransactionService testing', () => {
 //         caesarBuyer,
 //       )
 //       if (typeof result !== 'boolean') {
-//         console.log(result)
 //         expect(result.subdistributor).toBeTruthy()
 //         expect(result.subdistributor).toEqual(subdExpect.id)
 //         expect(result.dsp).toEqual(dspExpect.id)

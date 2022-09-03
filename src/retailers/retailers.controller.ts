@@ -23,7 +23,6 @@ import { GetAllRetailerDto } from 'src/retailers/dto/get-all-retailer.dto'
 import SearchRetailerDto from 'src/retailers/dto/search-retailer.dto'
 import * as csvToJson from 'csvtojson'
 import * as path from 'path'
-import * as fs from 'fs'
 import { CreateRetailerOnlyDto } from './dto/create-retailer-only.dto'
 @Controller('retailer')
 @ApiTags('Retailer Routes')
@@ -117,14 +116,10 @@ export class RetailersController {
             }
             dspCounts[ea.dsp_name] = dspCounts[ea.dsp_name] + 1
           })
-          console.log('filtered', filtered)
           return retailerFiltered
         },
       )
       .then((res) => {
-        console.log(dsps)
-        console.log(dspCounts)
-        console.log(res.length)
         return res
       })
     return retailers

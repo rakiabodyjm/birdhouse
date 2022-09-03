@@ -1,4 +1,3 @@
-import { CaesarService } from 'src/caesar/caesar.service'
 import { Caesar } from 'src/caesar/entities/caesar.entity'
 import Inventory from 'src/inventory/entities/inventory.entity'
 import { Transaction } from 'src/transaction/entities/transaction.entity'

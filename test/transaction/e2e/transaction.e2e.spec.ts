@@ -3,7 +3,6 @@ import { Test } from '@nestjs/testing'
 
 import { INestApplication } from '@nestjs/common'
 import { TransactionModule } from 'src/transaction/transaction.module'
-import { TransactionService } from 'src/transaction/transaction.service'
 
 describe('Cats', () => {
   let app: INestApplication

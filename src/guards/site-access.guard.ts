@@ -20,7 +20,7 @@ export class SiteAccessGuard implements CanActivate {
     private reflector: Reflector,
   ) {}
   context: ExecutionContext
-  exception = ['external-caesar']
+  exception = ['external-caesar', 'otp', 'cash-transfer']
 
   async canActivate(context: ExecutionContext) {
     this.context = context

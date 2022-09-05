@@ -22,4 +22,6 @@ ENV SQL_SERVER_PASSWORD=Demo_Password
 
 ENV SQL_SERVER_DATABASE=alpha_db
 
+ENV REST_HOST=http://localhost:6006
+
 CMD ["yarn", "start"] 

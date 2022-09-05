@@ -21,7 +21,7 @@ export const accountModules = [
     TypeOrmModule.forFeature([User]),
     ...accountModules.map((module) => forwardRef(() => module)),
     JwtModule.register({
-      secret: process.env.SECRET_KEY || `Oasis2089$`,
+      secret: process.env.SECRET_KEY || `Demo_Secret_Key`,
       signOptions: {
         expiresIn: '5m',
       },

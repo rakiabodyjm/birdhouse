@@ -19,7 +19,7 @@ async function bootstrap() {
         whitelist: true,
       }),
     )
-    .use(cookieParser(process.env.SECRET_KEY || 'Oasis2089$'))
+    .use(cookieParser(process.env.SECRET_KEY || 'Demo_Secret_Key'))
     .enableCors({
       credentials: true,
       // origin: function (origin, callback) {

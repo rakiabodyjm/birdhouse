@@ -16,7 +16,7 @@ import { RolesGuard } from 'src/auth/guards/roles.guard'
     // }),
     PassportModule,
     JwtModule.register({
-      secret: process.env.SECRET_KEY || `Oasis2089$`,
+      secret: process.env.SECRET_KEY || `Demo_Secret_Key`,
       signOptions: {
         expiresIn: '5m',
       },

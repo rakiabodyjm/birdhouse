@@ -43,7 +43,7 @@ export class AuthService {
 
   validateJwt(jwtString: string) {
     return this.jwtService.verify(jwtString, {
-      secret: process.env.SECRET_KEY || `Oasis2089$`,
+      secret: process.env.SECRET_KEY || `Demo_Secret_Key`,
     })
   }
   decode(jwtString: string) {

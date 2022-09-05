@@ -12,11 +12,11 @@ module.exports = {
         CAESAR_HOST: 'http://localhost:6006',
         PORT: 6006,
         NODE_ENV: 'production',
-        SECRET_KEY: 'Oasis2089$',
+        SECRET_KEY: 'Demo_Secret_Key',
         SQL_SERVER_HOST: '20.20.0.161',
         SQL_SERVER_PORT: 1433,
         SQL_SERVER_USERNAME: 'realm1000',
-        SQL_SERVER_PASSWORD: 'Oasis2089$',
+        SQL_SERVER_PASSWORD: 'Demo_Secret_Key',
 
         SQL_SERVER_DATABASE: 'alpha_db',
         CLIENT_URL:
